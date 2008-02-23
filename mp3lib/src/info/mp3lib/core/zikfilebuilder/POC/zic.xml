@@ -1,0 +1,22 @@
+<artistes>
+	!-- if newPath is empty directory will not be moved, if newPath = #NULL# directory will be removed
+	<artiste id="0" code="0" currentPath="C/myMusic/diams" newPath="#NULL#" name="diams" style="rap">
+		<album id="0" code="0" currentPath="/i_am_a_racaille" newPath="" name="i am a racaille" year="" size="8097">
+			<track id="0" code="0" currentPath="/yeah yeah.mp3" newPath="" name="yeah yeah" length="3m26s" size="4876" />
+			<track id="1" code="0" currentPath="/ouech ma geule.mp3" newPath="" name="ouech ma geule" length="2m58s" size="3221" />
+		</album>
+		<album id="1" code="0" currentPath="/i_sing_shit" newPath=""
+			name="i sing shit" year="2008" size="6845">
+			<track id="0" code="0" currentPath="/what a sucking song"
+				newPath="" name="what a sucking song" length="5m30s" size="6845" ></track>
+		</album>
+	</artiste>
+	<artiste id="1" code="0" currentPath="C/myMusic/Johnny Halliday" newPath="D/librairy/Johnny Halliday" name="Johnny Halliday" style="rock">
+		<album id="0" code="0" currentPath="/Allumer le feu" newPath=""
+			name="Allumer le feu" year="2007" size="6750">
+			<track id="0" code="0" currentPath="" / Allumer le feu.mp3 "
+				newPath="" / Allumer_le_feu.mp3 " name="" Allumer le feu " length="5m48s"
+				size="6750" ></track>
+		</album>
+	</artiste>
+</artistes>
