@@ -1,0 +1,25 @@
+Structure du XML zik.xml
+
+- code : entier definissant la façon dont on va traiter le fichier
+à définir au fur et a mesure de l'identification des besoins
+
+0 - traitement normal
+1 - tag physique non impacté
+2 - nom physique du mp3 non impacté
+3 - arbo physique non impacté 
+4 - aucune info appliquée physiquement
+...
+9 - track ignoré dans les traitements appliqués au fichier xml et physiquement
+
+
+- newPath : chaine de caractère spécifiant le répertoire dans l'arborescence après traitement
+si vide : aucun déplacement n'est effectué
+si = #NULL# : le répertoire sera supprimé
+
+
+NB : certains états impliquent d'être reportés sur l'attribut père.
+Par exemple un code 9 sur un track implique un code 3 sur l'album ce qui implique aussi un code 3 sur artiste
+
+TODO:
+
+- faire le DTD

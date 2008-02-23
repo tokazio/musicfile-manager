@@ -1,0 +1,11 @@
+<root path="C/myMusic">
+	<l1directory path="/shit">
+		<l2directory path="/johnny halliday">
+			<l3directory path="/first Jonnhy Shitly Album" tagged="1"/>
+		</l2directory>
+		<l2directory path="/diams">
+			<l3directory path="/i am a racaille" tagged="0"/>
+			<l3directory path="/i sing shit" tagged="0"/>
+		</l2directory>
+	</l1directory>
+</root>
