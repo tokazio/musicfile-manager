@@ -25,7 +25,7 @@ public class Album extends AbstractMusicDirectory {
 		super(albumDirectory);
 		// TODO verify the validity of argument and implement the exception mechanism
 		if (buildNode) {
-			buildTrackElementFromFile();
+			buildElementFromFile();
 		}
 
 	}
@@ -33,25 +33,21 @@ public class Album extends AbstractMusicDirectory {
 	/**
 	 * Constructs a new Album from the Element specified.
 	 * @param Element a zicfile album element
-	 * @param retrieveFile if true retrieve and set musicFile from node informations
 	 * @throws InvalidParameterException when the Element given in parameters
 	 * doesn't correspond to a valid album Element
 	 */
-	public Album(Element albumElement,  boolean retrieveFile) throws InvalidParameterException {		
+	public Album(Element albumElement) throws InvalidParameterException {		
 		super(albumElement);
 		// TODO verify that given node well correspond to an album and implement the exception mechanism
-		if (retrieveFile) {
-			RetrieveFileFromTrackElement();
-		}
 	}
-	
+
 	/* ------------------------- METHODS --------------------------- */
 	/**
 	 * retrieves the name of the album, ie. tag album if possible else physical name
 	 * @return the name of the album
 	 */
 	@Override
-	public String getName() {
+	public String getNameFromTag() {
 		String name = new String();
 		// TODO method implementation
 		return name;
@@ -84,15 +80,7 @@ public class Album extends AbstractMusicDirectory {
 	 * build the track Element from informations retrieved from the album directory
 	 * and set it in this.node
 	 */
-	private void buildTrackElementFromFile() {
-		// TODO method implementation
-	}
-	
-	/**
-	 * Retrieve a File pointing on the album directory from path attribute of Element track
-	 * and set it in this.musicFile
-	 */
-	private void RetrieveFileFromTrackElement() {
+	protected void buildElementFromFile() {
 		// TODO method implementation
 	}
 

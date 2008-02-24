@@ -33,7 +33,7 @@ public abstract class AbstractMusicDirectory extends AbstractMusicFile implement
 	 * @return the name of the AbstractMusicDirectory
 	 */
 	@Override
-	public String getName() {
+	public String getNameFromTag() {
 		String name = new String();
 		// TODO method implementation
 		return name;

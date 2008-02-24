@@ -1,7 +1,13 @@
 package info.mp3lib.core.xom;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.security.InvalidParameterException;
 
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.apache.log4j.Logger;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 /**
@@ -16,14 +22,26 @@ public abstract class AbstractMusicFile implements IMusicFile {
 	/** The XML element representing this in the zicfile */
 	protected Node node;
 	
+	/** Apache log4j logger */
+	private final static Logger LOGGER = Logger.getLogger(AbstractMusicFile.class.getName());
+	
 	/* ----------------------- CONSTRUCTORS ----------------------- */
 	/**
 	 * Constructs a new AbstractMusicFile from the file specified.
 	 * @param musicFile a file in any music format
+	 * @param buildNode if true build and set node according to informations retrieved from mp3File
 	 */
-	public AbstractMusicFile(File _musicFile) {
+	public AbstractMusicFile(File _musicFile, boolean buildNode) {
 		musicFile = _musicFile;
-		node = null;
+		if (buildNode) {
+			try {
+				buildElementFromFile();
+			} catch (ParserConfigurationException e) {
+				LOGGER.error(new StringBuffer("unable to build XML element : ")
+				.append(e.getMessage()).toString());
+				//e.printStackTrace();
+			}
+		}
 	}
 	
 	/**
@@ -32,7 +50,14 @@ public abstract class AbstractMusicFile implements IMusicFile {
 	 */
 	public AbstractMusicFile(Node _node) {		
 		node = _node;
-		// TODO retrieve the current File corresponding to the zicfile element and set it in musicFile
+		try {
+			RetrieveFileFromElement();
+		} catch (FileNotFoundException e) {
+			LOGGER.error(new StringBuffer("unable to retrieve the associated music file ")
+			.append(e.getMessage()).toString());
+			throw new InvalidParameterException("Node given is misformed");
+			//e.printStackTrace();
+		}
 	}
 	
 	/* ------------------------- METHODS --------------------------- */
@@ -80,6 +105,32 @@ public abstract class AbstractMusicFile implements IMusicFile {
 	@Override
 	public File getFile() {
 		return musicFile;
+	}
+	
+	/**
+	 * build the track Element from informations retrieved from the mp3 file
+	 * and set it in this.node
+	 * @throws ParserConfigurationException 
+	 */
+	protected abstract void buildElementFromFile() throws ParserConfigurationException;
+	
+	/**
+	 * Retrieve a File pointing on the associated music file from path attribute of the current Element
+	 * and set it in this.musicFile
+	 * @throws FileNotFoundException when attribute currentPath of the current element doesn't
+	 * represent a real file
+	 */
+	private void RetrieveFileFromElement() throws FileNotFoundException {
+		LOGGER.debug("RetrieveFileFromTrackElement()");
+		if (node != null) {
+			final String path = ((Element)node).getAttribute("currentPath");
+			File f = new File(path);
+			if (!f.exists()) {
+				throw new FileNotFoundException();
+			} else {
+				musicFile = f;
+			}
+		}
 	}
 
 }
