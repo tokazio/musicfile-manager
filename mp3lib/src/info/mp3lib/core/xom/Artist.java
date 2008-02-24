@@ -24,7 +24,7 @@ public class Artist extends AbstractMusicDirectory {
 		super(artistDirectory);
 		// TODO verify the validity of argument and implement the exception mechanism
 		if (buildNode) {
-			buildTrackElementFromFile();
+			buildElementFromFile();
 		}
 	}
 	
@@ -35,21 +35,18 @@ public class Artist extends AbstractMusicDirectory {
 	 * @throws InvalidParameterException when the Element given in parameters
 	 * doesn't correspond to a valid artist Element
 	 */
-	public Artist(Element artistElement, boolean retrieveFile) throws InvalidParameterException {
+	public Artist(Element artistElement) throws InvalidParameterException {
 		super(artistElement);
 		// TODO verify that given node well correspond to an artist and implement the exception mechanism
-		if (retrieveFile) {
-			RetrieveFileFromTrackElement();
-		}
 	}
-	
+
 	/* ------------------------- METHODS --------------------------- */
 	/**
 	 * retrieves the name of the artist, ie. tag album if possible else physical name
 	 * @return the name of the artist
 	 */
 	@Override
-	public String getName() {
+	public String getNameFromTag() {
 		String name = new String();
 		// TODO method implementation
 		return name;
@@ -71,15 +68,8 @@ public class Artist extends AbstractMusicDirectory {
 	 * build the track Element from informations retrieved from the artist directory
 	 * and set it in this.node
 	 */
-	private void buildTrackElementFromFile() {
+	protected void buildElementFromFile() {
 		// TODO method implementation
 	}
 	
-	/**
-	 * Retrieve a File pointing on the artist directory from path attribute of Element track
-	 * and set it in this.musicFile
-	 */
-	private void RetrieveFileFromTrackElement() {
-		// TODO method implementation
-	}
 }

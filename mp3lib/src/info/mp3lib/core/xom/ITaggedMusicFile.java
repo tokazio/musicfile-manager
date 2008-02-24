@@ -11,7 +11,7 @@ public interface ITaggedMusicFile extends IMusicFile {
 	 * retrieves the name of the current object (artist or album name or song title).
 	 * @return the name
 	 */
-	public String getName();
+	public String getNameFromTag();
 	
 	/**
 	 * Checks if the current file contains tag informations
