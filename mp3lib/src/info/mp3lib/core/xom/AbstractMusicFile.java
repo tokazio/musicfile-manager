@@ -29,7 +29,7 @@ public abstract class AbstractMusicFile implements IMusicFile {
 	/**
 	 * Constructs a new AbstractMusicFile from the file specified.
 	 * @param musicFile a file in any music format
-	 * @param buildNode if true build and set node according to informations retrieved from mp3File
+	 * @param buildNode if true build and set node according to informations retrieved from music file 
 	 */
 	public AbstractMusicFile(File _musicFile, boolean buildNode) {
 		musicFile = _musicFile;

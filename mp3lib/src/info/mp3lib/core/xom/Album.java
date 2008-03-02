@@ -22,7 +22,7 @@ public class Album extends AbstractMusicDirectory {
 	 * doesn't correspond to a valid album
 	 */
 	public Album(File albumDirectory, boolean buildNode) throws InvalidParameterException {
-		super(albumDirectory);
+		super(albumDirectory, buildNode);
 		// TODO verify the validity of argument and implement the exception mechanism
 		if (buildNode) {
 			buildElementFromFile();
