@@ -14,9 +14,10 @@ public abstract class AbstractMusicDirectory extends AbstractMusicFile implement
 	/**
 	 * Constructs a new AbstractMusicDirectory from the file specified.
 	 * @param directory a File representing a directory containing music files
+	 * @param buildNode if true build and set node according to informations retrieved from music file
 	 */
-	public AbstractMusicDirectory(File directory) {
-		super(directory);
+	public AbstractMusicDirectory(File directory, boolean buildNode) {
+		super(directory, buildNode);
 	}
 	
 	/**

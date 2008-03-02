@@ -21,7 +21,7 @@ public class Artist extends AbstractMusicDirectory {
 	 * doesn't correspond to a valid artist
 	 */
 	public Artist(File artistDirectory, boolean buildNode) throws InvalidParameterException {
-		super(artistDirectory);
+		super(artistDirectory, buildNode);
 		// TODO verify the validity of argument and implement the exception mechanism
 		if (buildNode) {
 			buildElementFromFile();
