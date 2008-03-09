@@ -1,12 +1,8 @@
 package info.mp3lib.core.xom;
 
 import java.io.File;
-import java.security.InvalidParameterException;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 /**
  * Object corresponding to a directory on the file system containing some music files (ie. Tracks or ALbums)
@@ -50,7 +46,7 @@ public abstract class AbstractMusicDirectory extends AbstractMusicFile implement
 		return tagged;
 	}
 
-	private final ITaggedMusicFile getItem(final int indice) {
+	public final ITaggedMusicFile getItem(final int indice) {
 		return listFile[indice]; 
 	}
 	
