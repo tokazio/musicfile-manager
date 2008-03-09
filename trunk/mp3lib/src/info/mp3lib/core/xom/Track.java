@@ -108,7 +108,12 @@ public class Track extends AbstractMusicFile implements ITaggedMusicFile{
 		node = element;
 	}
 	
-	public String getXMLName() {
-		return ((Element)node).getAttribute("name");
-	}
+	public final float getXMLLength() { return Float.parseFloat(getXML("length")); }
+	/**
+	 * Retourne la value de l'attribut XML en parametre.
+	 * TODO: OU NULL si inexistant.. / throw exception...
+	 * @param arg String XML argument
+	 * @return String XML value
+	 */
+
 }

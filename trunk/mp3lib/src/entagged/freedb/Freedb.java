@@ -38,7 +38,7 @@ import java.util.regex.Pattern;
 //$Id: Freedb.java,v 1.1 2007/03/23 14:16:57 nicov1 Exp $
 public class Freedb {
     
-    private class SimpleTrack implements FreedbTrack {
+    public class SimpleTrack implements FreedbTrack {
 	    private float length;	    
 	    
 	    public SimpleTrack(float sec) {
@@ -381,7 +381,7 @@ public class Freedb {
         
         return results;
     }
-        
+    
     public FreedbReadResult read(FreedbQueryResult query) throws FreedbException {
         //Create the command to be sent to freedb
         String command = getReadCommand(query);
@@ -392,7 +392,7 @@ public class Freedb {
         //Parse the result
         return new FreedbReadResult(queryAnswer, query.isExactMatch());
     }
-
+    
     public FreedbReadResult read(String genre, String id) throws FreedbException {
         //Create the command to be sent to freedb
         String command = getReadCommand(genre, id);

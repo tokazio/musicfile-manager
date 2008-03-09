@@ -108,6 +108,21 @@ public abstract class AbstractMusicFile implements IMusicFile {
 	}
 	
 	/**
+	 * Return XML value of XML attribute in parameter
+	 * @param arg String XML Argument
+	 * @return String XML value
+	 */
+	protected final String getXML(final String arg)
+	{
+		return ((Element)node).getAttribute(arg);
+	}
+	/**
+	 * Return XML Name attribute
+	 * @return XML Name
+	 */
+	public final String getXMLName() { return getXML("name"); }
+	
+	/**
 	 * build the track Element from informations retrieved from the mp3 file
 	 * and set it in this.node
 	 * @throws ParserConfigurationException 
