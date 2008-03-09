@@ -66,7 +66,7 @@ public class CDDBquery extends entagged.freedb.Freedb {
 		for (int tId=0; tId < album.getLength(); tId++)
 		{
 			Track track = (Track) album.getItem(tId);
-			size[tId] = track.getXMLLength();
+			size[tId] = track.getLength();
 			
 		}
 		try {
