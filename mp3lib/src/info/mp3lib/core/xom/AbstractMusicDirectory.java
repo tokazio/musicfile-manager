@@ -46,14 +46,6 @@ public abstract class AbstractMusicDirectory extends AbstractMusicFile implement
 	abstract public String getTagName();
 	
 	/**
-	 * retrieves the name of the AbstractMusicDirectory from the XML Element.
-	 * @return the name
-	 */
-	public String getXMLName() {
-		return ((Element)node).getAttribute("name");
-	}
-	
-	/**
 	 * Checks if the current directory contains at less one file containing tag information.
 	 * @author
 	 * @return true if directory is tagged, else return false
@@ -64,4 +56,11 @@ public abstract class AbstractMusicDirectory extends AbstractMusicFile implement
 		// TODO method implementation
 		return tagged;
 	}
+
+	public final AbstractMusicFile getItem(final int indice) { return listFile[indice]; }
+	public final int getItemCount() {
+		return listFile.length;
+	}
+	
+	
 }

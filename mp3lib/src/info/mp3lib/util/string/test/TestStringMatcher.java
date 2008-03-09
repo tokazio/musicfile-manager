@@ -1,10 +1,6 @@
 package info.mp3lib.util.string.test;
 
-import info.mp3lib.core.xom.Album;
-import info.mp3lib.core.xom.ITaggedMusicFile;
 import info.mp3lib.util.string.StringMatcher;
-
-import java.io.File;
 
 public class TestStringMatcher {
 
