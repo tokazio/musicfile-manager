@@ -16,7 +16,7 @@ import org.w3c.dom.Node;
  */
 public abstract class AbstractMusicFile implements IMusicFile {
 	/* ------------------------ ATTRIBUTES ------------------------ */
-	/** The current mp3 file;*/
+	/** The current music file;*/
 	protected File musicFile;
 	
 	/** The XML element representing this in the zicfile */

@@ -3,6 +3,7 @@ package info.mp3lib.core.xom;
 import java.io.File;
 import java.security.InvalidParameterException;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
 /**
@@ -11,7 +12,8 @@ import org.w3c.dom.Element;
 */
 public class Artist extends AbstractMusicDirectory {
 	/* ------------------------ ATTRIBUTES ------------------------ */
-	
+	/** Apache log4j logger */
+	private final static Logger LOGGER = Logger.getLogger(AbstractMusicFile.class.getName());
 	/* ----------------------- CONSTRUCTORS ----------------------- */
 	/**
 	 * Constructs a new Artist from the file specified.
@@ -46,7 +48,7 @@ public class Artist extends AbstractMusicDirectory {
 	 * @return the name of the artist
 	 */
 	@Override
-	public String getNameFromTag() {
+	public String getTagName() {
 		String name = new String();
 		// TODO method implementation
 		return name;

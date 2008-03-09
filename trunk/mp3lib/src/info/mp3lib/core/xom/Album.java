@@ -2,8 +2,12 @@ package info.mp3lib.core.xom;
 
 import java.io.File;
 import java.security.InvalidParameterException;
+import java.util.LinkedList;
+import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
  * All objects corresponding to a directory containing music files. Allows to retrieve various information
@@ -12,7 +16,8 @@ import org.w3c.dom.Element;
  */
 public class Album extends AbstractMusicDirectory {
 	/* ------------------------ ATTRIBUTES ------------------------ */
-	
+	/** Apache log4j logger */
+	private final static Logger LOGGER = Logger.getLogger(AbstractMusicFile.class.getName());
 	/* ----------------------- CONSTRUCTORS ----------------------- */
 	/**
 	 * Constructs a new Album from the file specified.
@@ -23,11 +28,28 @@ public class Album extends AbstractMusicDirectory {
 	 */
 	public Album(File albumDirectory, boolean buildNode) throws InvalidParameterException {
 		super(albumDirectory, buildNode);
-		// TODO verify the validity of argument and implement the exception mechanism
 		if (buildNode) {
 			buildElementFromFile();
 		}
-
+		// Initialize listFile with Tracks contained in this Album
+		final File[] listFiles = albumDirectory.listFiles();
+		final List<AbstractMusicFile> linkedListFile = new LinkedList<AbstractMusicFile>();
+		for (int i = 0; i < listFiles.length; i++) {
+			try {
+				linkedListFile.add(new Track(listFiles[i], buildNode));
+			} catch (InvalidParameterException e) {
+				LOGGER.warn(new StringBuffer("Unable to build a Track from ")
+						.append(listFiles[i].getName())
+						.append(" : ")
+						.append(e.getMessage()).toString());
+			}
+		}
+		if (linkedListFile.isEmpty()) {
+			throw new InvalidParameterException(new StringBuffer("Album : ")
+					.append(albumDirectory.getName())
+					.append(" does not contain any valid audio files").toString());
+		}
+		listFile = (AbstractMusicFile[])linkedListFile.toArray();
 	}
 	
 	/**
@@ -38,7 +60,26 @@ public class Album extends AbstractMusicDirectory {
 	 */
 	public Album(Element albumElement) throws InvalidParameterException {		
 		super(albumElement);
-		// TODO verify that given node well correspond to an album and implement the exception mechanism
+		// retrieve the list of Files contained by this directory from albumElement
+		NodeList listTrackElement = albumElement.getChildNodes();
+		final List<AbstractMusicFile> linkedListFile = new LinkedList<AbstractMusicFile>();
+		for (int i = 0; i < listTrackElement.getLength(); i++) {
+			final Element trackElement = (Element)listTrackElement.item(i);
+			try {
+				linkedListFile.add(new Track(trackElement));
+			} catch (InvalidParameterException e) {
+				LOGGER.warn(new StringBuffer("Unable to build a Track from ")
+						.append(trackElement.getAttribute("name"))
+						.append(" : ")
+						.append(e.getMessage()).toString());
+			}
+		}		
+		if (linkedListFile.isEmpty()) {
+			throw new InvalidParameterException(new StringBuffer("Album : ")
+					.append(((Element)node).getAttribute("name"))
+					.append(" does not contain any valid audio files").toString());
+		}
+		listFile = (AbstractMusicFile[])linkedListFile.toArray();
 	}
 
 	/* ------------------------- METHODS --------------------------- */
@@ -47,7 +88,7 @@ public class Album extends AbstractMusicDirectory {
 	 * @return the name of the album
 	 */
 	@Override
-	public String getNameFromTag() {
+	public String getTagName() {
 		String name = new String();
 		// TODO method implementation
 		return name;
@@ -66,8 +107,8 @@ public class Album extends AbstractMusicDirectory {
 	}
 	
 	/**
-	 * Checks if at less two music file of the current directory contains different values
-	 * for tags artist or album
+	 * Checks if at less more than half of music files of the current directory contains different values
+	 * compared two by two for tags artist or album
 	 * @return true if album is known to be a compilation, else return false
 	 */
 	public boolean isCompilation() {
