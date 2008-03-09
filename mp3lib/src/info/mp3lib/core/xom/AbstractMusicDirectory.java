@@ -12,10 +12,10 @@ import org.w3c.dom.Node;
  * Object corresponding to a directory on the file system containing some music files (ie. Tracks or ALbums)
  * @author Gabriel Pala
  */
-public abstract class AbstractMusicDirectory extends AbstractMusicFile implements ITaggedMusicFile {
+public abstract class AbstractMusicDirectory extends AbstractMusicFile implements IMusicDirectory {
 	/* ------------------------ ATTRIBUTES ------------------------ */
 	/** array of AbstractMusicFile contained in this AbstractMusicDirectory */
-	protected AbstractMusicFile[] listFile;
+	protected ITaggedMusicFile[] listFile;
 	
 	/** Apache log4j logger */
 	private final static Logger LOGGER = Logger.getLogger(AbstractMusicFile.class.getName()); 
@@ -23,10 +23,9 @@ public abstract class AbstractMusicDirectory extends AbstractMusicFile implement
 	/**
 	 * Constructs a new AbstractMusicDirectory from the file specified.
 	 * @param directory a File representing a directory containing music files
-	 * @param buildNode if true build and set node according to informations retrieved from music file
 	 */
-	public AbstractMusicDirectory(File directory, boolean buildNode){
-		super(directory, buildNode);		
+	public AbstractMusicDirectory(File directory) {
+		super(directory);		
 	}
 	
 	/**
@@ -38,12 +37,6 @@ public abstract class AbstractMusicDirectory extends AbstractMusicFile implement
 	}
 	
 	/* ------------------------- METHODS --------------------------- */
-	/**
-	 * retrieves the name of the AbstractMusicDirectory from the tag of its content
-	 * @return the name of the AbstractMusicDirectory
-	 */
-	@Override
-	abstract public String getTagName();
 	
 	/**
 	 * Checks if the current directory contains at less one file containing tag information.
@@ -57,10 +50,17 @@ public abstract class AbstractMusicDirectory extends AbstractMusicFile implement
 		return tagged;
 	}
 
-	public final AbstractMusicFile getItem(final int indice) { return listFile[indice]; }
-	public final int getItemCount() {
-		return listFile.length;
+	private final ITaggedMusicFile getItem(final int indice) {
+		return listFile[indice]; 
 	}
 	
+	/**
+	 * Retrieves the number of tracks contained in this IMusicDirectory.
+	 * @return number of IMusicFile of this Album
+	 */
+	public int getLength() {
+		return listFile.length;
+		
+	}
 	
 }

@@ -25,17 +25,16 @@ import entagged.audioformats.exceptions.CannotReadException;
 public class Track extends AbstractMusicFile implements ITaggedMusicFile{
 	/* ------------------------ ATTRIBUTES ------------------------ */
 	/** Apache log4j logger */
-	private final static Logger LOGGER = Logger.getLogger(AbstractMusicFile.class.getName()); 
+	private final static Logger LOGGER = Logger.getLogger(Track.class.getName()); 
 	/* ----------------------- CONSTRUCTORS ----------------------- */
 	/**
 	 * Constructs a new audio from the file specified.
 	 * @param audioFile a file in audio format
-	 * @param buildNode if true build and set node according to informations retrieved from audioFile
 	 * @throws InvalidParameterException when the File given in parameters
 	 * doesn't correspond to a valid audio file
 	 */
-	public Track(File audioFile, boolean buildNode) throws InvalidParameterException {
-		super(audioFile, buildNode);
+	public Track(File audioFile) throws InvalidParameterException {
+		super(audioFile);
 		try {
 			musicFile = AudioFileIO.read(audioFile);
 		} catch (CannotReadException e) {
@@ -63,7 +62,7 @@ public class Track extends AbstractMusicFile implements ITaggedMusicFile{
 	 * retrieves the name of the audio, ie. tag title if possible else physical name
 	 * @return the title of the audio song
 	 */
-	public String getTagName() {
+	private String getTagName() {
 		String name = getTag().getFirstTitle();
 		if (name.trim().isEmpty()) {
 			// TODO maybe check if some common pattern like 'CD' or 'encoded by' could be removed
@@ -103,17 +102,18 @@ public class Track extends AbstractMusicFile implements ITaggedMusicFile{
 		element.setAttribute("currentPath", musicFile.getPath());
 		element.setAttribute("newPath", "");
 		element.setAttribute("name", getTagName());
-		element.setAttribute("length",new StringBuffer().append(musicFile.length()).toString());
-		element.setAttribute("size",new StringBuffer().append(((AudioFile)musicFile).getLength()).toString());
+		element.setAttribute("size",new StringBuffer().append(musicFile.length()).toString());
+		element.setAttribute("length",new StringBuffer().append(((AudioFile)musicFile).getLength()).toString());
 		node = element;
 	}
 	
-	public final float getXMLLength() { return Float.parseFloat(getXML("length")); }
 	/**
-	 * Retourne la value de l'attribut XML en parametre.
-	 * TODO: OU NULL si inexistant.. / throw exception...
-	 * @param arg String XML argument
-	 * @return String XML value
+	 * Retrieves the duration in seconds
+	 * @return number of Tracks of this Album
 	 */
+	public int getLength() {
+		return ((AudioFile)musicFile).getLength();
+		
+	}
 
 }

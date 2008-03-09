@@ -20,4 +20,15 @@ public final class StringUtils {
 		}
 		return name;
 	}
+	
+	/**
+	 * Checks if name doesn't correspond to some patterns like 'track 01' 
+	 * @param name the title of this track
+	 * @return true if name is a valid title else return false
+	 */
+	public final static boolean isValidTitle(String name) {
+		boolean valid = false;
+		//TODO method implementation
+		return valid;
+	}
 }

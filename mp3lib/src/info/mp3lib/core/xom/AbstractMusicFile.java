@@ -29,18 +29,15 @@ public abstract class AbstractMusicFile implements IMusicFile {
 	/**
 	 * Constructs a new AbstractMusicFile from the file specified.
 	 * @param musicFile a file in any music format
-	 * @param buildNode if true build and set node according to informations retrieved from music file 
 	 */
-	public AbstractMusicFile(File _musicFile, boolean buildNode) {
+	public AbstractMusicFile(File _musicFile) {
 		musicFile = _musicFile;
-		if (buildNode) {
-			try {
-				buildElementFromFile();
-			} catch (ParserConfigurationException e) {
-				LOGGER.error(new StringBuffer("unable to build XML element : ")
-				.append(e.getMessage()).toString());
-				//e.printStackTrace();
-			}
+		try {
+			buildElementFromFile();
+		} catch (ParserConfigurationException e) {
+			LOGGER.error(new StringBuffer("unable to build XML element : ")
+			.append(e.getMessage()).toString());
+			//e.printStackTrace();
 		}
 	}
 	
@@ -117,10 +114,12 @@ public abstract class AbstractMusicFile implements IMusicFile {
 		return ((Element)node).getAttribute(arg);
 	}
 	/**
-	 * Return XML Name attribute
-	 * @return XML Name
+	 * Retrieve the name of this music file ie. title for track or album/artist name
+	 * @return the name of this music file
 	 */
-	public final String getXMLName() { return getXML("name"); }
+	public final String getName() { 
+		return getXML("name"); 
+	}
 	
 	/**
 	 * build the track Element from informations retrieved from the mp3 file
