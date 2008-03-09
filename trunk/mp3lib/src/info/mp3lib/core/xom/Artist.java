@@ -18,16 +18,13 @@ public class Artist extends AbstractMusicDirectory {
 	/**
 	 * Constructs a new Artist from the file specified.
 	 * @param directory a File representing a directory containing albums
-	 * @param buildNode if true build and set node according to informations retrieved from mp3File
 	 * @throws InvalidParameterException when the File given in parameters
 	 * doesn't correspond to a valid artist
 	 */
-	public Artist(File artistDirectory, boolean buildNode) throws InvalidParameterException {
-		super(artistDirectory, buildNode);
+	public Artist(File artistDirectory) throws InvalidParameterException {
+		super(artistDirectory);
 		// TODO verify the validity of argument and implement the exception mechanism
-		if (buildNode) {
 			buildElementFromFile();
-		}
 	}
 	
 	/**
@@ -47,8 +44,7 @@ public class Artist extends AbstractMusicDirectory {
 	 * retrieves the name of the artist, ie. tag album if possible else physical name
 	 * @return the name of the artist
 	 */
-	@Override
-	public String getTagName() {
+	private String getTagName() {
 		String name = new String();
 		// TODO method implementation
 		return name;

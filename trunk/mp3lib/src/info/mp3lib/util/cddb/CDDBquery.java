@@ -51,7 +51,7 @@ public class CDDBquery extends entagged.freedb.Freedb {
 	 */
 	public static Album createAlbum(File directory)
 	{
-		Album album = new Album(directory, true);
+		Album album = new Album(directory);
 		return album;
 	}
 	/**
@@ -61,9 +61,9 @@ public class CDDBquery extends entagged.freedb.Freedb {
 	 */
 	public FreedbQueryResult[] queryAlbum(Album album)
 	{
-		float size[] = new float[album.getItemCount()];
+		float size[] = new float[album.getLength()];
 		FreedbQueryResult[] result = null;
-		for (int tId=0; tId < album.getItemCount(); tId++)
+		for (int tId=0; tId < album.getLength(); tId++)
 		{
 			Track track = (Track) album.getItem(tId);
 			size[tId] = track.getXMLLength();

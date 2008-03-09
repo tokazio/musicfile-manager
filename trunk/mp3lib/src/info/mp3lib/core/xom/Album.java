@@ -22,21 +22,18 @@ public class Album extends AbstractMusicDirectory {
 	/**
 	 * Constructs a new Album from the file specified.
 	 * @param directory a File representing a directory containing music files
-	 * @param buildNode if true build and set node according to informations retrieved from mp3File
 	 * @throws InvalidParameterException when the File given in parameters
 	 * doesn't correspond to a valid album
 	 */
-	public Album(File albumDirectory, boolean buildNode) throws InvalidParameterException {
-		super(albumDirectory, buildNode);
-		if (buildNode) {
-			buildElementFromFile();
-		}
+	public Album(File albumDirectory) throws InvalidParameterException {
+		super(albumDirectory);
+		buildElementFromFile();
 		// Initialize listFile with Tracks contained in this Album
 		final File[] listFiles = albumDirectory.listFiles();
-		final List<AbstractMusicFile> linkedListFile = new LinkedList<AbstractMusicFile>();
+		final List<ITaggedMusicFile> linkedListFile = new LinkedList<ITaggedMusicFile>();
 		for (int i = 0; i < listFiles.length; i++) {
 			try {
-				linkedListFile.add(new Track(listFiles[i], buildNode));
+				linkedListFile.add(new Track(listFiles[i]));
 			} catch (InvalidParameterException e) {
 				LOGGER.warn(new StringBuffer("Unable to build a Track from ")
 						.append(listFiles[i].getName())
@@ -49,7 +46,7 @@ public class Album extends AbstractMusicDirectory {
 					.append(albumDirectory.getName())
 					.append(" does not contain any valid audio files").toString());
 		}
-		listFile = (AbstractMusicFile[])linkedListFile.toArray();
+		listFile = (ITaggedMusicFile[])linkedListFile.toArray();
 	}
 	
 	/**
@@ -62,7 +59,7 @@ public class Album extends AbstractMusicDirectory {
 		super(albumElement);
 		// retrieve the list of Files contained by this directory from albumElement
 		NodeList listTrackElement = albumElement.getChildNodes();
-		final List<AbstractMusicFile> linkedListFile = new LinkedList<AbstractMusicFile>();
+		final List<ITaggedMusicFile> linkedListFile = new LinkedList<ITaggedMusicFile>();
 		for (int i = 0; i < listTrackElement.getLength(); i++) {
 			final Element trackElement = (Element)listTrackElement.item(i);
 			try {
@@ -79,21 +76,10 @@ public class Album extends AbstractMusicDirectory {
 					.append(((Element)node).getAttribute("name"))
 					.append(" does not contain any valid audio files").toString());
 		}
-		listFile = (AbstractMusicFile[])linkedListFile.toArray();
+		listFile = (ITaggedMusicFile[])linkedListFile.toArray();
 	}
 
-	/* ------------------------- METHODS --------------------------- */
-	/**
-	 * retrieves the name of the album, ie. tag album if possible else physical name
-	 * @return the name of the album
-	 */
-	@Override
-	public String getTagName() {
-		String name = new String();
-		// TODO method implementation
-		return name;
-	}
-	
+	/* ------------------------- METHODS --------------------------- */	
 	/**
 	 * Checks if the current directory contains at less one file containing tag information.
 	 * @author
@@ -123,6 +109,16 @@ public class Album extends AbstractMusicDirectory {
 	 */
 	protected void buildElementFromFile() {
 		// TODO method implementation
+	}
+	
+	/**
+	 * retrieves the name of the album, ie. tag album if possible else physical name
+	 * @return the name of the album
+	 */
+	private String getTagName() {
+		String name = new String();
+		// TODO method implementation
+		return name;
 	}
 
 }

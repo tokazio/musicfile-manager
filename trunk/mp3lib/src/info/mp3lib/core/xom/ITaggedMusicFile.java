@@ -8,16 +8,17 @@ package info.mp3lib.core.xom;
 public interface ITaggedMusicFile extends IMusicFile {
 
 	/**
-	 * retrieves the name of the current object (artist or album name or song title) from its tag.
+	 * retrieves the name of the current object (artist or album name or song title).
 	 * @return the name
 	 */
-	public String getTagName();
+	public String getName();
 	
 	/**
-	 * retrieves the name of the current object (artist or album name or song title) from the XML Element.
-	 * @return the name
+	 * retrieves the length of the current object 
+	 * (number of items for artist or album and length in second for the Track ).
+	 * @return the length of the music file
 	 */
-	public String getXMLName();
+	public int getLength();
 	
 	/**
 	 * Checks if the current file contains tag informations
