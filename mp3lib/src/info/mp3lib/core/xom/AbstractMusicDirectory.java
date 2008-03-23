@@ -17,18 +17,28 @@ public abstract class AbstractMusicDirectory extends AbstractMusicFile implement
 	private final static Logger LOGGER = Logger.getLogger(AbstractMusicFile.class.getName()); 
 	/* ----------------------- CONSTRUCTORS ----------------------- */
 	/**
-	 * Constructs a new AbstractMusicDirectory from the file specified.
+	 * Constructs a new AbstractMusicDirectory and all ITaggedMusicFile it contains from the file specified.
 	 * @param directory a File representing a directory containing music files
 	 */
-	public AbstractMusicDirectory(File directory) {
+	public AbstractMusicDirectory(final File directory) {
 		super(directory);		
+	}
+	
+	/**
+	 * Constructs a new AbstractMusicDirectory from the file specified.
+	 * @param directory a File representing a directory containing music files
+	 * listFileArg all the ITaggedMusicFile instances contained in this AbstractMusicDirectory
+	 */
+	public AbstractMusicDirectory(final File directory, final ITaggedMusicFile[] listFileArg) {
+		super(directory);
+		listFile = listFileArg;
 	}
 	
 	/**
 	 * Constructs a new AbstractMusicDirectory from the node specified.
 	 * @param node a zicfile element representing an artist or album
 	 */
-	public AbstractMusicDirectory(Node node) {
+	public AbstractMusicDirectory(final Node node) {
 		super(node);
 	}
 	

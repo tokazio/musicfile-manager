@@ -26,6 +26,12 @@ public class Track extends AbstractMusicFile implements ITaggedMusicFile{
 	/* ------------------------ ATTRIBUTES ------------------------ */
 	/** Apache log4j logger */
 	private final static Logger LOGGER = Logger.getLogger(Track.class.getName()); 
+	
+	/** The author of this Track */
+	private String artist;
+	
+	/** The name of the album containing this Track */
+	private String Album;
 	/* ----------------------- CONSTRUCTORS ----------------------- */
 	/**
 	 * Constructs a new audio from the file specified.
@@ -114,6 +120,34 @@ public class Track extends AbstractMusicFile implements ITaggedMusicFile{
 	public int getLength() {
 		return ((AudioFile)musicFile).getLength();
 		
+	}
+
+	/**
+	 * @return the artist
+	 */
+	public String getArtist() {
+		return artist;
+	}
+
+	/**
+	 * @param artist the artist to set
+	 */
+	public void setArtist(String artist) {
+		this.artist = artist;
+	}
+
+	/**
+	 * @return the album
+	 */
+	public String getAlbum() {
+		return Album;
+	}
+
+	/**
+	 * @param album the album to set
+	 */
+	public void setAlbum(String album) {
+		Album = album;
 	}
 
 }

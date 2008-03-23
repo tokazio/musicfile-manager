@@ -30,8 +30,8 @@ public abstract class AbstractMusicFile implements IMusicFile {
 	 * Constructs a new AbstractMusicFile from the file specified.
 	 * @param musicFile a file in any music format
 	 */
-	public AbstractMusicFile(File _musicFile) {
-		musicFile = _musicFile;
+	public AbstractMusicFile(final File musicFileArg) {
+		musicFile = musicFileArg;
 		try {
 			buildElementFromFile();
 		} catch (ParserConfigurationException e) {
@@ -45,8 +45,8 @@ public abstract class AbstractMusicFile implements IMusicFile {
 	 * Constructs a new AbstractMusicFile from the node specified.
 	 * @param node a zicfile element (artist, album or track)
 	 */
-	public AbstractMusicFile(Node _node) {		
-		node = _node;
+	public AbstractMusicFile(final Node nodeArg) {		
+		node = nodeArg;
 		try {
 			RetrieveFileFromElement();
 		} catch (FileNotFoundException e) {
