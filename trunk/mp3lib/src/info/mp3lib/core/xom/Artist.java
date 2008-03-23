@@ -16,7 +16,7 @@ public class Artist extends AbstractMusicDirectory {
 	private final static Logger LOGGER = Logger.getLogger(AbstractMusicFile.class.getName());
 	/* ----------------------- CONSTRUCTORS ----------------------- */
 	/**
-	 * Constructs a new Artist from the file specified.
+	 * Constructs a new Artist and all Album it contains from the file specified.
 	 * @param directory a File representing a directory containing albums
 	 * @throws InvalidParameterException when the File given in parameters
 	 * doesn't correspond to a valid artist
@@ -25,6 +25,17 @@ public class Artist extends AbstractMusicDirectory {
 		super(artistDirectory);
 		// TODO verify the validity of argument and implement the exception mechanism
 			buildElementFromFile();
+	}
+	
+	/**
+	 * Constructs a new Album from the file and the array of Tracks specified.
+	 * @param directory a File representing a directory containing music files
+	 * @param listFileArg all the Album instances contained in this Artist
+	 */
+	public Artist(final File directory, final ITaggedMusicFile[] listFileArg) {
+		super(directory, listFileArg);
+		listFile = listFileArg;
+		buildElementFromFile();
 	}
 	
 	/**

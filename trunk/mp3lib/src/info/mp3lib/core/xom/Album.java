@@ -18,9 +18,12 @@ public class Album extends AbstractMusicDirectory {
 	/* ------------------------ ATTRIBUTES ------------------------ */
 	/** Apache log4j logger */
 	private final static Logger LOGGER = Logger.getLogger(AbstractMusicFile.class.getName());
+	
+	/** The artist name of this album */
+	private String artist;
 	/* ----------------------- CONSTRUCTORS ----------------------- */
 	/**
-	 * Constructs a new Album from the file specified.
+	 * Constructs a new Album from the file specified .
 	 * @param directory a File representing a directory containing music files
 	 * @throws InvalidParameterException when the File given in parameters
 	 * doesn't correspond to a valid album
@@ -50,12 +53,24 @@ public class Album extends AbstractMusicDirectory {
 	}
 	
 	/**
+	 * Constructs a new Album from the file and the array of Tracks specified.
+	 * @param directory a File representing a directory containing music files
+	 * @param listFileArg all the Track instances contained in this Album
+	 */
+	public Album(final File directory, final ITaggedMusicFile[] listFileArg) {
+		super(directory, listFileArg);
+		listFile = listFileArg;
+		buildElementFromFile();
+	}
+	
+	/**
 	 * Constructs a new Album from the Element specified.
 	 * @param Element a zicfile album element
+	 * @param artist The artist name of this album
 	 * @throws InvalidParameterException when the Element given in parameters
 	 * doesn't correspond to a valid album Element
 	 */
-	public Album(Element albumElement) throws InvalidParameterException {		
+	public Album(final Element albumElement, String artist ) throws InvalidParameterException {		
 		super(albumElement);
 		// retrieve the list of Files contained by this directory from albumElement
 		NodeList listTrackElement = albumElement.getChildNodes();
@@ -119,6 +134,20 @@ public class Album extends AbstractMusicDirectory {
 		String name = new String();
 		// TODO method implementation
 		return name;
+	}
+
+	/**
+	 * @return the artist
+	 */
+	public String getArtist() {
+		return artist;
+	}
+
+	/**
+	 * @param artist the artist to set
+	 */
+	public void setArtist(String artist) {
+		this.artist = artist;
 	}
 
 }
