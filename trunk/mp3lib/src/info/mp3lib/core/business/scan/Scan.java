@@ -1,5 +1,7 @@
 package info.mp3lib.core.business.scan;
 
+import info.mp3lib.core.business.IBusinessPlan;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -13,7 +15,7 @@ import java.util.Iterator;
  * 
  * @author AkS
  */
-public class Scan extends ArrayList<ScanDataContainer> {
+public class Scan implements IBusinessPlan {
 
 	private static final long serialVersionUID = -1963252596917406454L;
 	
@@ -29,6 +31,7 @@ public class Scan extends ArrayList<ScanDataContainer> {
 	 *    successivement (et récursivement) les sous répertoires présents.
 	 * @param rootPath Point d'entrée du Scan de l'arborescence. 
 	 */
+	
 	public void read(File path) //throws BusinessException
 	{
 		ScanData mData = null;
@@ -53,7 +56,7 @@ public class Scan extends ArrayList<ScanDataContainer> {
 				mData = new ScanData(pFile);
 				
 				// add MusicData to its Container.
-				mCont.add(mData);
+				mCont.getContainer().add(mData);
 			}
 			else
 			{
@@ -74,21 +77,29 @@ public class Scan extends ArrayList<ScanDataContainer> {
 	 */
 	public void validate()
 	{
-		
+		// not necessary here
 	}
 	
+	
+	
+	@Override
+	public void manage() {
+		// not necessary here
+	}
+
 	/**
 	 * Write ScanList Results
 	 * 
 	 */
 	public void write()
 	{
+		Iterator<ScanDataContainer> iter = scanList.iterator();
 		ScanDataContainer mCont = null;
-		Iterator iter = mCont.iterator();
+		
 		while (iter.hasNext())
 		{
-			mCont = (ScanDataContainer) iter.next();
-			mCont.writeToXml();
+			mCont = iter.next();
+			mCont.write();
 		}
 	}
 
