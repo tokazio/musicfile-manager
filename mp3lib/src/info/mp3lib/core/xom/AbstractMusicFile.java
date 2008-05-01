@@ -42,6 +42,14 @@ public abstract class AbstractMusicFile implements IMusicFile {
 	}
 	
 	/**
+	 * Constructs a new empty AbstractMusicFile.
+	 */
+	public AbstractMusicFile() {
+		node = null;
+		musicFile = null;
+	}
+	
+	/**
 	 * Constructs a new AbstractMusicFile from the node specified.
 	 * @param node a zicfile element (artist, album or track)
 	 */

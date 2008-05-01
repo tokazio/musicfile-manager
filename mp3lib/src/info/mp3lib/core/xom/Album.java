@@ -14,7 +14,7 @@ import org.w3c.dom.NodeList;
  * from the directory.
  * @author Gabriel Pala
  */
-public class Album extends AbstractMusicDirectory {
+public class Album extends AbstractMusicContainer {
 	/* ------------------------ ATTRIBUTES ------------------------ */
 	/** Apache log4j logger */
 	private final static Logger LOGGER = Logger.getLogger(AbstractMusicFile.class.getName());
@@ -22,12 +22,24 @@ public class Album extends AbstractMusicDirectory {
 	/** The artist name of this album */
 	private String artist;
 	/* ----------------------- CONSTRUCTORS ----------------------- */
+	
+	/**
+	 * Constructs a new empty Album.
+	 * This method should not be called directly, used by <code>MusicDataScanner.read(File)</code>
+	 */
+	@Deprecated
+	public Album() {
+		super();
+	}
+	
 	/**
 	 * Constructs a new Album from the file specified .
+	 * Do not use this method, use <code>MusicDataScanner.read(File)</code> instead
 	 * @param directory a File representing a directory containing music files
 	 * @throws InvalidParameterException when the File given in parameters
 	 * doesn't correspond to a valid album
 	 */
+	@Deprecated
 	public Album(File albumDirectory) throws InvalidParameterException {
 		super(albumDirectory);
 		buildElementFromFile();
@@ -49,18 +61,7 @@ public class Album extends AbstractMusicDirectory {
 					.append(albumDirectory.getName())
 					.append(" does not contain any valid audio files").toString());
 		}
-		listFile = (ITaggedMusicFile[])linkedListFile.toArray();
-	}
-	
-	/**
-	 * Constructs a new Album from the file and the array of Tracks specified.
-	 * @param directory a File representing a directory containing music files
-	 * @param listFileArg all the Track instances contained in this Album
-	 */
-	public Album(final File directory, final ITaggedMusicFile[] listFileArg) {
-		super(directory, listFileArg);
-		listFile = listFileArg;
-		buildElementFromFile();
+		listFile = linkedListFile;
 	}
 	
 	/**
@@ -91,7 +92,7 @@ public class Album extends AbstractMusicDirectory {
 					.append(((Element)node).getAttribute("name"))
 					.append(" does not contain any valid audio files").toString());
 		}
-		listFile = (ITaggedMusicFile[])linkedListFile.toArray();
+		listFile = linkedListFile;
 	}
 
 	/* ------------------------- METHODS --------------------------- */	

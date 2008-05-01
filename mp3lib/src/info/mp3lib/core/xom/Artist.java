@@ -4,13 +4,16 @@ import java.io.File;
 import java.security.InvalidParameterException;
 
 import org.apache.log4j.Logger;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl;
 
 /**
 * All objects corresponding to a directory containing some albums (ie. directories containing music files).
 * @author Gabriel Pala
 */
-public class Artist extends AbstractMusicDirectory {
+public class Artist extends AbstractMusicContainer {
 	/* ------------------------ ATTRIBUTES ------------------------ */
 	/** Apache log4j logger */
 	private final static Logger LOGGER = Logger.getLogger(AbstractMusicFile.class.getName());
@@ -21,21 +24,26 @@ public class Artist extends AbstractMusicDirectory {
 	 * @throws InvalidParameterException when the File given in parameters
 	 * doesn't correspond to a valid artist
 	 */
-	public Artist(File artistDirectory) throws InvalidParameterException {
-		super(artistDirectory);
+	public Artist(String name) throws InvalidParameterException {
+		super();
+		// TODO singleton holding the DocumentBuilder
+		// TODO enum album
+		Document doc =  DocumentBuilderFactoryImpl.newInstance().newDocumentBuilder().newDocument();
+		Element element = doc.createElement("artist");
 		// TODO verify the validity of argument and implement the exception mechanism
 			buildElementFromFile();
 	}
 	
 	/**
-	 * Constructs a new Album from the file and the array of Tracks specified.
-	 * @param directory a File representing a directory containing music files
-	 * @param listFileArg all the Album instances contained in this Artist
+	 * Constructs a new Artist and all Album it contains from the file specified.
+	 * @param directory a File representing a directory containing albums
+	 * @throws InvalidParameterException when the File given in parameters
+	 * doesn't correspond to a valid artist
 	 */
-	public Artist(final File directory, final ITaggedMusicFile[] listFileArg) {
-		super(directory, listFileArg);
-		listFile = listFileArg;
-		buildElementFromFile();
+	public Artist(File artistDirectory) throws InvalidParameterException {
+		super(artistDirectory);
+		// TODO verify the validity of argument and implement the exception mechanism
+			buildElementFromFile();
 	}
 	
 	/**
@@ -51,15 +59,6 @@ public class Artist extends AbstractMusicDirectory {
 	}
 
 	/* ------------------------- METHODS --------------------------- */
-	/**
-	 * retrieves the name of the artist, ie. tag album if possible else physical name
-	 * @return the name of the artist
-	 */
-	private String getTagName() {
-		String name = new String();
-		// TODO method implementation
-		return name;
-	}
 	
 	/**
 	 * Checks if the current directory contains at less one album containing tag information.
