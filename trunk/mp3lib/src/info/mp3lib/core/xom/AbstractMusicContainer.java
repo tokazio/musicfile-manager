@@ -1,44 +1,46 @@
 package info.mp3lib.core.xom;
 
 import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Node;
+
+import com.sun.org.apache.bcel.internal.generic.LNEG;
 /**
  * Object corresponding to a directory on the file system containing some music files (ie. Tracks or ALbums)
  * @author Gabriel Pala
  */
-public abstract class AbstractMusicDirectory extends AbstractMusicFile implements IMusicDirectory {
+public abstract class AbstractMusicContainer extends AbstractMusicFile implements IMusicContainer {
 	/* ------------------------ ATTRIBUTES ------------------------ */
-	/** array of AbstractMusicFile contained in this AbstractMusicDirectory */
-	protected ITaggedMusicFile[] listFile;
+	/** List of AbstractMusicFile contained in this AbstractMusicContainer */
+	protected List<ITaggedMusicFile> listFile;
 	
 	/** Apache log4j logger */
 	private final static Logger LOGGER = Logger.getLogger(AbstractMusicFile.class.getName()); 
 	/* ----------------------- CONSTRUCTORS ----------------------- */
 	/**
-	 * Constructs a new AbstractMusicDirectory and all ITaggedMusicFile it contains from the file specified.
+	 * Constructs a new AbstractMusicContainer and all ITaggedMusicFile it contains from the file specified.
 	 * @param directory a File representing a directory containing music files
 	 */
-	public AbstractMusicDirectory(final File directory) {
+	public AbstractMusicContainer(final File directory) {
 		super(directory);		
 	}
 	
 	/**
-	 * Constructs a new AbstractMusicDirectory from the file specified.
-	 * @param directory a File representing a directory containing music files
-	 * listFileArg all the ITaggedMusicFile instances contained in this AbstractMusicDirectory
+	 * Constructs a new empty AbstractMusicContainer.
 	 */
-	public AbstractMusicDirectory(final File directory, final ITaggedMusicFile[] listFileArg) {
-		super(directory);
-		listFile = listFileArg;
+	public AbstractMusicContainer() {
+		super();
+		listFile = new LinkedList<ITaggedMusicFile>();
 	}
 	
 	/**
-	 * Constructs a new AbstractMusicDirectory from the node specified.
+	 * Constructs a new AbstractMusicContainer from the node specified.
 	 * @param node a zicfile element representing an artist or album
 	 */
-	public AbstractMusicDirectory(final Node node) {
+	public AbstractMusicContainer(final Node node) {
 		super(node);
 	}
 	
@@ -56,16 +58,16 @@ public abstract class AbstractMusicDirectory extends AbstractMusicFile implement
 		return tagged;
 	}
 
-	public final ITaggedMusicFile getItem(final int indice) {
-		return listFile[indice]; 
+	public final ITaggedMusicFile getItem(final int index) {
+		return listFile.get(index); 
 	}
 	
 	/**
-	 * Retrieves the number of tracks contained in this IMusicDirectory.
+	 * Retrieves the number of tracks contained in this IMusicContainer.
 	 * @return number of IMusicFile of this Album
 	 */
 	public int getLength() {
-		return listFile.length;
+		return listFile.size();
 		
 	}
 	

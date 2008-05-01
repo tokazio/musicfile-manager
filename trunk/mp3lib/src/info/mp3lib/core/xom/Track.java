@@ -101,7 +101,7 @@ public class Track extends AbstractMusicFile implements ITaggedMusicFile{
 	 * @throws ParserConfigurationException 
 	 */
 	protected void buildElementFromFile() throws ParserConfigurationException {
-		LOGGER.debug("buildTrackElementFromFile()");
+//		LOGGER.debug("buildTrackElementFromFile()");
 		Document doc =  DocumentBuilderFactoryImpl.newInstance().newDocumentBuilder().newDocument();
 		Element element = doc.createElement("track");
 		element.setAttribute("code", "0");
