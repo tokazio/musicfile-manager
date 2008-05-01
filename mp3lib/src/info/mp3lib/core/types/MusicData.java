@@ -6,21 +6,24 @@ import org.w3c.dom.Node;
 
 import entagged.audioformats.Tag;
 
-public abstract class AbstractMusicData implements IMusicData {
+public class MusicData extends IMusicData {
 
+	private static final long serialVersionUID = 1L;
 	protected Tag tag = null;
 	protected File file = null;
 	protected Node node = null;
 
-	public AbstractMusicData(File file){
+	
+	
+	public MusicData(File file){
 		this.file = file;
 	}
 	
-	public AbstractMusicData(Tag tag) {
+	protected MusicData(Tag tag) {
 		this.tag = tag;
 	}
 	
-	public AbstractMusicData(File file, Tag tag) {
+	protected MusicData(File file, Tag tag) {
 		this.file = file;
 		this.tag = tag;
 	}
@@ -55,6 +58,11 @@ public abstract class AbstractMusicData implements IMusicData {
 	@Override
 	public Tag getTag() {
 		return tag;
+	}
+
+	@Override
+	public void write() {
+		
 	}
 	
 }
