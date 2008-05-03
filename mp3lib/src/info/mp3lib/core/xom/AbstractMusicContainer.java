@@ -15,7 +15,7 @@ import com.sun.org.apache.bcel.internal.generic.LNEG;
 public abstract class AbstractMusicContainer extends AbstractMusicFile implements IMusicContainer {
 	/* ------------------------ ATTRIBUTES ------------------------ */
 	/** List of AbstractMusicFile contained in this AbstractMusicContainer */
-	protected List<ITaggedMusicFile> listFile;
+	protected List<AbstractMusicFile> listFile;
 	
 	/** Apache log4j logger */
 	private final static Logger LOGGER = Logger.getLogger(AbstractMusicFile.class.getName()); 
@@ -25,7 +25,7 @@ public abstract class AbstractMusicContainer extends AbstractMusicFile implement
 	 * @param directory a File representing a directory containing music files
 	 */
 	public AbstractMusicContainer(final File directory) {
-		super(directory);		
+		super(directory);
 	}
 	
 	/**
@@ -33,7 +33,7 @@ public abstract class AbstractMusicContainer extends AbstractMusicFile implement
 	 */
 	public AbstractMusicContainer() {
 		super();
-		listFile = new LinkedList<ITaggedMusicFile>();
+		listFile = new LinkedList<AbstractMusicFile>();
 	}
 	
 	/**
@@ -45,6 +45,10 @@ public abstract class AbstractMusicContainer extends AbstractMusicFile implement
 	}
 	
 	/* ------------------------- METHODS --------------------------- */
+	
+	public void add(AbstractMusicFile f) {
+		listFile.add(f);
+	}
 	
 	/**
 	 * Checks if the current directory contains at less one file containing tag information.
@@ -58,7 +62,7 @@ public abstract class AbstractMusicContainer extends AbstractMusicFile implement
 		return tagged;
 	}
 
-	public final ITaggedMusicFile getItem(final int index) {
+	public final AbstractMusicFile getItem(final int index) {
 		return listFile.get(index); 
 	}
 	

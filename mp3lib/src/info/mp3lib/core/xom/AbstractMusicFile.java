@@ -121,6 +121,14 @@ public abstract class AbstractMusicFile implements IMusicFile {
 	{
 		return ((Element)node).getAttribute(arg);
 	}
+	
+	/**
+	 * Checks if the current file or directory contains tag informations.
+	 * @author
+	 * @return true if directory is tagged, else return false
+	 */
+	abstract public boolean isTagged();
+	
 	/**
 	 * Retrieve the name of this music file ie. title for track or album/artist name
 	 * @return the name of this music file

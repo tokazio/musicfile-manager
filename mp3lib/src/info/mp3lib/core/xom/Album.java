@@ -32,6 +32,10 @@ public class Album extends AbstractMusicContainer {
 		super();
 	}
 	
+	public Album(File file) {
+		super(file);
+	}
+	
 	/**
 	 * Constructs a new Album from the file specified .
 	 * Do not use this method, use <code>MusicDataScanner.read(File)</code> instead
@@ -39,6 +43,7 @@ public class Album extends AbstractMusicContainer {
 	 * @throws InvalidParameterException when the File given in parameters
 	 * doesn't correspond to a valid album
 	 */
+	/*
 	@Deprecated
 	public Album(File albumDirectory) throws InvalidParameterException {
 		super(albumDirectory);
@@ -63,7 +68,7 @@ public class Album extends AbstractMusicContainer {
 		}
 		listFile = linkedListFile;
 	}
-	
+	*/
 	/**
 	 * Constructs a new Album from the Element specified.
 	 * @param Element a zicfile album element
@@ -75,7 +80,7 @@ public class Album extends AbstractMusicContainer {
 		super(albumElement);
 		// retrieve the list of Files contained by this directory from albumElement
 		NodeList listTrackElement = albumElement.getChildNodes();
-		final List<ITaggedMusicFile> linkedListFile = new LinkedList<ITaggedMusicFile>();
+		final List<AbstractMusicFile> linkedListFile = new LinkedList<AbstractMusicFile>();
 		for (int i = 0; i < listTrackElement.getLength(); i++) {
 			final Element trackElement = (Element)listTrackElement.item(i);
 			try {
