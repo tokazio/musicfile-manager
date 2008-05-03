@@ -1,4 +1,4 @@
-package info.mp3lib.core.xom;
+package info.mp3lib.core;
 
 import java.io.File;
 import java.security.InvalidParameterException;
@@ -10,30 +10,44 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 /**
- * All objects corresponding to a directory containing music files. Allows to retrieve various information
+ * A container of physical music files. Hold the XMLAlbum Allows to retrieve various information
  * from the directory.
  * @author Gabriel Pala
  */
 public class Album extends AbstractMusicContainer {
+	
+	public enum albumTagEnum {
+		ALL_SAME_TAGS(16),
+		ALL_DIFF_TAGS(8),
+		SOME_SAME_TAGS(4),
+		SOME_DIFF_TAGS(2),
+		NO_TAGS(0);
+
+		private int value;
+
+		private albumTagEnum(final int pValue) {
+			value = pValue;
+		}
+		
+	}
 	/* ------------------------ ATTRIBUTES ------------------------ */
 	/** Apache log4j logger */
 	private final static Logger LOGGER = Logger.getLogger(AbstractMusicFile.class.getName());
 	
 	/** The artist name of this album */
 	private String artist;
+	
+	/** The tag state of this album */
+	private albumTagEnum tagState;
 	/* ----------------------- CONSTRUCTORS ----------------------- */
 	
 	/**
 	 * Constructs a new empty Album.
 	 * This method should not be called directly, used by <code>MusicDataScanner.read(File)</code>
 	 */
-	@Deprecated
 	public Album() {
 		super();
-	}
-	
-	public Album(File file) {
-		super(file);
+		tagState = albumTagEnum.NO_TAGS;
 	}
 	
 	/**
@@ -43,14 +57,13 @@ public class Album extends AbstractMusicContainer {
 	 * @throws InvalidParameterException when the File given in parameters
 	 * doesn't correspond to a valid album
 	 */
-	/*
 	@Deprecated
 	public Album(File albumDirectory) throws InvalidParameterException {
 		super(albumDirectory);
 		buildElementFromFile();
 		// Initialize listFile with Tracks contained in this Album
 		final File[] listFiles = albumDirectory.listFiles();
-		final List<ITaggedMusicFile> linkedListFile = new LinkedList<ITaggedMusicFile>();
+		final List<IMusicFile> linkedListFile = new LinkedList<IMusicFile>();
 		for (int i = 0; i < listFiles.length; i++) {
 			try {
 				linkedListFile.add(new Track(listFiles[i]));
@@ -68,19 +81,19 @@ public class Album extends AbstractMusicContainer {
 		}
 		listFile = linkedListFile;
 	}
-	*/
 	/**
 	 * Constructs a new Album from the Element specified.
 	 * @param Element a zicfile album element
-	 * @param artist The artist name of this album
+	 * @param pArtist The artist name of this album
 	 * @throws InvalidParameterException when the Element given in parameters
 	 * doesn't correspond to a valid album Element
 	 */
-	public Album(final Element albumElement, String artist ) throws InvalidParameterException {		
+	public Album(final Element albumElement, String pArtist ) throws InvalidParameterException {		
 		super(albumElement);
+		artist = pArtist;
 		// retrieve the list of Files contained by this directory from albumElement
 		NodeList listTrackElement = albumElement.getChildNodes();
-		final List<AbstractMusicFile> linkedListFile = new LinkedList<AbstractMusicFile>();
+		final List<IMusicFile> linkedListFile = new LinkedList<IMusicFile>();
 		for (int i = 0; i < listTrackElement.getLength(); i++) {
 			final Element trackElement = (Element)listTrackElement.item(i);
 			try {
@@ -103,14 +116,11 @@ public class Album extends AbstractMusicContainer {
 	/* ------------------------- METHODS --------------------------- */	
 	/**
 	 * Checks if the current directory contains at less one file containing tag information.
-	 * @author
 	 * @return true if album tracks are tagged, else return false
 	 */
 	@Override
 	public boolean isTagged() {
-		boolean tagged = false;
-		// TODO method implementation
-		return tagged;
+		return tagState != albumTagEnum.NO_TAGS;
 	}
 	
 	/**
@@ -119,9 +129,7 @@ public class Album extends AbstractMusicContainer {
 	 * @return true if album is known to be a compilation, else return false
 	 */
 	public boolean isCompilation() {
-		boolean compilation = false;
-		// TODO method implementation
-		return compilation;
+		return tagState == albumTagEnum.ALL_DIFF_TAGS || tagState == albumTagEnum.SOME_DIFF_TAGS;
 	}
 	
 	/**
@@ -156,4 +164,11 @@ public class Album extends AbstractMusicContainer {
 		this.artist = artist;
 	}
 
+	/**
+	 * @return the tagState
+	 */
+	public albumTagEnum getTagState() {
+		return tagState;
+	}
+	
 }

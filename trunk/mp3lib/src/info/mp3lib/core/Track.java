@@ -1,4 +1,4 @@
-package info.mp3lib.core.xom;
+package info.mp3lib.core;
 
 import info.mp3lib.util.string.StringUtils;
 
