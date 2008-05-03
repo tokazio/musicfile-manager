@@ -4,29 +4,34 @@ import java.io.File;
 
 import org.w3c.dom.Node;
 
+import entagged.audioformats.AudioFile;
+import entagged.audioformats.AudioFileIO;
 import entagged.audioformats.Tag;
+import entagged.audioformats.exceptions.CannotReadException;
+import entagged.audioformats.exceptions.CannotWriteException;
 
 public class MusicData extends IMusicData {
 
 	private static final long serialVersionUID = 1L;
-	protected Tag tag = null;
-	protected File file = null;
+	
+	protected AudioFile file = null;
 	protected Node node = null;
-
 	
-	
-	public MusicData(File file){
-		this.file = file;
+	public MusicData(File file) throws CannotReadException {
+		this.file = AudioFileIO.read(file);
 	}
 	
-	protected MusicData(Tag tag) {
+	public MusicData(File file, Node node) throws CannotReadException {
+		this.file = AudioFileIO.read(file);
+		this.node = node;
+	}
+	
+	/*
+	protected MusicData(File file, Tag tag) throws CannotReadException {
+		this.file = AudioFileIO.read(file);
 		this.tag = tag;
 	}
-	
-	protected MusicData(File file, Tag tag) {
-		this.file = file;
-		this.tag = tag;
-	}
+	*/
 	
 	@Override
 	public String getAbsolutePath() {
@@ -34,7 +39,7 @@ public class MusicData extends IMusicData {
 	}
 
 	@Override
-	public File getFile() {
+	public AudioFile getFile() {
 		return file;
 	}
 
@@ -45,24 +50,37 @@ public class MusicData extends IMusicData {
 
 	@Override
 	public long getFileSize() {
-		// TODO Auto-generated method stub
-		return 0;
+		return file.length();
 	}
 
 	@Override
 	public Node getNode() {
-		// TODO Auto-generated method stub
 		return node;
 	}
 
 	@Override
 	public Tag getTag() {
-		return tag;
+		return this.file.getTag();
+	}
+
+	@Override
+	public void setTagByCDDB() {
+		// TODO implementation to retrieve CDDB tag info
 	}
 
 	@Override
 	public void write() {
-		
+		writeXML();
+	}
+	
+	@Override
+	void writeFile() throws CannotWriteException {
+		AudioFileIO.write(this.file);
+	}
+
+	@Override
+	void writeXML() {
+		System.out.println(this.getClass()+": writeXML() implementation to do in an inherited format..");
 	}
 	
 }

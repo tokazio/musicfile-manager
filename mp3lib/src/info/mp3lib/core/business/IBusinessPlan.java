@@ -21,6 +21,6 @@ public interface IBusinessPlan {
 	
 	
 	
-	public void write();
+//	public void write();
 	
 }

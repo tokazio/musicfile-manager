@@ -1,10 +1,11 @@
 package info.mp3lib.core.business.scan;
 
 import info.mp3lib.core.business.IBusinessPlan;
+import info.mp3lib.core.xom.Album;
+import info.mp3lib.core.xom.Artist;
+import info.mp3lib.core.xom.Track;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 
 /**
@@ -19,7 +20,7 @@ public class Scan implements IBusinessPlan {
 
 	private static final long serialVersionUID = -1963252596917406454L;
 	
-	ArrayList<ScanDataContainer> scanList = new ArrayList<ScanDataContainer>();
+	Artist scanList = new Artist("unknown");
 	
 	/**
 	 * Parcours récursivement une arborescence de répertoires :
@@ -34,34 +35,33 @@ public class Scan implements IBusinessPlan {
 	
 	public void read(File path) //throws BusinessException
 	{
-		ScanData mData = null;
-		ScanDataContainer mCont = null;
-		File pFile = null;
+		Track mData = null;
+		Album mCont = null;
 
 		// erreur d'initialisation
 		if (path.isDirectory() == false)
 			return;
 		
-		// - For each entry in this rootPath
-		//FileInputStream fis = new FileInputStream(path);
-		//while (....pFile = fis.nextFileInDirectory()....)
+		// - For each entry in this rootPath folder
+		File[] fs = path.listFiles();
+		for (int i = 0; i < fs.length; i++)
 		{
-			if (pFile.isDirectory() == false)
+			if (fs[i].isDirectory() == false)	// files
 			{
 				// create new Container if first.
 				if (mCont == null)
-					mCont = new ScanDataContainer();
+					mCont = new Album(path);
 
 				// construct new ScanMusicData from this File.
-				mData = new ScanData(pFile);
+				mData = new Track(fs[i]);
 				
 				// add MusicData to its Container.
-				mCont.getContainer().add(mData);
+				mCont.add(mData);
 			}
-			else
+			else								// sub folders
 			{
 				// recursively check sub directories
-				this.read(pFile);
+				this.read(fs[i]);
 			}
 		}
 		
@@ -80,30 +80,9 @@ public class Scan implements IBusinessPlan {
 		// not necessary here
 	}
 	
-	
-	
 	@Override
 	public void manage() {
 		// not necessary here
 	}
-
-	/**
-	 * Write ScanList Results
-	 * 
-	 */
-	public void write()
-	{
-		Iterator<ScanDataContainer> iter = scanList.iterator();
-		ScanDataContainer mCont = null;
-		
-		while (iter.hasNext())
-		{
-			mCont = iter.next();
-			mCont.write();
-		}
-	}
-
-	
-	
 }
 
