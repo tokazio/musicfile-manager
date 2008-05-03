@@ -1,4 +1,4 @@
-package info.mp3lib.core.xom;
+package info.mp3lib.core;
 
 import java.io.File;
 
@@ -30,15 +30,15 @@ public interface IMusicFile {
 	public String getFileName();
 	
 	/**
-	 * retrieves the zicFile node associated to the current music file
-	 * @return the node
-	 */
-	public Node getNode();
-	
-	/**
 	 * retrieves the File associated to the current music file
 	 * @return the File if it exists, else return null
 	 */
 	public File getFile();
+	
+	/**
+	 * retrieves the xml element associated to the current music file
+	 * @return the xml element
+	 */
+	public IXMLMusicElement getXMLElement();
 
 }

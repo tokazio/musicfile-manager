@@ -1,7 +1,9 @@
-package info.mp3lib.core.xom;
+package info.mp3lib.core;
 
 import java.io.File;
 import java.security.InvalidParameterException;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
@@ -28,7 +30,13 @@ public class Artist extends AbstractMusicContainer {
 		super();
 		// TODO singleton holding the DocumentBuilder
 		// TODO enum album
-		Document doc =  DocumentBuilderFactoryImpl.newInstance().newDocumentBuilder().newDocument();
+		Document doc = null;
+		try {
+			doc = DocumentBuilderFactoryImpl.newInstance().newDocumentBuilder().newDocument();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Element element = doc.createElement("artist");
 		// TODO verify the validity of argument and implement the exception mechanism
 			buildElementFromFile();

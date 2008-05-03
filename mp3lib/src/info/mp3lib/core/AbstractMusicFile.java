@@ -1,4 +1,4 @@
-package info.mp3lib.core.xom;
+package info.mp3lib.core;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,7 +20,7 @@ public abstract class AbstractMusicFile implements IMusicFile {
 	protected File musicFile;
 	
 	/** The XML element representing this in the zicfile */
-	protected Node node;
+	protected IXMLMusicElement xmlElement;
 	
 	/** Apache log4j logger */
 	private final static Logger LOGGER = Logger.getLogger(AbstractMusicFile.class.getName());
@@ -45,16 +45,16 @@ public abstract class AbstractMusicFile implements IMusicFile {
 	 * Constructs a new empty AbstractMusicFile.
 	 */
 	public AbstractMusicFile() {
-		node = null;
+		xmlElement = null;
 		musicFile = null;
 	}
 	
 	/**
 	 * Constructs a new AbstractMusicFile from the node specified.
 	 * @param node a zicfile element (artist, album or track)
+	 * TODO review and implement the method
 	 */
 	public AbstractMusicFile(final Node nodeArg) {		
-		node = nodeArg;
 		try {
 			RetrieveFileFromElement();
 		} catch (FileNotFoundException e) {
@@ -162,5 +162,4 @@ public abstract class AbstractMusicFile implements IMusicFile {
 			}
 		}
 	}
-
 }

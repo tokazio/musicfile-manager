@@ -1,4 +1,4 @@
-package info.mp3lib.core.xom;
+package info.mp3lib.core;
 
 import java.io.File;
 import java.util.Iterator;
@@ -14,7 +14,7 @@ import org.w3c.dom.Node;
 public abstract class AbstractMusicContainer extends AbstractMusicFile implements IMusicContainer {
 	/* ------------------------ ATTRIBUTES ------------------------ */
 	/** List of AbstractMusicFile contained in this AbstractMusicContainer */
-	protected List<AbstractMusicFile> listFile;
+	protected List<IMusicFile> listFile;
 	
 	/** Apache log4j logger */
 	private final static Logger LOGGER = Logger.getLogger(AbstractMusicFile.class.getName()); 
@@ -32,7 +32,7 @@ public abstract class AbstractMusicContainer extends AbstractMusicFile implement
 	 */
 	public AbstractMusicContainer() {
 		super();
-		listFile = new LinkedList<AbstractMusicFile>();
+		listFile = new LinkedList<IMusicFile>();
 	}
 	
 	/**
@@ -45,36 +45,28 @@ public abstract class AbstractMusicContainer extends AbstractMusicFile implement
 	
 	/* ------------------- INHERITS / REQUIRED METHODS ---------------------- */
 	
-	public void add(AbstractMusicFile f) {
+	public void add(ITaggedMusicFile f) {
 		listFile.add(f);
 	}
 	
-	public Iterator<AbstractMusicFile> getIterator() {
+	public Iterator<IMusicFile> getIterator() {
 		return listFile.iterator();
 	}
 	
 	
 	/* ------------------------- BUSINESS METHODS --------------------------- */
-	
-	/**
-	 * Checks if the current directory contains at less one file containing tag information.
-	 * @author
-	 * @return true if directory is tagged, else return false
-	 */
-	@Override
-	public boolean isTagged() {
-		boolean tagged = false;
-		// TODO method implementation
-		return tagged;
-	}
 
 	public final IMusicFile getItem(final int index) {
 		return listFile.get(index); 
 	}
 	
+	public List<IMusicFile> getContainedList() {
+		return listFile;
+	}
+	
 	/**
-	 * Retrieves the number of tracks contained in this IMusicContainer.
-	 * @return number of IMusicFile of this Album
+	 * Retrieves the number of item contained in this Container.
+	 * @return number of IMusicFile of this IMusicContainer
 	 */
 	public int getLength() {
 		return listFile.size();
