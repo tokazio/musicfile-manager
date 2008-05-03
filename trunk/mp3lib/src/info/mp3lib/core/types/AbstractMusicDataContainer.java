@@ -11,9 +11,9 @@ public class AbstractMusicDataContainer {
 	
 	private static final long serialVersionUID = 7208528853334813094L;
 	
-	ArrayList<AbstractMusicData> container = null;
+	ArrayList<MusicData> container = null;
 	
-	public ArrayList<AbstractMusicData> getContainer() {
+	public ArrayList<MusicData> getContainer() {
 		return container;
 	}
 

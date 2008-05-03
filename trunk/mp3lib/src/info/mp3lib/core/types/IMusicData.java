@@ -5,6 +5,7 @@ import java.io.File;
 import org.w3c.dom.Node;
 
 import entagged.audioformats.Tag;
+import entagged.audioformats.exceptions.CannotWriteException;
 
 /**
  * All objects corresponding to a music file (It includes directory containing music files)
@@ -54,8 +55,26 @@ public abstract class IMusicData {
 	abstract public Tag getTag();
 	
 	/**
-	 * Abstract Method used for writing Music data to any source,
-	 * in the implemented format.
+	 * Retrieves the music TagInfos associated to the current music file
+	 * via CDDB and set new informations if they are pertinent ...
+	 */
+	abstract public void setTagByCDDB();
+	
+	/**
+	 * Abstract Method used for writing Music data to any target format,
+	 * in the implemented format (default use).
 	 */
 	abstract void write();
+	
+	/**
+	 * Abstract Method used for writing Music data to XML format,
+	 * - tree to define in implementation
+	 */
+	abstract void writeXML();
+
+	/**
+	 * Abstract Method used for writing Music data to File
+	 * - for example: tags, filename, new path ...
+	 */
+	abstract void writeFile() throws CannotWriteException;
 }

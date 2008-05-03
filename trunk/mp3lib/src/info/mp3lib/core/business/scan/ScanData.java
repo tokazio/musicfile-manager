@@ -5,36 +5,36 @@ import info.mp3lib.core.types.MusicData;
 import java.io.File;
 
 import entagged.audioformats.Tag;
-import entagged.audioformats.generic.TagField;
+import entagged.audioformats.exceptions.CannotReadException;
+import entagged.audioformats.generic.GenericTag;
 
 public class ScanData extends MusicData {
 	
 	private static final long serialVersionUID = -601051253164507347L;
 
-	public ScanData(File file) {
+	public ScanData(File file) throws CannotReadException {
 		super(file);
 		
 		
 		// *** Business specific implementation ***
-		Tag tag = new TagField();
+		Tag tag = new GenericTag();//new TagField();
 		
 		// set tags Info when available
 		if (tag.getArtist().isEmpty() ||
 			tag.getAlbum().isEmpty() ||
 			tag.getTitle().isEmpty())
 		{
-			// query CDDB
+			// query CDDB (single file method..)
+			
+			// set tag info
 			tag.setArtist("");
 			tag.setAlbum("");
 			tag.setTitle("");
 			tag.setTrack("");
 		}
 	}
-
-	@Override
-	public void write() {
-		// TODO Auto-generated method stub
-		System.out.println(this.getClass()+": writeData() implementation to do..");
-	}
 	
+	void writeXML() {
+		System.out.println(this.getClass()+": writeXML() implementation to do in an inherited format..");
+	}
 }

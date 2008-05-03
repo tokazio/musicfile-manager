@@ -1,13 +1,12 @@
 package info.mp3lib.core.xom;
 
 import java.io.File;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Node;
-
-import com.sun.org.apache.bcel.internal.generic.LNEG;
 /**
  * Object corresponding to a directory on the file system containing some music files (ie. Tracks or ALbums)
  * @author Gabriel Pala
@@ -44,11 +43,18 @@ public abstract class AbstractMusicContainer extends AbstractMusicFile implement
 		super(node);
 	}
 	
-	/* ------------------------- METHODS --------------------------- */
+	/* ------------------- INHERITS / REQUIRED METHODS ---------------------- */
 	
 	public void add(AbstractMusicFile f) {
 		listFile.add(f);
 	}
+	
+	public Iterator<AbstractMusicFile> getIterator() {
+		return listFile.iterator();
+	}
+	
+	
+	/* ------------------------- BUSINESS METHODS --------------------------- */
 	
 	/**
 	 * Checks if the current directory contains at less one file containing tag information.
@@ -62,7 +68,7 @@ public abstract class AbstractMusicContainer extends AbstractMusicFile implement
 		return tagged;
 	}
 
-	public final AbstractMusicFile getItem(final int index) {
+	public final IMusicFile getItem(final int index) {
 		return listFile.get(index); 
 	}
 	
