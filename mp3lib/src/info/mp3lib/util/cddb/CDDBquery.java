@@ -1,7 +1,7 @@
 package info.mp3lib.util.cddb;
 
-import info.mp3lib.core.xom.Album;
-import info.mp3lib.core.xom.Track;
+import info.mp3lib.core.Album;
+import info.mp3lib.core.Track;
 
 import java.io.File;
 
