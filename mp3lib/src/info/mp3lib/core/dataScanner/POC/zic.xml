@@ -9,8 +9,7 @@
 	</artiste>
 	<artiste id="1" code="0" name="unknown" style="rock">
 		<album id="0" code="0" name="unknown" year="2007" size="6750" path="C/myMusic/Johnny Halliday/Allumer le feu">
-			<track id="0" code="0" currentPath="C/myMusic/Johnny Halliday/Allumer le feu/Allumer le feu.mp3"
-				newPath="C/myMusic/Johnny Halliday/Allumer le feu/Allumer_le_feu.mp3" name="Allumer le feu" length="5m48s"
+			<track id="0" code="0" name="Allumer le feu" length="5m48s"
 				size="6750" artist="johnny halliday" album="allumer le feu"></track>
 		</album>
 	</artiste>
