@@ -1,17 +1,22 @@
 package info.mp3lib.util.cddb;
 
 import info.mp3lib.core.Album;
+import info.mp3lib.core.IMusicFile;
 import info.mp3lib.core.Track;
 
 import java.io.File;
+import java.util.Iterator;
 
 import entagged.freedb.Freedb;
+import entagged.freedb.FreedbAlbum;
 import entagged.freedb.FreedbException;
 import entagged.freedb.FreedbQueryResult;
+import entagged.freedb.FreedbReadResult;
+import entagged.freedb.FreedbTrack;
 
 public class CDDBquery extends entagged.freedb.Freedb {
 	public static void main(String[] args) {
-		new CDDBquery("","");
+		new CDDBquery("C:/MP3/[ Ragga - Dancehall ]/Capleton/I testament","");
 	}
 
 	/**
@@ -25,6 +30,31 @@ public class CDDBquery extends entagged.freedb.Freedb {
 			// http://www.freedb.org/freedb_search.php?words=high+tone&allfields=YES
 			// FreedbQueryResult[] r = freedb.query("metallica");
 			
+			File adir = new File(directory);
+			Album album = new Album(adir);
+			FreedbTrack[] tracks = new FreedbTrack[album.getLength()];
+			
+			for (int tId=0; tId < album.getLength(); tId++)
+			{
+				Track track = (Track) album.getItem(tId);
+				FreedbTrack st = new SimpleTrack(track.getLength());
+				tracks[tId] = st;
+			}
+			FreedbAlbum fab = new FreedbAlbum((FreedbTrack[]) tracks);
+			
+			FreedbQueryResult[] result = queryAlbum(album);
+			
+			FreedbQueryResult[] albumResult = query(fab);
+			
+			Iterator<IMusicFile> trackIT = album.getIterator();
+			
+			for (int i=0; i<result.length; i++) {
+				System.out.println("RESULT N°"+i);
+				FreedbReadResult readResult = read(result[i]);
+				System.out.println(readResult.toString());
+			}
+			
+			/*
 			FreedbQueryResult[] queryResult = freedb.query("hightone");
 			System.out.println("request result: " + super.read(queryResult[0]));
 			/*
