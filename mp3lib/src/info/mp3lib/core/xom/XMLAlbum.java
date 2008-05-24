@@ -51,6 +51,19 @@ public class XMLAlbum extends XMLMusicElement implements IXMLMusicElement {
 	 * Sets the given year as XML element attribute
 	 * @param year the year to set
 	 */
+	public void setArtist(String name) {
+		final Element parent = (Element)elt.getParent();
+		// TODO : recherche xom si il existe un artiste du nom 'name'
+		//		- si oui, on déplace le node de l'album
+		//		- si non, on créé un nouveau node artist, dans lequel on déplace le node album.
+		
+//		parent.setAttribute("name", name);
+	}
+	
+	/**
+	 * Sets the given year as XML element attribute
+	 * @param year the year to set
+	 */
 	public void setYear(final int year) {
 		elt.setAttribute("year", new Integer(year).toString());
 	}
