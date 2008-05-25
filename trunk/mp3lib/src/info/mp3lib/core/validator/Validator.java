@@ -5,8 +5,10 @@ import info.mp3lib.core.IMusicFile;
 import info.mp3lib.core.Track;
 import info.mp3lib.util.cddb.CDDBquery;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import entagged.audioformats.AudioFile;
 import entagged.audioformats.Tag;
@@ -16,7 +18,7 @@ public class Validator {
 
 	Album album = null;
 	FreedbReadResult[] cddbInfos = null;
-	TagInfos[] tagInfos = null;
+	HashMap<String,TagInfos> tagInfos = new HashMap<String,TagInfos>();
 
 	private class TagInfos {
 		int origine = -1;
@@ -80,8 +82,8 @@ public class Validator {
 	 * cddb_tags tracks_tag context_info
 	 */
 
-	public Validator(IMusicFile mf) {
-		album = (Album) mf;
+	public Validator(Album album) {
+		this.album = album;
 		retrieveCDDB();
 		retrieveTAG();
 		retrieveCONTEXT();
@@ -104,11 +106,11 @@ public class Validator {
 		Iterator<IMusicFile> iterator = tracks.iterator();
 		if (iterator.hasNext()) {
 			track = (Track) iterator.next();
-			tagInfos[0].album = track.getTag().getFirstAlbum();
-			tagInfos[0].artist = track.getTag().getFirstArtist();
-			tagInfos[0].year = Integer.parseInt(track.getTag().getFirstYear());
+			tagInfos.get("FileTag").album = track.getTag().getFirstAlbum();
+			tagInfos.get("FileTag").artist = track.getTag().getFirstArtist();
+			tagInfos.get("FileTag").year = Integer.parseInt(track.getTag().getFirstYear());
 		}
-		tagInfos[0].size = tracks.size();
+		tagInfos.get("FileTag").size = tracks.size();
 	}
 
 	public void retrieveCONTEXT() {
@@ -146,12 +148,12 @@ public class Validator {
 		 *	- LE FAIT QUE CERTAINS CHAMPS SOIT VIDES OU NON
 		 *	- LE FAIT QUE LES COMPARAISONS SOIENT QUASIMENT SIMILAIRES OU NON
 		 *	- L'ORIGINE DES TAGS
-		 *	- LES ELEMENTS QUI CONFIRMENT LA PERTINENCE DU TAG D'ORIGINE
+		 *	- LES ELEMENTS QUI CONFIRMENT LA PERTINENCE DU TAG
 		 * 
 		 * une fois toutes les étapes terminées :
 		 *	- SELECTION DU TAG AVEC LE MEILLEUR INDICE
 		 *	- UPDATE XML des TAGS (Artist + Album + Tracks) avec IQV
-		 *	  (pas de gestion des doublons a ce niveau !)
+		 *	  (pas de gestion des doublons ici)
 		 *
 		 * 
 		 * a noter :
@@ -164,21 +166,13 @@ public class Validator {
 		 *
 		 */
 		
-		// création des différents tag possibles pour un album et ses tracks
-		// TODO faire un hash map pour différencier chaque étape ..
-		tagInfos = new TagInfos[cddbInfos.length+10];
-		
 		// Validation TAGS / Context
-		// TODO commencer par valider les tags si il faut..
-		if (album.isTagged()) {
-			// TODO check pertinence of each tag fields ..
-			// TODO generate IQV
-		} // else if ( etc... )
+		FileTagValidation();
 		
 		// Validation CDDB (for each possibilities)
 		if (cddbInfos.length != 0) {
 			for (int i = 0; i < cddbInfos.length; i++) {
-				tagInfos[i+1] = CDDBResultValidation(cddbInfos[i]);
+				tagInfos.put("cddb_"+i, CDDBResultValidation(cddbInfos[i]));
 			}
 		} else {
 			// no CDDB result : low level IQV => back to TAG infos
@@ -186,10 +180,10 @@ public class Validator {
 
 		// TODO SUP analyse les differences entre tous les tagInfos
 		//		et fait les corrections éventuelles sur le tag final
-		TagInfos finalTag = makeProperResult();
+		TagInfos finalTag = makeBestResult();
 		
-		// TODO: génération de l'IQV final
-		finalTag.IQV = generateFinalIQV(finalTag);
+		// TODO: re-génération de l'IQV final
+		updateFinalIQV(finalTag);
 		
 		// Update XML
 		updateXMLAlbum(finalTag);
@@ -230,15 +224,37 @@ public class Validator {
 		return tag;
 	}
 
-	public TagInfos makeProperResult() {
-		// TODO select best result
-		int i = 0;
-		TagInfos tag = tagInfos[i];
-		// TODO correct if necessary
+	public TagInfos FileTagValidation() {
+		// TODO
+		if (album.isTagged()) {
+			// TODO check pertinence of each tag fields ..
+			// TODO generate IQV
+		} // else if ( etc... )
+		return tagInfos.get("FileTag");
+	}
+	
+	public TagInfos makeBestResult() {
+		TagInfos tag = new TagInfos();
+		// select best result
+		Set<String> keys = tagInfos.keySet();
+		Iterator<String> it = keys.iterator();
+		int max = 0;
+		String key, maxKey = null;
+		while (it.hasNext()) {
+			key = it.next(); 
+			if (tagInfos.get(key).IQV > max) {
+				max = tagInfos.get(key).IQV;
+				maxKey = key;
+			}
+		}
+		if (maxKey != null) {
+			tag = tagInfos.get(maxKey);
+		}
+		// TODO correct fields with others tags if necessary
 		return tag;
 	}
 	
-	public int generateFinalIQV(TagInfos finalTag) {
+	public int updateFinalIQV(TagInfos finalTag) {
 		// TODO re calcul eventuel ...
 		return finalTag.IQV;
 	}
