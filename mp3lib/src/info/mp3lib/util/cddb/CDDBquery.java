@@ -70,6 +70,39 @@ public class CDDBquery extends entagged.freedb.Freedb {
 		}
 	}
 
+	public CDDBquery() {}
+
+	public FreedbReadResult[] queryAlbumInfos(Album album)
+	{
+		// return variable
+		FreedbReadResult[] readResult = null;
+		
+		// retrieve track length
+		float size[] = new float[album.getLength()];
+		for (int tId=0; tId < album.getLength(); tId++)
+		{
+			size[tId] = ((Track) album.getItem(tId)).getLength();
+		}
+		try {
+			// submit Album query
+			FreedbQueryResult[] result = null;
+			result = query(size);
+			
+			// submit Track query 
+			readResult = new FreedbReadResult[result.length];
+			for (int i=0; i<result.length; i++)
+			{
+				readResult[i] = read(result[i]);
+			}
+			
+		} catch (FreedbException e) {
+			e.printStackTrace();
+		}
+		
+		// return album & tracks values
+		return readResult;
+	}
+	
 	@Override
 	public String[] getAvailableServers() throws FreedbException {
 		return super.getAvailableServers();

@@ -1,8 +1,15 @@
 package info.mp3lib.core.xom;
 
-import org.jdom.Element;
-
 import info.mp3lib.core.IXMLMusicElement;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import org.jdom.Element;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 
 /**
  * Denotes an object that holds an xml node containing a track data.
@@ -17,7 +24,28 @@ public class XMLTrack extends XMLMusicElement implements IXMLMusicElement {
 	public XMLTrack(final Element element) {
 		super(element);
 	}
-
+	
+	/**
+	 * Constructor
+	 * @param name the name of this element
+	 */
+	public XMLTrack(String name) {
+		super(new Element(name));
+	}
+	
+	public void write() throws FileNotFoundException {
+		// TODO Get file Path / filename
+		File f = null;
+		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+		PrintWriter pw = new PrintWriter(f);
+		try {
+			outputter.output(elt.getDocument(), pw);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * Retrieves the album attribute of this track Element if it exists
 	 * else return the name of the parent album element
@@ -101,4 +129,11 @@ public class XMLTrack extends XMLMusicElement implements IXMLMusicElement {
 		elt.setAttribute("length", new Integer(length).toString());
 	}
 	
+	/**
+	 * Retrieves the path attribute of the XML node
+	 * @return the path
+	 */
+	public String getPath() {
+		return (elt.getParentElement().getAttributeValue("path"));
+	}
 }

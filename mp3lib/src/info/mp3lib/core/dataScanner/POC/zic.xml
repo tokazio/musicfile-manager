@@ -1,16 +1,25 @@
-<artistes><artiste id="0" code="0" name="diams" style="rap">
-		<album id="0" code="0" name="i am a racaille" year="" size="8097" path="C/myMusic/diams/i_am_a_racaille">
-			<track id="0" code="0" name="yeah yeah" length="240" size="4876" />
-			<track id="1" code="0" name="ouech ma geule" length="240" size="3221" />
+<artistes>
+	<artiste id="0" code="0" name="diams" style="rap">
+		<album id="0" code="0" name="i am a racaille" year=""
+			size="8097" path="C/myMusic/diams/i_am_a_racaille">
+			<track id="0" code="0" name="yeah yeah" length="240"
+				size="4876" />
+			<track id="1" code="0" name="ouech ma geule" length="240"
+				size="3221" />
 		</album>
-		<album id="1" code="0" name="i sing shit" year="2008" size="6845" path="C/myMusic/diams/i_sing_shit">
-			<track id="0" code="0" name="what a sucking song" length="240" size="6845" ></track>
+		<album id="1" code="0" name="i sing shit" year="2008"
+			size="6845" path="C/myMusic/diams/i_sing_shit">
+			<track id="0" code="0" name="what a sucking song"
+				length="240" size="6845">
+			</track>
 		</album>
 	</artiste>
 	<artiste id="1" code="0" name="unknown" style="rock">
-		<album id="0" code="0" name="unknown" year="2007" size="6750" path="C/myMusic/Johnny Halliday/Allumer le feu">
+		<album id="0" code="0" name="unknown" year="2007" size="6750"
+			path="C/myMusic/Johnny Halliday/Allumer le feu">
 			<track id="0" code="0" name="Allumer le feu" length="240"
-				size="6750" artist="johnny halliday" album="allumer le feu"></track>
+				size="6750" artist="johnny halliday" album="allumer le feu">
+			</track>
 		</album>
 	</artiste>
 </artistes>

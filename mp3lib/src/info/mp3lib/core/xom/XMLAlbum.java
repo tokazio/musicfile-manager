@@ -15,13 +15,21 @@ public class XMLAlbum extends XMLMusicElement implements IXMLMusicElement {
 	}
 	
 	/**
+	 * Constructor
+	 * @param name the name of this element
+	 */
+	public XMLAlbum(String name) {
+		super(new Element(name));
+	}
+	
+	/**
 	 * Retrieves the name of the parent artist element
 	 * @return the artist
 	 */
 	public String getArtist() {
 		final Element parent = (Element)elt.getParent();
 		return parent.getAttributeValue("name");
-	}	
+	}
 
 	/**
 	 * Retrieves the size attribute of the XML node

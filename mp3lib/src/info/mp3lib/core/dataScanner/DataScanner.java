@@ -29,11 +29,11 @@ public class DataScanner {
 
 	public void read(File path) //throws BusinessException
 	{
-		Track mData = null;
-		Album mCont = null;
+		Track track = null;
+		Album album = null;
 
 		// erreur d'initialisation
-		if (path.isDirectory() == false)
+		if (!path.isDirectory())
 			return;
 
 		// - For each entry in this rootPath folder
@@ -42,14 +42,14 @@ public class DataScanner {
 			if (fs[i].isDirectory() == false) // files
 			{
 				// create new Container if first.
-				if (mCont == null)
-					mCont = new Album();
+				if (album == null)
+					album = new Album();
 
 				// construct new ScanMusicData from this File.
-				mData = new Track(fs[i]);
+				track = new Track(fs[i]);
 
 				// add MusicData to its Container.
-				mCont.add(mData);
+				album.add(track);
 			} else // sub folders
 			{
 				// recursively check sub directories
@@ -58,8 +58,8 @@ public class DataScanner {
 		}
 
 		// store new unknown Album to scanList (unknown Artist)
-		if (mCont != null)
-			scanList.add(mCont);
+		if (album != null)
+			scanList.add(album);
 	}
 
 }

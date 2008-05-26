@@ -87,5 +87,11 @@ public class Artist extends AbstractMusicContainer {
 	protected void buildElementFromFile() {
 		// TODO method implementation
 	}
+
+	@Override
+	public IXMLMusicElement getXMLElement() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

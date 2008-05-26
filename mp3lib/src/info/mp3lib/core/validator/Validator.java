@@ -1,7 +1,6 @@
 package info.mp3lib.core.validator;
 
 import info.mp3lib.core.Album;
-import info.mp3lib.core.IMusicFile;
 import info.mp3lib.core.Track;
 import info.mp3lib.util.cddb.CDDBquery;
 
@@ -102,15 +101,14 @@ public class Validator {
 	public void retrieveTAG() {
 		Track track = null;
 		// retrieve album infos
-		List<IMusicFile> tracks = album.getContainedList();
-		Iterator<IMusicFile> iterator = tracks.iterator();
+		Iterator<Track> iterator = album.getTrackIterator();
 		if (iterator.hasNext()) {
-			track = (Track) iterator.next();
+			track = iterator.next();
 			tagInfos.get("FileTag").album = track.getTag().getFirstAlbum();
 			tagInfos.get("FileTag").artist = track.getTag().getFirstArtist();
 			tagInfos.get("FileTag").year = Integer.parseInt(track.getTag().getFirstYear());
 		}
-		tagInfos.get("FileTag").size = tracks.size();
+		tagInfos.get("FileTag").size = track.getLength();
 	}
 
 	public void retrieveCONTEXT() {
@@ -201,7 +199,7 @@ public class Validator {
 		TagInfos tag = new TagInfos();
 		
 		// With TAG infos ..
-		if (cddb.getAlbum().equals(((AudioFile)album.getFile()).getTag().getAlbum())) {
+		if (cddb.getAlbum().equals(album.getTag().getAlbum())) {
 			tag.generateIQV(CDDB_ALBUM, TAG_ALBUM);
 		}
 		if (cddb.getArtist().equals(((AudioFile)album.getFile()).getTag().getArtist())) {
