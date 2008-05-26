@@ -1,6 +1,6 @@
 package info.mp3lib.util.string;
 
-public class StringMatcher {
+public class KiriStringMatcher {
 	private String str1;
 	private char[] ch1;
 	private int lg_ch1;
@@ -14,7 +14,7 @@ public class StringMatcher {
 	private static int substCost = -5;
 	private static int matchCost = 2;
 	
-	public StringMatcher() {
+	public KiriStringMatcher() {
 		str1 = "";
 		lg_ch1 = 0;
 		
@@ -22,7 +22,7 @@ public class StringMatcher {
 		lg_ch2 = 0;
 	}
 	
-	public StringMatcher(String s1, String s2) {
+	public KiriStringMatcher(String s1, String s2) {
 		lg_ch1 = s1.length();
 		str1 = new String(s1);
 		//System.out.println("s1 avant : "+str1);

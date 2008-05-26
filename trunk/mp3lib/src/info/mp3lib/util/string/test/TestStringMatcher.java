@@ -1,6 +1,6 @@
 package info.mp3lib.util.string.test;
 
-import info.mp3lib.util.string.StringMatcher;
+import info.mp3lib.util.string.KiriStringMatcher;
 
 public class TestStringMatcher {
 
@@ -12,7 +12,7 @@ public class TestStringMatcher {
 		String s2 = "Meï_Teï_Shô_-_Lô-bâ_-_01._Stand_up_and_fight_again";
 		String s1 = "blabla - Stand up and fight again";
 		long start = System.currentTimeMillis();// calcul du temps d'execution
-		StringMatcher sm = new StringMatcher(s1, s2);
+		KiriStringMatcher sm = new KiriStringMatcher(s1, s2);
 		//System.out.println(sm);
 		String[] sAlign = sm.align();
 		long msecs = System.currentTimeMillis() - start;
