@@ -1,17 +1,12 @@
 package info.mp3lib.core;
 
-import info.mp3lib.util.string.StringUtils;
+import info.mp3lib.core.xom.XMLTrack;
 
 import java.io.File;
 import java.security.InvalidParameterException;
 
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.apache.log4j.Logger;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
-import com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl;
+import org.jdom.Element;
 
 import entagged.audioformats.AudioFile;
 import entagged.audioformats.AudioFileIO;
@@ -22,16 +17,19 @@ import entagged.audioformats.exceptions.CannotReadException;
  * All objects corresponding to a music files in audio format.
  * @author Gabriel Pala
  */
-public class Track extends AbstractMusicFile implements ITaggedMusicFile{
+public class Track {
 	/* ------------------------ ATTRIBUTES ------------------------ */
 	/** Apache log4j logger */
 	private final static Logger LOGGER = Logger.getLogger(Track.class.getName()); 
 	
-	/** The author of this Track */
-	private String artist;
+	/** the physical file holding tag object (inherits from File) */
+	private AudioFile musicFile;
 	
-	/** The name of the album containing this Track */
-	private String Album;
+	/** The XOM track */
+	private XMLTrack xmlTrack;
+	
+	/** total number of Tracks */
+	private static int id = 0;
 	/* ----------------------- CONSTRUCTORS ----------------------- */
 	/**
 	 * Constructs a new audio from the file specified.
@@ -40,11 +38,14 @@ public class Track extends AbstractMusicFile implements ITaggedMusicFile{
 	 * doesn't correspond to a valid audio file
 	 */
 	public Track(File audioFile) throws InvalidParameterException {
-		super(audioFile);
+		id++;
 		try {
 			musicFile = AudioFileIO.read(audioFile);
+			buildElementFromFile();
 		} catch (CannotReadException e) {
-			throw new InvalidParameterException(e.getMessage());
+				LOGGER.debug("the given file is not in a supported audio format : "
+						.concat(audioFile.getAbsolutePath()));
+				throw new InvalidParameterException(e.getMessage());
 		}
 	}
 
@@ -55,62 +56,55 @@ public class Track extends AbstractMusicFile implements ITaggedMusicFile{
 	 * doesn't correspond to a valid track Element
 	 */
 	public Track(Element trackElement) throws InvalidParameterException {
-		super(trackElement);
+		xmlTrack = new XMLTrack(trackElement);
 		try {
-			musicFile = AudioFileIO.read(new File(trackElement.getAttribute("currentPath")));
+			musicFile = AudioFileIO.read(new File(xmlTrack.getPath()));
 		} catch (CannotReadException e) {
-			// should never happen, only correct audio files are listed in zicfile
+			throw new InvalidParameterException("The given XML contains invalid audio files : "
+					.concat(xmlTrack.getPath()));
 		}
 	}
 
 	/* ------------------------- METHODS --------------------------- */
 	/**
-	 * retrieves the name of the audio, ie. tag title if possible else physical name
-	 * @return the title of the audio song
-	 */
-	private String getTagName() {
-		String name = getTag().getFirstTitle();
-		if (name.trim().isEmpty()) {
-			// TODO maybe check if some common pattern like 'CD' or 'encoded by' could be removed
-			name = StringUtils.removeExtension(name);
-		}
-		return name;
-	}
-
-	/**
 	 * Returns true if the current file contains tag information.
 	 * @return true if file is tagged, else return false
 	 */
-	@Override
 	public boolean isTagged() {
-		return ((AudioFile)musicFile).getTag().isEmpty();
+		return musicFile.getTag().isEmpty();
 	}
 
+	public String getArtist() {
+		return musicFile.getTag().getFirstArtist();
+	}
+	
+	public String getAlbum() {
+		return musicFile.getTag().getFirstAlbum();
+	}
+	
 	/**
 	 * Retrieve tags from the audio file.
 	 * @return a Tag object containing all tag information of the audioFile
 	 * return null if tags aren't available
 	 */
 	public Tag getTag() {
-		return ((AudioFile)musicFile).getTag();
+		return musicFile.getTag();
 	}
 
 	/**
 	 * build the track Element from informations retrieved from the audio file
 	 * and set it in this.node
-	 * @throws ParserConfigurationException 
 	 */
-	protected void buildElementFromFile() throws ParserConfigurationException {
-//		LOGGER.debug("buildTrackElementFromFile()");
-		Document doc =  DocumentBuilderFactoryImpl.newInstance().newDocumentBuilder().newDocument();
-		Element element = doc.createElement("track");
-		element.setAttribute("code", "0");
-		element.setAttribute("currentPath", musicFile.getPath());
-		element.setAttribute("newPath", "");
-		element.setAttribute("name", getTagName());
-		element.setAttribute("size",new StringBuffer().append(musicFile.length()).toString());
-		element.setAttribute("length",new StringBuffer().append(((AudioFile)musicFile).getLength()).toString());
-		node = element;
+	private void buildElementFromFile() {
+		final Tag tag = musicFile.getTag();
+		xmlTrack = new XMLTrack(musicFile.getName());
+		xmlTrack.setAlbum(tag.getFirstAlbum());
+		xmlTrack.setArtist(tag.getFirstArtist());
+		xmlTrack.setName(tag.getFirstTitle());
+		xmlTrack.setCode(0);
+		xmlTrack.setId(id);
+		xmlTrack.setLength(musicFile.getLength());
+		xmlTrack.setSize(new Long(musicFile.length() * 1024).intValue());
 	}
 	
 	/**
@@ -118,36 +112,15 @@ public class Track extends AbstractMusicFile implements ITaggedMusicFile{
 	 * @return number of Tracks of this Album
 	 */
 	public int getLength() {
-		return ((AudioFile)musicFile).getLength();
+		return musicFile.getLength();
 		
 	}
 
 	/**
-	 * @return the artist
+	 * @return the xmlTrack
 	 */
-	public String getArtist() {
-		return artist;
-	}
-
-	/**
-	 * @param artist the artist to set
-	 */
-	public void setArtist(String artist) {
-		this.artist = artist;
-	}
-
-	/**
-	 * @return the album
-	 */
-	public String getAlbum() {
-		return Album;
-	}
-
-	/**
-	 * @param album the album to set
-	 */
-	public void setAlbum(String album) {
-		Album = album;
+	public XMLTrack getXMLElement() {
+		return xmlTrack;
 	}
 
 }

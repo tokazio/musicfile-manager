@@ -1,27 +1,29 @@
 package info.mp3lib.core;
 
-import java.io.File;
+import info.mp3lib.core.xom.XMLAlbum;
+import info.mp3lib.util.string.StringMatcher;
+
 import java.security.InvalidParameterException;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
+import org.jdom.Element;
 
 /**
- * A container of physical music files. Hold the XMLAlbum Allows to retrieve various information
+ * A container of physical music files. Hold the XMLAlbum. Allows to retrieve various information
  * from the directory.
  * @author Gabriel Pala
  */
-public class Album extends AbstractMusicContainer {
+public class Album {
 	
 	public enum albumTagEnum {
-		ALL_SAME_TAGS(16),
-		ALL_DIFF_TAGS(8),
-		SOME_SAME_TAGS(4),
-		SOME_DIFF_TAGS(2),
-		NO_TAGS(0);
+		ALL_SAME_TAGS(16), // all track are tagged with the same tag
+		ALL_DIFF_TAGS(8), // all track are tagged but at less two of them have different tag
+		SOME_SAME_TAGS(4), // some track are tagged with the same tag
+		SOME_DIFF_TAGS(2), // some track are tagged but at less two of them have different tag
+		NO_TAGS(0); // no track is tagged
 
 		private int value;
 
@@ -32,13 +34,22 @@ public class Album extends AbstractMusicContainer {
 	}
 	/* ------------------------ ATTRIBUTES ------------------------ */
 	/** Apache log4j logger */
-	private final static Logger LOGGER = Logger.getLogger(AbstractMusicFile.class.getName());
+	private final static Logger LOGGER = Logger.getLogger(Album.class.getName());
 	
 	/** The artist name of this album */
 	private String artist;
 	
 	/** The tag state of this album */
 	private albumTagEnum tagState;
+	
+	/** Collection of Tracks */
+	private List<Track> trackList;
+	
+	/** The XOM album */
+	private XMLAlbum xmlAlbum;
+	
+	/** Total number of ALbum */
+	private static int id = 0;
 	/* ----------------------- CONSTRUCTORS ----------------------- */
 	
 	/**
@@ -46,58 +57,30 @@ public class Album extends AbstractMusicContainer {
 	 * This method should not be called directly, used by <code>MusicDataScanner.read(File)</code>
 	 */
 	public Album() {
-		super();
+		id++;
+		xmlAlbum = new XMLAlbum(new Integer(id).toString());
+		trackList = new LinkedList<Track>();
 		tagState = albumTagEnum.NO_TAGS;
 	}
 	
 	/**
-	 * Constructs a new Album from the file specified .
-	 * Do not use this method, use <code>MusicDataScanner.read(File)</code> instead
-	 * @param directory a File representing a directory containing music files
-	 * @throws InvalidParameterException when the File given in parameters
-	 * doesn't correspond to a valid album
-	 */
-	@Deprecated
-	public Album(File albumDirectory) throws InvalidParameterException {
-		super(albumDirectory);
-		buildElementFromFile();
-		// Initialize listFile with Tracks contained in this Album
-		final File[] listFiles = albumDirectory.listFiles();
-		final List<IMusicFile> linkedListFile = new LinkedList<IMusicFile>();
-		for (int i = 0; i < listFiles.length; i++) {
-			try {
-				linkedListFile.add(new Track(listFiles[i]));
-			} catch (InvalidParameterException e) {
-				LOGGER.warn(new StringBuffer("Unable to build a Track from ")
-						.append(listFiles[i].getName())
-						.append(" : ")
-						.append(e.getMessage()).toString());
-			}
-		}
-		if (linkedListFile.isEmpty()) {
-			throw new InvalidParameterException(new StringBuffer("Album : ")
-					.append(albumDirectory.getName())
-					.append(" does not contain any valid audio files").toString());
-		}
-		listFile = linkedListFile;
-	}
-	/**
 	 * Constructs a new Album from the Element specified.
 	 * @param Element a zicfile album element
-	 * @param pArtist The artist name of this album
 	 * @throws InvalidParameterException when the Element given in parameters
 	 * doesn't correspond to a valid album Element
 	 */
-	public Album(final Element albumElement, String pArtist ) throws InvalidParameterException {		
-		super(albumElement);
-		artist = pArtist;
+	@SuppressWarnings("unchecked")
+	public Album(final Element albumElement) throws InvalidParameterException {
+		super();
+		xmlAlbum = new XMLAlbum(albumElement);
 		// retrieve the list of Files contained by this directory from albumElement
-		NodeList listTrackElement = albumElement.getChildNodes();
-		final List<IMusicFile> linkedListFile = new LinkedList<IMusicFile>();
-		for (int i = 0; i < listTrackElement.getLength(); i++) {
-			final Element trackElement = (Element)listTrackElement.item(i);
+		List<Element> listTrackElement = albumElement.getChildren();
+		trackList = new LinkedList<Track>(); //TODO remove
+		for (Iterator<Element> iterator = listTrackElement.iterator(); iterator
+				.hasNext();) {
+			final Element trackElement = iterator.next();
 			try {
-				linkedListFile.add(new Track(trackElement));
+				trackList.add(new Track(trackElement)); // TODO use add method instead
 			} catch (InvalidParameterException e) {
 				LOGGER.warn(new StringBuffer("Unable to build a Track from ")
 						.append(trackElement.getAttribute("name"))
@@ -105,20 +88,53 @@ public class Album extends AbstractMusicContainer {
 						.append(e.getMessage()).toString());
 			}
 		}		
-		if (linkedListFile.isEmpty()) {
+		if (trackList.isEmpty()) {
 			throw new InvalidParameterException(new StringBuffer("Album : ")
-					.append(((Element)node).getAttribute("name"))
+					.append(albumElement.getAttribute("name"))
 					.append(" does not contain any valid audio files").toString());
 		}
-		listFile = linkedListFile;
 	}
 
 	/* ------------------------- METHODS --------------------------- */	
 	/**
+	 * Adds the given track to this album
+	 */
+	public void add(Track track) {
+		trackList.add(track);
+		if (track.isTagged()) {
+			if (tagState == albumTagEnum.NO_TAGS) {
+				if (trackList.size() == 1) {
+					tagState = albumTagEnum.ALL_SAME_TAGS;
+				} else {
+					tagState = albumTagEnum.SOME_SAME_TAGS;
+				}
+			} else if (tagState == albumTagEnum.ALL_SAME_TAGS) {
+				// match album of first and current track
+				if (!StringMatcher.getInstance().match(track.getAlbum(), trackList.get(0).getAlbum())) {
+					tagState = albumTagEnum.SOME_SAME_TAGS;
+				}
+			} else if (tagState == albumTagEnum.SOME_SAME_TAGS) {
+				// do nothing
+			} else if (tagState == albumTagEnum.SOME_DIFF_TAGS) {
+				// do nothing
+			}
+		} else {
+			if (tagState == albumTagEnum.ALL_SAME_TAGS) {
+				tagState = albumTagEnum.SOME_SAME_TAGS;
+			} else if (tagState == albumTagEnum.ALL_DIFF_TAGS) {
+				tagState = albumTagEnum.SOME_DIFF_TAGS;
+			}
+		}
+	}
+	
+	public Iterator<Track> getTrackIterator() {
+		return trackList.iterator();
+	}
+	
+	/**
 	 * Checks if the current directory contains at less one file containing tag information.
 	 * @return true if album tracks are tagged, else return false
 	 */
-	@Override
 	public boolean isTagged() {
 		return tagState != albumTagEnum.NO_TAGS;
 	}
@@ -141,34 +157,14 @@ public class Album extends AbstractMusicContainer {
 	}
 	
 	/**
-	 * retrieves the name of the album, ie. tag album if possible else physical name
-	 * @return the name of the album
-	 */
-	private String getTagName() {
-		String name = new String();
-		// TODO method implementation
-		return name;
-	}
-
-	/**
-	 * @return the artist
-	 */
-	public String getArtist() {
-		return artist;
-	}
-
-	/**
-	 * @param artist the artist to set
-	 */
-	public void setArtist(String artist) {
-		this.artist = artist;
-	}
-
-	/**
 	 * @return the tagState
 	 */
 	public albumTagEnum getTagState() {
 		return tagState;
+	}
+	
+	public XMLAlbum getXMLElement() {
+		return xmlAlbum;
 	}
 	
 }
