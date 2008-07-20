@@ -1,7 +1,5 @@
 package info.mp3lib.core;
 
-import info.mp3lib.core.xom.XMLTrack;
-
 import java.io.File;
 import java.security.InvalidParameterException;
 
@@ -17,16 +15,13 @@ import entagged.audioformats.exceptions.CannotReadException;
  * All objects corresponding to a music files in audio format.
  * @author Gabriel Pala
  */
-public class Track {
+public class Track extends XMLMusicElement implements IXMLMusicElement {
 	/* ------------------------ ATTRIBUTES ------------------------ */
 	/** Apache log4j logger */
 	private final static Logger LOGGER = Logger.getLogger(Track.class.getName()); 
 	
 	/** the physical file holding tag object (inherits from File) */
 	private AudioFile musicFile;
-	
-	/** The XOM track */
-	private XMLTrack xmlTrack;
 	
 	/** total number of Tracks */
 	private static int id = 0;
@@ -56,16 +51,107 @@ public class Track {
 	 * doesn't correspond to a valid track Element
 	 */
 	public Track(Element trackElement) throws InvalidParameterException {
-		xmlTrack = new XMLTrack(trackElement);
+		super(trackElement);
 		try {
-			musicFile = AudioFileIO.read(new File(xmlTrack.getPath()));
+			musicFile = AudioFileIO.read(new File(getPath()));
 		} catch (CannotReadException e) {
 			throw new InvalidParameterException("The given XML contains invalid audio files : "
-					.concat(xmlTrack.getPath()));
+					.concat(getPath()));
 		}
 	}
-
+	
+	/**
+	 * Constructor
+	 * @param name the name of this element
+	 */
+	public Track(String name) {
+		super(new Element(name));
+	}
+	
 	/* ------------------------- METHODS --------------------------- */
+	/**
+	 * Retrieves the album attribute of this track Element if it exists
+	 * else return the name of the parent album element
+	 * @return the album
+	 */
+	public String getAlbum() {
+		String album;
+		album = elt.getAttributeValue("album");
+		if (album == null) {
+			final Element parent = (Element)elt.getParent();
+			album = parent.getAttributeValue("name");
+		}
+		return album;
+	}
+
+	/**
+	 * Retrieves the of the parent artist element
+	 * @return the artist
+	 */
+	public String getArtist() {
+		return elt.getParentElement().getParentElement().getAttributeValue("name");
+	}
+
+	/**
+	 * Sets the given album as XML element attribute
+	 * /!\ if the track denoted by this is not in a compilation
+	 * you should set the album at album level
+	 * @param album the album to set
+	 */
+	public void setAlbum(final String album) {
+		elt.setAttribute("album",album);
+	}
+
+	/**
+	 * Sets the given artist as XML element attribute
+	 * /!\ if the track denoted by this is not in a compilation
+	 * you should set the artist at artist level
+	 * @param artist the artist to set
+	 */
+	public void setArtist(final String artist) {
+		elt.setAttribute("artist",artist);
+	}
+
+	/**
+	 * Retrieves the size attribute of the XML node
+	 * @return the size
+	 */
+	public int getSize() {
+		return Integer.parseInt(elt.getAttributeValue("size"));
+	}
+	
+	/**
+	 * Sets the given size as XML element attribute
+	 * @param size the size to set
+	 */
+	public void setSize(final int size) {
+		elt.setAttribute("size", new Integer(size).toString());
+	}
+	
+	/**
+	 * Retrieves the length attribute of the XML node
+	 * @return the length (in seconds)
+	 */
+	public int getLength() {
+		return Integer.parseInt(elt.getAttributeValue("length"));
+	}
+	
+	/**
+	 * Sets the given length as XML element attribute
+	 * @param length the length to set (in seconds)
+	 */
+	public void setLength(final int length) {
+		elt.setAttribute("length", new Integer(length).toString());
+	}
+	
+	/**
+	 * Retrieves the path attribute of the XML node
+	 * @return the path
+	 */
+	public String getPath() {
+		return (elt.getParentElement().getAttributeValue("path"));
+	}
+
 	/**
 	 * Returns true if the current file contains tag information.
 	 * @return true if file is tagged, else return false
@@ -74,14 +160,6 @@ public class Track {
 		return musicFile.getTag().isEmpty();
 	}
 
-	public String getArtist() {
-		return musicFile.getTag().getFirstArtist();
-	}
-	
-	public String getAlbum() {
-		return musicFile.getTag().getFirstAlbum();
-	}
-	
 	/**
 	 * Retrieve tags from the audio file.
 	 * @return a Tag object containing all tag information of the audioFile
@@ -97,30 +175,14 @@ public class Track {
 	 */
 	private void buildElementFromFile() {
 		final Tag tag = musicFile.getTag();
-		xmlTrack = new XMLTrack(musicFile.getName());
-		xmlTrack.setAlbum(tag.getFirstAlbum());
-		xmlTrack.setArtist(tag.getFirstArtist());
-		xmlTrack.setName(tag.getFirstTitle());
-		xmlTrack.setCode(0);
-		xmlTrack.setId(id);
-		xmlTrack.setLength(musicFile.getLength());
-		xmlTrack.setSize(new Long(musicFile.length() * 1024).intValue());
-	}
-	
-	/**
-	 * Retrieves the duration in seconds
-	 * @return number of Tracks of this Album
-	 */
-	public int getLength() {
-		return musicFile.getLength();
-		
-	}
-
-	/**
-	 * @return the xmlTrack
-	 */
-	public XMLTrack getXMLElement() {
-		return xmlTrack;
+		elt = new Element(musicFile.getName());
+		setAlbum(tag.getFirstAlbum());
+		setArtist(tag.getFirstArtist());
+		setName(tag.getFirstTitle());
+		setCode(0);
+		setId(id);
+		setLength(musicFile.getLength());
+		setSize(new Long(musicFile.length() * 1024).intValue());
 	}
 
 }

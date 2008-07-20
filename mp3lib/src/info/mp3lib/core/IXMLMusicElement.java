@@ -1,5 +1,7 @@
 package info.mp3lib.core;
 
+import java.io.IOException;
+
 import org.jdom.Element;
 
 /**
@@ -49,6 +51,12 @@ public interface IXMLMusicElement {
 	 * Sets the given name as XML element attribute
 	 * @param name the name to set
 	 */
-	public void setName(final String name);	
+	public void setName(final String name);
+	
+	/**
+	 * Saves the XML node in the zicfile.xml file on the file system.
+	 * @throws IOException when an IO error occurs
+	 */
+	public void save() throws IOException;
 	
 }

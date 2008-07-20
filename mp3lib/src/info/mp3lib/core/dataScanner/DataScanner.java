@@ -37,23 +37,23 @@ public class DataScanner {
 			return;
 
 		// - For each entry in this rootPath folder
-		File[] fs = path.listFiles();
-		for (int i = 0; i < fs.length; i++) {
-			if (fs[i].isDirectory() == false) // files
+		File[] fileList = path.listFiles();
+		for (int i = 0; i < fileList.length; i++) {
+			if (fileList[i].isDirectory() == false) // files
 			{
-				// create new Container if first.
+				// creates new Container if first.
 				if (album == null)
 					album = new Album();
 
-				// construct new ScanMusicData from this File.
-				track = new Track(fs[i]);
+				// constructs new ScanMusicData from this File.
+				track = new Track(fileList[i]);
 
-				// add MusicData to its Container.
+				// adds MusicData to its Container.
 				album.add(track);
 			} else // sub folders
 			{
 				// recursively check sub directories
-				this.read(fs[i]);
+				this.read(fileList[i]);
 			}
 		}
 

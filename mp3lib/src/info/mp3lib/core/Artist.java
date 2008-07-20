@@ -1,24 +1,32 @@
 package info.mp3lib.core;
 
-import java.io.File;
-import java.security.InvalidParameterException;
+import info.mp3lib.util.string.StringMatcher;
 
-import javax.xml.parsers.ParserConfigurationException;
+import java.security.InvalidParameterException;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
-import com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl;
+import org.jdom.Element;
 
 /**
 * All objects corresponding to a directory containing some albums (ie. directories containing music files).
 * @author Gabriel Pala
 */
-public class Artist extends AbstractMusicContainer {
+public class Artist extends XMLMusicElement implements IXMLMusicElement {
 	/* ------------------------ ATTRIBUTES ------------------------ */
 	/** Apache log4j logger */
-	private final static Logger LOGGER = Logger.getLogger(AbstractMusicFile.class.getName());
+	private final static Logger LOGGER = Logger.getLogger(Artist.class.getName());
+	
+	/** Collection of ALbums */
+	private List<Album> albumList;
+	
+	/** The tag state of this artist */
+	private TagEnum tagState;
+	
+	/** Total number of Artist */
+	private static int id = 0;
+	
 	/* ----------------------- CONSTRUCTORS ----------------------- */
 	/**
 	 * Constructs a new Artist and all Album it contains from the file specified.
@@ -27,31 +35,8 @@ public class Artist extends AbstractMusicContainer {
 	 * doesn't correspond to a valid artist
 	 */
 	public Artist(String name) throws InvalidParameterException {
-		super();
-		// TODO singleton holding the DocumentBuilder
-		// TODO enum album
-		Document doc = null;
-		try {
-			doc = DocumentBuilderFactoryImpl.newInstance().newDocumentBuilder().newDocument();
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Element element = doc.createElement("artist");
-		// TODO verify the validity of argument and implement the exception mechanism
-			buildElementFromFile();
-	}
-	
-	/**
-	 * Constructs a new Artist and all Album it contains from the file specified.
-	 * @param directory a File representing a directory containing albums
-	 * @throws InvalidParameterException when the File given in parameters
-	 * doesn't correspond to a valid artist
-	 */
-	public Artist(File artistDirectory) throws InvalidParameterException {
-		super(artistDirectory);
-		// TODO verify the validity of argument and implement the exception mechanism
-			buildElementFromFile();
+		super(new Element(name));
+		id++;
 	}
 	
 	/**
@@ -63,35 +48,75 @@ public class Artist extends AbstractMusicContainer {
 	 */
 	public Artist(Element artistElement) throws InvalidParameterException {
 		super(artistElement);
+		id++;
 		// TODO verify that given node well correspond to an artist and implement the exception mechanism
 	}
-
-	/* ------------------------- METHODS --------------------------- */
 	
+	/* ------------------------- METHODS --------------------------- */
+	/**
+	 * Retrieves the style attribute of the XML node
+	 * @return the style
+	 */
+	public String getStyle() {
+		return elt.getAttributeValue("style");
+	}
+	
+	/**
+	 * Sets the given style as XML element attribute
+	 * @param style the style to set
+	 */
+	public void setStyle(final String style) {
+		elt.setAttribute("style",style);
+	}
+
 	/**
 	 * Checks if the current directory contains at less one album containing tag information.
 	 * @author
 	 * @return true if artist tracks are tagged, else return false
 	 */
-	@Override
 	public boolean isTagged() {
-		boolean tagged = false;
-		// TODO method implementation
-		return tagged;
+		return tagState != TagEnum.NO_TAGS;
 	}
 	
 	/**
-	 * build the track Element from informations retrieved from the artist directory
-	 * and set it in this.node
+	 * @return the tagState
 	 */
-	protected void buildElementFromFile() {
-		// TODO method implementation
-	}
-
-	@Override
-	public IXMLMusicElement getXMLElement() {
-		// TODO Auto-generated method stub
-		return null;
+	public TagEnum getTagState() {
+		return tagState;
 	}
 	
+	/**
+	 * Adds the given album to this artist
+	 */
+	public void add(Album album) {
+		albumList.add(album);
+		if (album.isTagged()) {
+			if (tagState == TagEnum.NO_TAGS) {
+				if (albumList.size() == 1) {
+					tagState = TagEnum.ALL_SAME_TAGS;
+				} else {
+					tagState = TagEnum.SOME_SAME_TAGS;
+				}
+			} else if (tagState == TagEnum.ALL_SAME_TAGS) {
+				// match album of first and current track
+				if (!StringMatcher.getInstance().match(album.getArtist(), albumList.get(0).getArtist())) {
+					tagState = TagEnum.SOME_SAME_TAGS;
+				}
+			} else if (tagState == TagEnum.SOME_SAME_TAGS) {
+				// does nothing
+			} else if (tagState == TagEnum.SOME_DIFF_TAGS) {
+				// does nothing
+			}
+		} else {
+			if (tagState == TagEnum.ALL_SAME_TAGS) {
+				tagState = TagEnum.SOME_SAME_TAGS;
+			} else if (tagState == TagEnum.ALL_DIFF_TAGS) {
+				tagState = TagEnum.SOME_DIFF_TAGS;
+			}
+		}
+	}
+	
+	public Iterator<Album> getAlbumIterator() {
+		return albumList.iterator();
+	}
 }

@@ -1,9 +1,14 @@
-package
-info.mp3lib.core.xom;
+package info.mp3lib.core;
 
-import info.mp3lib.core.IXMLMusicElement;
+
+
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 import org.jdom.Element;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 
 /**
  * Abstract implementation of {@link IXMLMusicElement} interface
@@ -20,6 +25,13 @@ public abstract class XMLMusicElement implements IXMLMusicElement {
 	 */
 	public XMLMusicElement(final Element element) {
 		elt = element;
+	}
+	
+	/**
+	 * Defaut constructor
+	 * Never called explicitly
+	 */
+	protected XMLMusicElement() {
 	}
 	
 	/**
@@ -76,6 +88,23 @@ public abstract class XMLMusicElement implements IXMLMusicElement {
 	 */
 	public void setName(final String name) {
 		elt.setAttribute("name",name);
+	}
+	
+	/**
+	 * Saves the XML node in the zicfile.xml file on the file system.
+	 * @throws IOException when an IO error occurs
+	 */
+	public void save() throws IOException {
+		// TODO Get file Path / filename
+		File f = null;
+		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+		PrintWriter pw = new PrintWriter(f);
+		try {
+			outputter.output(elt.getDocument(), pw);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }

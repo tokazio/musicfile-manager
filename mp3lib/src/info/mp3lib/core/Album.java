@@ -1,6 +1,5 @@
 package info.mp3lib.core;
 
-import info.mp3lib.core.xom.XMLAlbum;
 import info.mp3lib.util.string.StringMatcher;
 
 import java.security.InvalidParameterException;
@@ -16,37 +15,16 @@ import org.jdom.Element;
  * from the directory.
  * @author Gabriel Pala
  */
-public class Album {
-	
-	public enum albumTagEnum {
-		ALL_SAME_TAGS(16), // all track are tagged with the same tag
-		ALL_DIFF_TAGS(8), // all track are tagged but at less two of them have different tag
-		SOME_SAME_TAGS(4), // some track are tagged with the same tag
-		SOME_DIFF_TAGS(2), // some track are tagged but at less two of them have different tag
-		NO_TAGS(0); // no track is tagged
-
-		private int value;
-
-		private albumTagEnum(final int pValue) {
-			value = pValue;
-		}
-		
-	}
+public class Album extends XMLMusicElement implements IXMLMusicElement {
 	/* ------------------------ ATTRIBUTES ------------------------ */
 	/** Apache log4j logger */
 	private final static Logger LOGGER = Logger.getLogger(Album.class.getName());
 	
-	/** The artist name of this album */
-	private String artist;
-	
 	/** The tag state of this album */
-	private albumTagEnum tagState;
+	private TagEnum tagState;
 	
 	/** Collection of Tracks */
 	private List<Track> trackList;
-	
-	/** The XOM album */
-	private XMLAlbum xmlAlbum;
 	
 	/** Total number of ALbum */
 	private static int id = 0;
@@ -57,10 +35,19 @@ public class Album {
 	 * This method should not be called directly, used by <code>MusicDataScanner.read(File)</code>
 	 */
 	public Album() {
+		super(new Element(new Integer(id).toString()));
 		id++;
-		xmlAlbum = new XMLAlbum(new Integer(id).toString());
 		trackList = new LinkedList<Track>();
-		tagState = albumTagEnum.NO_TAGS;
+		tagState = TagEnum.NO_TAGS;
+	}
+	
+	/**
+	 * Constructor
+	 * @param name the name of this element
+	 */
+	public Album(String name) {
+		super(new Element(name));
+		id++;
 	}
 	
 	/**
@@ -71,8 +58,8 @@ public class Album {
 	 */
 	@SuppressWarnings("unchecked")
 	public Album(final Element albumElement) throws InvalidParameterException {
-		super();
-		xmlAlbum = new XMLAlbum(albumElement);
+		super(albumElement);
+		id++;
 		// retrieve the list of Files contained by this directory from albumElement
 		List<Element> listTrackElement = albumElement.getChildren();
 		trackList = new LinkedList<Track>(); //TODO remove
@@ -97,32 +84,85 @@ public class Album {
 
 	/* ------------------------- METHODS --------------------------- */	
 	/**
+	 * Retrieves the name of the parent artist element
+	 * @return the artist
+	 */
+	public String getArtist() {
+		final Element parent = (Element)elt.getParent();
+		return parent.getAttributeValue("name");
+	}
+
+	/**
+	 * Retrieves the size attribute of the XML node
+	 * @return the size
+	 */
+	public int getSize() {
+		return Integer.parseInt(elt.getAttributeValue("size"));
+	}
+
+	/**
+	 * Sets the given size as XML element attribute
+	 * @param size the size to set
+	 */
+	public void setSize(final int size) {
+		elt.setAttribute("size", new Integer(size).toString());
+	}
+
+	/**
+	 * Retrieves the year attribute of the XML node
+	 * @return the year
+	 */
+	public int getYear() {
+		return Integer.parseInt(elt.getAttributeValue("year"));
+	}
+
+	/**
+	 * Sets the given year as XML element attribute
+	 * @param year the year to set
+	 */
+	public void setArtist(String name) {
+		final Element parent = (Element)elt.getParent();
+		// TODO : recherche xom si il existe un artiste du nom 'name'
+		//		- si oui, on déplace le node de l'album
+		//		- si non, on créé un nouveau node artist, dans lequel on déplace le node album.
+		
+//		parent.setAttribute("name", name);
+	}
+	
+	/**
+	 * Sets the given year as XML element attribute
+	 * @param year the year to set
+	 */
+	public void setYear(final int year) {
+		elt.setAttribute("year", new Integer(year).toString());
+	}
+	/**
 	 * Adds the given track to this album
 	 */
 	public void add(Track track) {
 		trackList.add(track);
 		if (track.isTagged()) {
-			if (tagState == albumTagEnum.NO_TAGS) {
+			if (tagState == TagEnum.NO_TAGS) {
 				if (trackList.size() == 1) {
-					tagState = albumTagEnum.ALL_SAME_TAGS;
+					tagState = TagEnum.ALL_SAME_TAGS;
 				} else {
-					tagState = albumTagEnum.SOME_SAME_TAGS;
+					tagState = TagEnum.SOME_SAME_TAGS;
 				}
-			} else if (tagState == albumTagEnum.ALL_SAME_TAGS) {
+			} else if (tagState == TagEnum.ALL_SAME_TAGS) {
 				// match album of first and current track
 				if (!StringMatcher.getInstance().match(track.getAlbum(), trackList.get(0).getAlbum())) {
-					tagState = albumTagEnum.SOME_SAME_TAGS;
+					tagState = TagEnum.SOME_SAME_TAGS;
 				}
-			} else if (tagState == albumTagEnum.SOME_SAME_TAGS) {
-				// do nothing
-			} else if (tagState == albumTagEnum.SOME_DIFF_TAGS) {
-				// do nothing
+			} else if (tagState == TagEnum.SOME_SAME_TAGS) {
+				// does nothing
+			} else if (tagState == TagEnum.SOME_DIFF_TAGS) {
+				// does nothing
 			}
 		} else {
-			if (tagState == albumTagEnum.ALL_SAME_TAGS) {
-				tagState = albumTagEnum.SOME_SAME_TAGS;
-			} else if (tagState == albumTagEnum.ALL_DIFF_TAGS) {
-				tagState = albumTagEnum.SOME_DIFF_TAGS;
+			if (tagState == TagEnum.ALL_SAME_TAGS) {
+				tagState = TagEnum.SOME_SAME_TAGS;
+			} else if (tagState == TagEnum.ALL_DIFF_TAGS) {
+				tagState = TagEnum.SOME_DIFF_TAGS;
 			}
 		}
 	}
@@ -136,7 +176,7 @@ public class Album {
 	 * @return true if album tracks are tagged, else return false
 	 */
 	public boolean isTagged() {
-		return tagState != albumTagEnum.NO_TAGS;
+		return tagState != TagEnum.NO_TAGS;
 	}
 	
 	/**
@@ -145,26 +185,13 @@ public class Album {
 	 * @return true if album is known to be a compilation, else return false
 	 */
 	public boolean isCompilation() {
-		return tagState == albumTagEnum.ALL_DIFF_TAGS || tagState == albumTagEnum.SOME_DIFF_TAGS;
-	}
-	
-	/**
-	 * build the track Element from informations retrieved from the album directory
-	 * and set it in this.node
-	 */
-	protected void buildElementFromFile() {
-		// TODO method implementation
+		return tagState == TagEnum.ALL_DIFF_TAGS || tagState == TagEnum.SOME_DIFF_TAGS;
 	}
 	
 	/**
 	 * @return the tagState
 	 */
-	public albumTagEnum getTagState() {
+	public TagEnum getTagState() {
 		return tagState;
 	}
-	
-	public XMLAlbum getXMLElement() {
-		return xmlAlbum;
-	}
-	
 }
