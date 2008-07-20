@@ -2,6 +2,7 @@ package info.mp3lib.core.dataScanner;
 
 import info.mp3lib.core.Album;
 import info.mp3lib.core.Artist;
+import info.mp3lib.core.Library;
 import info.mp3lib.core.Track;
 
 import java.io.File;
@@ -12,9 +13,29 @@ import java.io.File;
  */
 
 public class DataScanner {
+	
+	/** the unique instance of the singleton */
+	private static DataScanner instance;
+	
 	private static final long serialVersionUID = -1963252596917406454L;
 
-	Artist scanList = new Artist("unknown");
+	/** the unique artist in chich store all the retrieved album */
+	Artist scanList;
+	
+	/** static access to the singleton */
+	public static DataScanner getInstance() {
+		if (instance == null) {
+			instance = new DataScanner();
+		}
+		return instance;
+	}
+	
+	/**
+	 * Private Constructor.
+	 */
+	private DataScanner() {
+		scanList = Library.getInstance().getArtist("unknown");
+	}
 
 	/**
 	 * Parcours récursivement une arborescence de répertoires :

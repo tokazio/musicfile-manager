@@ -29,7 +29,8 @@ public class Artist extends XMLMusicElement {
 	
 	/* ----------------------- CONSTRUCTORS ----------------------- */
 	/**
-	 * Constructs a new Artist and all Album it contains from the file specified.
+	 * Constructs a new Artist and all Album it contains from the file specified.<br/>
+	 *  /!\ should not be call directly use <code>Library.getInstance().getArtist()</code> instead.
 	 * @param directory a File representing a directory containing albums
 	 * @throws InvalidParameterException when the File given in parameters
 	 * doesn't correspond to a valid artist
@@ -40,7 +41,8 @@ public class Artist extends XMLMusicElement {
 	}
 	
 	/**
-	 * Constructs a new Artist from the node specified.
+	 * Constructs a new Artist from the node specified.<br/>
+	 *  /!\ should not be call directly use <code>Library.getInstance().getArtist()</code> instead.
 	 * @param Element a zicfile artist element
 	 * @param retrieveFile if true retrieve and set musicFile from node informations
 	 * @throws InvalidParameterException when the Element given in parameters
