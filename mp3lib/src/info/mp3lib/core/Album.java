@@ -15,7 +15,7 @@ import org.jdom.Element;
  * from the directory.
  * @author Gabriel Pala
  */
-public class Album extends XMLMusicElement implements IXMLMusicElement {
+public class Album extends XMLMusicElement {
 	/* ------------------------ ATTRIBUTES ------------------------ */
 	/** Apache log4j logger */
 	private final static Logger LOGGER = Logger.getLogger(Album.class.getName());
@@ -117,7 +117,7 @@ public class Album extends XMLMusicElement implements IXMLMusicElement {
 	}
 
 	/**
-	 * Sets the given year as XML element attribute
+	 * Sets the given artist as XML element attribute
 	 * @param year the year to set
 	 */
 	public void setArtist(String name) {
