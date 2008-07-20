@@ -15,7 +15,7 @@ import entagged.audioformats.exceptions.CannotReadException;
  * All objects corresponding to a music files in audio format.
  * @author Gabriel Pala
  */
-public class Track extends XMLMusicElement implements IXMLMusicElement {
+public class Track extends XMLMusicElement {
 	/* ------------------------ ATTRIBUTES ------------------------ */
 	/** Apache log4j logger */
 	private final static Logger LOGGER = Logger.getLogger(Track.class.getName()); 
