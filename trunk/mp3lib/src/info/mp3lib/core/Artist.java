@@ -13,7 +13,7 @@ import org.jdom.Element;
 * All objects corresponding to a directory containing some albums (ie. directories containing music files).
 * @author Gabriel Pala
 */
-public class Artist extends XMLMusicElement implements IXMLMusicElement {
+public class Artist extends XMLMusicElement {
 	/* ------------------------ ATTRIBUTES ------------------------ */
 	/** Apache log4j logger */
 	private final static Logger LOGGER = Logger.getLogger(Artist.class.getName());
