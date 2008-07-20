@@ -2,6 +2,8 @@ package info.mp3lib.core;
 
 
 
+import info.mp3lib.config.Config;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -95,8 +97,7 @@ public abstract class XMLMusicElement implements IXMLMusicElement {
 	 * @throws IOException when an IO error occurs
 	 */
 	public void save() throws IOException {
-		// TODO Get file Path / filename
-		File f = null;
+		File f = new File(Config.getInstance().getZicFilePath());
 		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
 		PrintWriter pw = new PrintWriter(f);
 		try {
