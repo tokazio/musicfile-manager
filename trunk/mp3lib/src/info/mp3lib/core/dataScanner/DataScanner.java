@@ -19,7 +19,7 @@ public class DataScanner {
 	
 	private static final long serialVersionUID = -1963252596917406454L;
 
-	/** the unique artist in chich store all the retrieved album */
+	/** the unique artist in which store all the retrieved album */
 	Artist scanList;
 	
 	/** static access to the singleton */
