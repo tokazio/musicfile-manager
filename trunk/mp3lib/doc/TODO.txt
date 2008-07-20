@@ -1,0 +1,7 @@
+- Implementer la classe config => Gab [0%]
+- Implementer StringMatcher et son systeme de config --Conception a discutter -- => Kiri [0%]
+- Tester le package core => Gab/Do [0%]
+- Etudier le systeme CDDB - reflechir a un solution de recoupement des resultats 
+d'une requête avec le contexte => Do [0%]
+- Reflechir à la conception des classes representant le contexte => All [0%]
+- Reflechir à la conception du systeme de supression des doublons (classement ?)
