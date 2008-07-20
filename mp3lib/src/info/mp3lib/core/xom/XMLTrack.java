@@ -136,4 +136,5 @@ public class XMLTrack extends XMLMusicElement implements IXMLMusicElement {
 	public String getPath() {
 		return (elt.getParentElement().getAttributeValue("path"));
 	}
+
 }
