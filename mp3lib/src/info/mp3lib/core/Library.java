@@ -3,10 +3,9 @@ package info.mp3lib.core;
 import java.util.Map;
 
 /**
- * Holds all existing artist in Map.<br/>
- * Manages (creates and provides artists to the program)
- * Unique instance in the program (Singleton)
- * @author AkS - Gab
+ * Holds all existing artist in Map.<br/> Manages (creates and provides artists to the program) Unique instance in the program (Singleton)
+ * @author   AkS - Gab
+ * @uml.dependency   supplier="info.mp3lib.core.Artist" stereotypes="Standard::Create"
  */
 public class Library {
 
