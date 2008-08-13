@@ -19,7 +19,7 @@ import org.jdom.output.XMLOutputter;
 public abstract class XMLMusicElement implements IXMLMusicElement {
 
 	/** The XML node */
-	protected Element elt;
+	private Element elt;
 	
 	/**
 	 * Constructor
@@ -45,11 +45,19 @@ public abstract class XMLMusicElement implements IXMLMusicElement {
 	}
 	
 	/**
+	 * Sets the given XML element
+	 * @param element the element to set
+	 */
+	protected void setElement(final Element element) {
+		elt = element;
+	}
+	
+	/**
 	 * Retrieves the id attribute of the XML node
 	 * @return the id
 	 */
 	public int getId() {
-		return Integer.parseInt(elt.getAttributeValue("id"));
+		return Integer.parseInt(elt.getAttributeValue(ATTR_ID));
 	}
 	
 	/**
@@ -57,7 +65,7 @@ public abstract class XMLMusicElement implements IXMLMusicElement {
 	 * @param id the id to set
 	 */
 	public void setId(final int id) {
-		elt.setAttribute("id", new Integer(id).toString());
+		elt.setAttribute(ATTR_ID, new Integer(id).toString());
 	}
 	
 	/**
@@ -65,7 +73,7 @@ public abstract class XMLMusicElement implements IXMLMusicElement {
 	 * @return the code
 	 */
 	public int getCode() {
-		return Integer.parseInt(elt.getAttributeValue("id"));
+		return Integer.parseInt(elt.getAttributeValue(ATTR_ID));
 	}
 	
 	/**
@@ -73,7 +81,7 @@ public abstract class XMLMusicElement implements IXMLMusicElement {
 	 * @param code the code to set
 	 */
 	public void setCode(final int code) {
-		elt.setAttribute("code", new Integer(code).toString());
+		elt.setAttribute(ATTR_CODE, new Integer(code).toString());
 	}
 	
 	/**
@@ -81,7 +89,7 @@ public abstract class XMLMusicElement implements IXMLMusicElement {
 	 * @return the name
 	 */
 	public String getName() {
-		return elt.getAttributeValue("name");
+		return elt.getAttributeValue(ATTR_NAME);
 	}
 	
 	/**
@@ -89,7 +97,7 @@ public abstract class XMLMusicElement implements IXMLMusicElement {
 	 * @param name the name to set
 	 */
 	public void setName(final String name) {
-		elt.setAttribute("name",name);
+		elt.setAttribute(ATTR_NAME,name);
 	}
 	
 	/**
@@ -108,4 +116,38 @@ public abstract class XMLMusicElement implements IXMLMusicElement {
 		}
 	}
 	
+	/* ------------------------- CONSTANTS --------------------------- */
+	
+	/** name attribute : used by artist, album, track */
+	public final static String ATTR_NAME = "name";
+	
+	/** id attribute : used by artist, album, track */
+	public final static String ATTR_ID = "id";
+	
+	/** code attribute : used by artist, album, track */
+	public final static String ATTR_CODE = "code";
+	
+	/** size attribute : used by album, track */
+	public final static String ATTR_SIZE = "size";
+	
+	/** style attribute : used by artist */
+	public final static String ATTR_STYLE = "style";
+	
+	/** path attribute : used by album */
+	public final static String ATTR_PATH = "path";
+	
+	/** year attribute : used by album */
+	public final static String ATTR_YEAR = "year";
+	
+	/** length attribute : used by track */
+	public final static String ATTR_LENGTH = "length";
+	
+	/** XML artist element */
+	public final static String ELT_ARTIST = "artist";
+	
+	/** XML album element */
+	public final static String ELT_ALBUM = "album";
+	
+	/** XML track element */
+	public final static String ELT_TRACK = "track";
 }

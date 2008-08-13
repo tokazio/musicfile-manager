@@ -2,7 +2,6 @@ package info.mp3lib.core;
 
 import info.mp3lib.util.string.StringMatcher;
 
-import java.security.InvalidParameterException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -32,10 +31,10 @@ public class Artist extends XMLMusicElement {
 	 * Constructs a new Artist and all Album it contains from the file specified.<br/>
 	 *  /!\ should not be call directly use <code>Library.getInstance().getArtist()</code> instead.
 	 * @param directory a File representing a directory containing albums
-	 * @throws InvalidParameterException when the File given in parameters
+	 * @throws IllegalArgumentException when the File given in parameters
 	 * doesn't correspond to a valid artist
 	 */
-	public Artist(String name) throws InvalidParameterException {
+	public Artist(String name) throws IllegalArgumentException {
 		super(new Element(name));
 		id++;
 	}
@@ -45,10 +44,10 @@ public class Artist extends XMLMusicElement {
 	 *  /!\ should not be call directly use <code>Library.getInstance().getArtist()</code> instead.
 	 * @param Element a zicfile artist element
 	 * @param retrieveFile if true retrieve and set musicFile from node informations
-	 * @throws InvalidParameterException when the Element given in parameters
+	 * @throws IllegalArgumentException when the Element given in parameters
 	 * doesn't correspond to a valid artist Element
 	 */
-	public Artist(Element artistElement) throws InvalidParameterException {
+	public Artist(Element artistElement) throws IllegalArgumentException {
 		super(artistElement);
 		id++;
 		// TODO verify that given node well correspond to an artist and implement the exception mechanism
@@ -60,7 +59,7 @@ public class Artist extends XMLMusicElement {
 	 * @return the style
 	 */
 	public String getStyle() {
-		return elt.getAttributeValue("style");
+		return getElement().getAttributeValue(XMLMusicElement.ATTR_STYLE);
 	}
 	
 	/**
@@ -68,7 +67,7 @@ public class Artist extends XMLMusicElement {
 	 * @param style the style to set
 	 */
 	public void setStyle(final String style) {
-		elt.setAttribute("style",style);
+		getElement().setAttribute(XMLMusicElement.ATTR_STYLE,style);
 	}
 
 	/**
@@ -101,7 +100,7 @@ public class Artist extends XMLMusicElement {
 				}
 			} else if (tagState == TagEnum.ALL_SAME_TAGS) {
 				// match album of first and current track
-				if (!StringMatcher.getInstance().match(album.getArtist(), albumList.get(0).getArtist())) {
+				if (!StringMatcher.getInstance().match(album.getArtistName(), albumList.get(0).getArtistName())) {
 					tagState = TagEnum.SOME_SAME_TAGS;
 				}
 			} else if (tagState == TagEnum.SOME_SAME_TAGS) {
@@ -118,7 +117,64 @@ public class Artist extends XMLMusicElement {
 		}
 	}
 	
+	/**
+	 * Removes the given album from this artist
+	 * @param album the album to remove
+	 * @return true if the track was successfully removed, false otherwise
+	 */
+	public boolean remove(Album album) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug(new StringBuffer("Artist [").append(getName()).append("]: Removing Album [")
+					.append(album.getName()).append("]...").toString());
+		}
+		boolean success = false;
+		if (getElement().removeChild(album.getName()))  {
+			success = albumList.remove(album);
+		}
+		if (!success) {
+			LOGGER.debug("Failure");
+		}
+		return success;
+	}
+	
+	/**
+	 * Retrieves an iterator of the album collection of this artist
+	 * @return an album iterator
+	 */
 	public Iterator<Album> getAlbumIterator() {
 		return albumList.iterator();
+	}
+	
+	/**
+	 * If it exists retrieves the album denoted by the given name else creates it and 
+	 * add it to this artist
+	 * @param albumName the name of the album to retrieve
+	 * @return the album denoted by the given name
+	 */
+	public Album getAlbum(final String albumName) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug(new StringBuffer("Asked for album [").append(albumName).append("]...").toString());
+		}
+		Album album = null;
+		final Iterator<Album> it = getAlbumIterator();
+		boolean notFound = true;
+		while (it.hasNext() && notFound) {
+			album = (Album) it.next();
+			notFound = !album.getName().equals(albumName);
+		}
+		if (notFound) {
+			LOGGER.debug("Does not exist, création...");
+			album = new Album(albumName);
+			add(album);
+		}
+		return album;
+	}
+	
+	/**
+	 * Checks if the album list of this artist contains no elements. 
+	 * @return true if this artist is empty
+	 */
+	public boolean isEmpty() {
+		return albumList.isEmpty();
 	}
 }

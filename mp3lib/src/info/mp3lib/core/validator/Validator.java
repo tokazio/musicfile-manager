@@ -199,7 +199,7 @@ public class Validator {
 		TagInfos tag = new TagInfos();
 		
 		// With TAG infos ..
-		if (cddb.getAlbum().equals(album.getTag().getAlbum())) {
+		if (cddb.getAlbum().equals(album.getTag().getAlbumName())) {
 			tag.generateIQV(CDDB_ALBUM, TAG_ALBUM);
 		}
 		if (cddb.getArtist().equals(((AudioFile)album.getFile()).getTag().getArtist())) {
@@ -216,7 +216,7 @@ public class Validator {
 		// With Context Infos ...
 		if (cddb.getAlbum().equals(album.getName())) {
 			tag.generateIQV(CDDB_ALBUM, CONTEXT_ALBUM);
-		} else if (cddb.getArtist().equals(album.getArtist())) {
+		} else if (cddb.getArtist().equals(album.getArtistName())) {
 			tag.generateIQV(CDDB_ALBUM, CONTEXT_ARTIST);
 		}
 		return tag;

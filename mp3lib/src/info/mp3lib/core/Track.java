@@ -1,7 +1,6 @@
 package info.mp3lib.core;
 
 import java.io.File;
-import java.security.InvalidParameterException;
 
 import org.apache.log4j.Logger;
 import org.jdom.Element;
@@ -29,10 +28,10 @@ public class Track extends XMLMusicElement {
 	/**
 	 * Constructs a new audio from the file specified.
 	 * @param audioFile a file in audio format
-	 * @throws InvalidParameterException when the File given in parameters
+	 * @throws IllegalArgumentException when the File given in parameters
 	 * doesn't correspond to a valid audio file
 	 */
-	public Track(File audioFile) throws InvalidParameterException {
+	public Track(File audioFile) throws IllegalArgumentException {
 		id++;
 		try {
 			musicFile = AudioFileIO.read(audioFile);
@@ -40,22 +39,22 @@ public class Track extends XMLMusicElement {
 		} catch (CannotReadException e) {
 				LOGGER.debug("the given file is not in a supported audio format : "
 						.concat(audioFile.getAbsolutePath()));
-				throw new InvalidParameterException(e.getMessage());
+				throw new IllegalArgumentException(e.getMessage());
 		}
 	}
 
 	/**
 	 * Constructs a new audio from the node specified.
 	 * @param trackElement a zicfile track element
-	 * @throws InvalidParameterException when the Element given in parameters
+	 * @throws IllegalArgumentException when the Element given in parameters
 	 * doesn't correspond to a valid track Element
 	 */
-	public Track(Element trackElement) throws InvalidParameterException {
+	public Track(Element trackElement) throws IllegalArgumentException {
 		super(trackElement);
 		try {
 			musicFile = AudioFileIO.read(new File(getPath()));
 		} catch (CannotReadException e) {
-			throw new InvalidParameterException("The given XML contains invalid audio files : "
+			throw new IllegalArgumentException("The given XML contains invalid audio files : "
 					.concat(getPath()));
 		}
 	}
@@ -70,46 +69,61 @@ public class Track extends XMLMusicElement {
 	
 	/* ------------------------- METHODS --------------------------- */
 	/**
-	 * Retrieves the album attribute of this track Element if it exists
-	 * else return the name of the parent album element
-	 * @return the album
+	 * Retrieves the name of the parent album element
+	 * @return the album name
 	 */
-	public String getAlbum() {
-		String album;
-		album = elt.getAttributeValue("album");
-		if (album == null) {
-			final Element parent = (Element)elt.getParent();
-			album = parent.getAttributeValue("name");
-		}
-		return album;
+	public String getAlbumName() {
+		return getElement().getParentElement().getAttributeValue(XMLMusicElement.ATTR_NAME);
 	}
 
 	/**
 	 * Retrieves the of the parent artist element
 	 * @return the artist
 	 */
-	public String getArtist() {
-		return elt.getParentElement().getParentElement().getAttributeValue("name");
+	public String getArtistName() {
+		return getElement().getParentElement().getParentElement().getAttributeValue(XMLMusicElement.ATTR_NAME);
 	}
 
 	/**
-	 * Sets the given album as XML element attribute
-	 * /!\ if the track denoted by this is not in a compilation
-	 * you should set the album at album level
-	 * @param album the album to set
+	 * <p>Moves this track to the album denoted by the specified name in the artist 
+	 * denoted by the specified name too.<br/>
+	 * (Those one will be created and added to library if they do not already exist)</p>
+	 * <p>Removes beforehand this track from its actual album if there is one.</p>
+	 * @param artistName the name of the artist containing the album below 
+	 * (can be null, in this case the album will be moved in default unknown artist)
+	 * @param albumName the name of the album in which to move this track
+	 * @throws IllegalArgumentException if the given album name is null or empty
 	 */
-	public void setAlbum(final String album) {
-		elt.setAttribute("album",album);
-	}
-
-	/**
-	 * Sets the given artist as XML element attribute
-	 * /!\ if the track denoted by this is not in a compilation
-	 * you should set the artist at artist level
-	 * @param artist the artist to set
-	 */
-	public void setArtist(final String artist) {
-		elt.setAttribute("artist",artist);
+	public void moveTo(String artistName, final String albumName) {
+		final Library library = Library.getInstance();
+		if (albumName == null || albumName.trim().length() == 0) {
+			throw new IllegalArgumentException("Given album name can't be null or empty");
+		}
+		// if this track already belongs to an album
+		final Element parentAlbum = (Element) getElement().getParent();
+		if (parentAlbum != null) {
+			final Element parentArtist = (Element) parentAlbum.getParent();// an album is necessary in a artist
+			// retrieve the album
+			final Album album = library.getAlbum(parentArtist.getName(), albumName);
+			// and remove the track from it
+			if (!album.remove(this)) {
+				// warn if the track was in the XOM but not in the object model
+				LOGGER.warn(new StringBuffer("Data corruption, XOM and Object model for the track [")
+				.append(getName()).append("], id [").append(getId()).append("] are desynchronised")
+				.toString());
+				
+				// remove the album if empty
+				if (album.isEmpty()) {
+					library.getArtist(album.getArtistName()).remove(album);
+				}
+			}
+		}
+		if (artistName == null) {
+			artistName = Library.DEFAULT_UNKNOWN_ELT_NAME;
+		}
+		// retrieve the album denoted by the given name
+		final Album album = library.getAlbum(artistName, albumName);
+		album.add(this);
 	}
 
 	/**
@@ -117,7 +131,7 @@ public class Track extends XMLMusicElement {
 	 * @return the size
 	 */
 	public int getSize() {
-		return Integer.parseInt(elt.getAttributeValue("size"));
+		return Integer.parseInt(getElement().getAttributeValue(XMLMusicElement.ATTR_SIZE));
 	}
 	
 	/**
@@ -125,7 +139,7 @@ public class Track extends XMLMusicElement {
 	 * @param size the size to set
 	 */
 	public void setSize(final int size) {
-		elt.setAttribute("size", new Integer(size).toString());
+		getElement().setAttribute(XMLMusicElement.ATTR_SIZE, new Integer(size).toString());
 	}
 	
 	/**
@@ -133,7 +147,7 @@ public class Track extends XMLMusicElement {
 	 * @return the length (in seconds)
 	 */
 	public int getLength() {
-		return Integer.parseInt(elt.getAttributeValue("length"));
+		return Integer.parseInt(getElement().getAttributeValue(XMLMusicElement.ATTR_LENGTH));
 	}
 	
 	/**
@@ -141,7 +155,7 @@ public class Track extends XMLMusicElement {
 	 * @param length the length to set (in seconds)
 	 */
 	public void setLength(final int length) {
-		elt.setAttribute("length", new Integer(length).toString());
+		getElement().setAttribute(XMLMusicElement.ATTR_LENGTH, new Integer(length).toString());
 	}
 	
 	/**
@@ -149,7 +163,7 @@ public class Track extends XMLMusicElement {
 	 * @return the path
 	 */
 	public String getPath() {
-		return (elt.getParentElement().getAttributeValue("path"));
+		return (getElement().getParentElement().getAttributeValue(XMLMusicElement.ATTR_PATH));
 	}
 
 	/**
@@ -157,7 +171,7 @@ public class Track extends XMLMusicElement {
 	 * @return true if file is tagged, else return false
 	 */
 	public boolean isTagged() {
-		return musicFile.getTag().isEmpty();
+		return ! musicFile.getTag().isEmpty();
 	}
 
 	/**
@@ -175,9 +189,8 @@ public class Track extends XMLMusicElement {
 	 */
 	private void buildElementFromFile() {
 		final Tag tag = musicFile.getTag();
-		elt = new Element(musicFile.getName());
-		setAlbum(tag.getFirstAlbum());
-		setArtist(tag.getFirstArtist());
+		setElement(new Element(musicFile.getName()));
+//		setAlbum(tag.getFirstAlbum()); //TODO check when and how set the album (artist ?). here does not seems good
 		setName(tag.getFirstTitle());
 		setCode(0);
 		setId(id);
