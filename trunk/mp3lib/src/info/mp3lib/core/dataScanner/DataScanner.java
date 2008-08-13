@@ -20,7 +20,7 @@ public class DataScanner {
 	private static final long serialVersionUID = -1963252596917406454L;
 
 	/** the unique artist in which store all the retrieved album */
-	Artist scanList;
+	private Artist scanList;
 	
 	/** static access to the singleton */
 	public static DataScanner getInstance() {
@@ -34,7 +34,7 @@ public class DataScanner {
 	 * Private Constructor.
 	 */
 	private DataScanner() {
-		scanList = Library.getInstance().getArtist("unknown");
+		scanList = Library.getInstance().getArtist(Library.DEFAULT_UNKNOWN_ELT_NAME);
 	}
 
 	/**
@@ -81,6 +81,14 @@ public class DataScanner {
 		// store new unknown Album to scanList (unknown Artist)
 		if (album != null)
 			scanList.add(album);
+	}
+
+	/**
+	 * retrieves the default unknown artist containing all unsorted music files read from the file system
+	 * @return the scanList
+	 */
+	public Artist getScanList() {
+		return scanList;
 	}
 
 }

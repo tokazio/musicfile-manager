@@ -2,13 +2,13 @@ package info.mp3lib.core;
 
 import info.mp3lib.util.string.StringMatcher;
 
-import java.security.InvalidParameterException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jdom.Element;
+import org.jdom.IllegalAddException;
 
 /**
  * A container of physical music files. Hold the XMLAlbum. Allows to retrieve various information
@@ -53,11 +53,11 @@ public class Album extends XMLMusicElement {
 	/**
 	 * Constructs a new Album from the Element specified.
 	 * @param Element a zicfile album element
-	 * @throws InvalidParameterException when the Element given in parameters
+	 * @throws IllegalArgumentException when the Element given in parameters
 	 * doesn't correspond to a valid album Element
 	 */
 	@SuppressWarnings("unchecked")
-	public Album(final Element albumElement) throws InvalidParameterException {
+	public Album(final Element albumElement) throws IllegalArgumentException {
 		super(albumElement);
 		id++;
 		// retrieve the list of Files contained by this directory from albumElement
@@ -68,17 +68,17 @@ public class Album extends XMLMusicElement {
 			final Element trackElement = iterator.next();
 			try {
 				trackList.add(new Track(trackElement)); // TODO use add method instead
-			} catch (InvalidParameterException e) {
+			} catch (IllegalArgumentException e) {
 				LOGGER.warn(new StringBuffer("Unable to build a Track from ")
-						.append(trackElement.getAttribute("name"))
+						.append(trackElement.getAttribute(XMLMusicElement.ATTR_NAME))
 						.append(" : ")
 						.append(e.getMessage()).toString());
 			}
-		}		
+		}
 		if (trackList.isEmpty()) {
-			throw new InvalidParameterException(new StringBuffer("Album : ")
-					.append(albumElement.getAttribute("name"))
-					.append(" does not contain any valid audio files").toString());
+			throw new IllegalArgumentException(new StringBuffer("Album [")
+					.append(albumElement.getAttribute(XMLMusicElement.ATTR_NAME))
+					.append("] does not contain any valid audio files").toString());
 		}
 	}
 
@@ -87,9 +87,9 @@ public class Album extends XMLMusicElement {
 	 * Retrieves the name of the parent artist element
 	 * @return the artist
 	 */
-	public String getArtist() {
-		final Element parent = (Element)elt.getParent();
-		return parent.getAttributeValue("name");
+	public String getArtistName() {
+		final Element parent = (Element)getElement().getParent();
+		return parent.getAttributeValue(XMLMusicElement.ATTR_NAME);
 	}
 
 	/**
@@ -97,7 +97,7 @@ public class Album extends XMLMusicElement {
 	 * @return the size
 	 */
 	public int getSize() {
-		return Integer.parseInt(elt.getAttributeValue("size"));
+		return Integer.parseInt(getElement().getAttributeValue(XMLMusicElement.ATTR_SIZE));
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class Album extends XMLMusicElement {
 	 * @param size the size to set
 	 */
 	public void setSize(final int size) {
-		elt.setAttribute("size", new Integer(size).toString());
+		getElement().setAttribute(XMLMusicElement.ATTR_SIZE, new Integer(size).toString());
 	}
 
 	/**
@@ -113,20 +113,40 @@ public class Album extends XMLMusicElement {
 	 * @return the year
 	 */
 	public int getYear() {
-		return Integer.parseInt(elt.getAttributeValue("year"));
+		return Integer.parseInt(getElement().getAttributeValue(XMLMusicElement.ATTR_YEAR));
 	}
 
 	/**
-	 * Sets the given artist as XML element attribute
-	 * @param year the year to set
+	 * <p>Moves this album to the artist denoted by the specified name<br/>
+	 * (This one will be created and added to library if it does not already exist)</p>
+	 * <p>Removes beforehand this album from its actual artist if there is one.</p>
+	 * @param artistName the name denoting the artist in which to move this album
+	 * @throws IllegalArgumentException if the given artist name is null or empty
 	 */
-	public void setArtist(String name) {
-		final Element parent = (Element)elt.getParent();
-		// TODO : recherche xom si il existe un artiste du nom 'name'
-		//		- si oui, on déplace le node de l'album
-		//		- si non, on créé un nouveau node artist, dans lequel on déplace le node album.
-		
-//		parent.setAttribute("name", name);
+	public void moveTo(final String artistName) {
+		final Library library = Library.getInstance();
+		if (artistName == null || artistName.trim().length() == 0) {
+			throw new IllegalArgumentException("Given artist name can't be null or empty");
+		}
+		// if this album already belongs to an artist
+		final Element parentArtist = (Element) getElement().getParent();
+		if (parentArtist != null) {
+			// retrieve the artist
+			final Artist artist = library.getArtist(parentArtist.getName());
+			// and remove the album from it
+			if (!artist.remove(this)) {
+				// warn if the album was in the XOM but not in the object model
+				LOGGER.warn(new StringBuffer("Data corruption, XOM and Object model for the album [")
+				.append(getName()).append("], id [").append(getId()).append("] are desynchronised")
+				.toString());
+				
+				// remove the artist if empty
+				if (artist.isEmpty()) {
+					library.remove(artist);
+				}
+			}
+		}
+		library.getArtist(artistName).add(this);
 	}
 	
 	/**
@@ -134,13 +154,21 @@ public class Album extends XMLMusicElement {
 	 * @param year the year to set
 	 */
 	public void setYear(final int year) {
-		elt.setAttribute("year", new Integer(year).toString());
+		getElement().setAttribute(XMLMusicElement.ATTR_YEAR, new Integer(year).toString());
 	}
+	
 	/**
 	 * Adds the given track to this album
+	 * @param track the track to add
+	 * @throws if the given track already has a parent.
 	 */
-	public void add(Track track) {
-		trackList.add(track);
+	public void add(Track track) throws IllegalAddException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug(new StringBuffer("Album [").append(getName()).append("]: Adding track [")
+					.append(track.getName()).append("]...").toString());
+		}
+		getElement().addContent(track.getElement()); // adds the track element to the album element
+		trackList.add(track); // adds the file to the album list
 		if (track.isTagged()) {
 			if (tagState == TagEnum.NO_TAGS) {
 				if (trackList.size() == 1) {
@@ -150,7 +178,7 @@ public class Album extends XMLMusicElement {
 				}
 			} else if (tagState == TagEnum.ALL_SAME_TAGS) {
 				// match album of first and current track
-				if (!StringMatcher.getInstance().match(track.getAlbum(), trackList.get(0).getAlbum())) {
+				if (!StringMatcher.getInstance().match(track.getAlbumName(), trackList.get(0).getAlbumName())) {
 					tagState = TagEnum.SOME_SAME_TAGS;
 				}
 			} else if (tagState == TagEnum.SOME_SAME_TAGS) {
@@ -167,6 +195,30 @@ public class Album extends XMLMusicElement {
 		}
 	}
 	
+	/**
+	 * Removes the given track from this album
+	 * @param track the track to remove
+	 * @return true if the track was successfully removed, false otherwise
+	 */
+	public boolean remove(Track track) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug(new StringBuffer("Album [").append(getName()).append("]: Removing track [")
+					.append(track.getName()).append("]...").toString());
+		}
+		boolean success = false;
+		if (getElement().removeChild(track.getName()))  {
+			success = trackList.remove(track);
+		}
+		if (!success) {
+			LOGGER.debug("Failure");
+		}
+		return success;
+	}
+	
+	/**
+	 * Retrieves an iterator on the track collection of this album
+	 * @return a track iterator
+	 */
 	public Iterator<Track> getTrackIterator() {
 		return trackList.iterator();
 	}
@@ -186,6 +238,14 @@ public class Album extends XMLMusicElement {
 	 */
 	public boolean isCompilation() {
 		return tagState == TagEnum.ALL_DIFF_TAGS || tagState == TagEnum.SOME_DIFF_TAGS;
+	}
+	
+	/**
+	 * Checks if the track list of this album contains no elements. 
+	 * @return true if this album is empty
+	 */
+	public boolean isEmpty() {
+		return trackList.isEmpty();
 	}
 	
 	/**

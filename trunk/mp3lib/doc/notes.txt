@@ -2,9 +2,13 @@ NB :
 
 - on scanne l'arbo tous les tracks a un niveau de l'arborescence sont rassemblés dans un album 'unknown'
 - l'ensemble des albums sont ajoutés à un seul et unique artiste 'unknown'
-- une fois l'ensemble de la librairie chargée en memoire on parcours la totalité des albums
+- une fois l'ensemble de la librairie chargée en memoire on parcours la totalité des track
 - on les tagge
-- on les deplaces au fum et a mesure qu'on reçoit des infos (setArtist() déplace l'album ds l'artiste concerné)
+- on les deplaces au fum et a mesure qu'on reçoit des infos (moveTo() déplace l'album ds l'artiste concerné)
 - les albums sont taggés et plus ou moins organisés =>
 	- on vire les doublons
 	- on classe (par style etc...)
+
+	
+RG0 - Un album appartient tjs à un artiste sauf au moment de sa création (DataScanner)
+    - Un track appartient tjs à un album sauf au moment de sa création (DataScanner)
