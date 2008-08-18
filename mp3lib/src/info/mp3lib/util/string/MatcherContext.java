@@ -57,7 +57,7 @@ public class MatcherContext {
 	 */
 	private List<String> ignoreList;
 	
-	private enum MatcherConfig {
+	public enum MatcherConfig {
 		FILE,
 		FOLDER,
 		TAG;
