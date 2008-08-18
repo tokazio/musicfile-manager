@@ -1,7 +1,6 @@
 package info.mp3lib.core.validator;
 
 import info.mp3lib.core.Album;
-import info.mp3lib.core.Library;
 import info.mp3lib.core.Track;
 import info.mp3lib.util.cddb.CDDBquery;
 
@@ -79,14 +78,6 @@ public class Validator {
 	 * cddb_tags tracks_tag context_info
 	 */
 
-	public Validator(Library lib) {
-	    
-		this.album = album;
-		retrieveCDDB();
-		retrieveTAG();
-		retrieveCONTEXT();
-	}
-	
 	public Validator(Album album) {
 		this.album = album;
 		retrieveCDDB();

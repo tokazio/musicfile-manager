@@ -1,6 +1,8 @@
 package info.mp3lib.core;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -100,6 +102,22 @@ public class Library {
 	 */
 	public Element getRootElement() {
 		return rootElement;
+	}
+
+	/**
+	 * Validate each albums of this library
+	 */
+	public void validate() {
+	    Collection<Artist> collection = artistList.values();
+	    Artist artist;
+	    Album album;
+	    for (Iterator<Artist> iterArt = collection.iterator(); iterArt.hasNext();) {
+		artist = iterArt.next();
+		for (Iterator<Album> iterAlb = artist.getAlbumIterator(); iterAlb.hasNext();) {
+		    album = iterAlb.next();
+		    album.validate();
+		}
+	    }
 	}
 	
 /* ------------------------- CONSTANTS --------------------------- */
