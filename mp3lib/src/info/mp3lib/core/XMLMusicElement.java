@@ -127,6 +127,9 @@ public abstract class XMLMusicElement implements IXMLMusicElement {
 	
 	/** path attribute : used by album */
 	public final static String ATTR_PATH = "path";
+
+	/** file name attribute : used by track */
+	public final static String ATTR_FILENAME = "filename";
 	
 	/** year attribute : used by album */
 	public final static String ATTR_YEAR = "year";

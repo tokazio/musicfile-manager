@@ -3,23 +3,21 @@
 		<album id="0" code="0" name="i am a racaille" year=""
 			size="8097" path="C/myMusic/diams/i_am_a_racaille">
 			<track id="0" code="0" name="yeah yeah" length="240"
-				size="4876" />
+				size="4876" filename="track08.mp3" />
 			<track id="1" code="0" name="ouech ma geule" length="240"
-				size="3221" />
+				size="3221" filename="track08.mp3" />
 		</album>
 		<album id="1" code="0" name="i sing shit" year="2008"
 			size="6845" path="C/myMusic/diams/i_sing_shit">
 			<track id="0" code="0" name="what a sucking song"
-				length="240" size="6845">
-			</track>
+				length="240" size="6845" filename="track08.mp3" />
 		</album>
 	</artiste>
 	<artiste id="1" code="0" name="unknown" style="rock">
 		<album id="0" code="0" name="unknown" year="2007" size="6750"
 			path="C/myMusic/Johnny Halliday/Allumer le feu">
 			<track id="0" code="0" name="Allumer le feu" length="240"
-				size="6750" artist="johnny halliday" album="allumer le feu">
-			</track>
+				size="6750" artist="johnny halliday" album="allumer le feu" filename="track08.mp3" />
 		</album>
 	</artiste>
 </artistes>
