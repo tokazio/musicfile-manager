@@ -45,14 +45,6 @@ public abstract class XMLMusicElement implements IXMLMusicElement {
 	}
 	
 	/**
-	 * Sets the given XML element
-	 * @param element the element to set
-	 */
-	protected void setElement(final Element element) {
-		elt = element;
-	}
-	
-	/**
 	 * Retrieves the id attribute of the XML node
 	 * @return the id
 	 */
@@ -65,7 +57,7 @@ public abstract class XMLMusicElement implements IXMLMusicElement {
 	 * @param id the id to set
 	 */
 	public void setId(final int id) {
-		elt.setAttribute(ATTR_ID, new Integer(id).toString());
+		elt.setAttribute(ATTR_ID, Integer.toString(id));
 	}
 	
 	/**

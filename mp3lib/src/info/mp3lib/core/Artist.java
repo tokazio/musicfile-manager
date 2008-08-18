@@ -35,8 +35,10 @@ public class Artist extends XMLMusicElement {
 	 * doesn't correspond to a valid artist
 	 */
 	public Artist(String name) throws IllegalArgumentException {
-		super(new Element(name));
+		super(new Element(ELT_ARTIST));
+		setName(name);
 		id++;
+		setId(id);
 	}
 	
 	/**
@@ -49,7 +51,6 @@ public class Artist extends XMLMusicElement {
 	 */
 	public Artist(Element artistElement) throws IllegalArgumentException {
 		super(artistElement);
-		id++;
 		// TODO verify that given node well correspond to an artist and implement the exception mechanism
 	}
 	

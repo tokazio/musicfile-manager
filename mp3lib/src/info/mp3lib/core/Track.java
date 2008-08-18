@@ -32,6 +32,7 @@ public class Track extends XMLMusicElement {
 	 * doesn't correspond to a valid audio file
 	 */
 	public Track(File audioFile) throws IllegalArgumentException {
+		super(new Element(ELT_ARTIST));
 		id++;
 		try {
 			musicFile = AudioFileIO.read(audioFile);
@@ -61,10 +62,13 @@ public class Track extends XMLMusicElement {
 	
 	/**
 	 * Constructor
-	 * @param name the name of this element
+	 * @param name the title of this track
 	 */
-	public Track(String name) {
-		super(new Element(name));
+	public Track(final String name) {
+		super(new Element(ELT_TRACK));
+		id++;
+		setId(id);
+		setName(name);
 	}
 	
 	/* ------------------------- METHODS --------------------------- */
@@ -189,11 +193,10 @@ public class Track extends XMLMusicElement {
 	 */
 	private void buildElementFromFile() {
 		final Tag tag = musicFile.getTag();
-		setElement(new Element(musicFile.getName()));
 //		setAlbum(tag.getFirstAlbum()); //TODO check when and how set the album (artist ?). here does not seems good
+		setId(id);
 		setName(tag.getFirstTitle());
 		setCode(0);
-		setId(id);
 		setLength(musicFile.getLength());
 		setSize(new Long(musicFile.length() * 1024).intValue());
 	}

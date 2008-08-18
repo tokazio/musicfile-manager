@@ -33,21 +33,15 @@ public class Album extends XMLMusicElement {
 	/**
 	 * Constructs a new empty Album.
 	 * This method should not be called directly, used by <code>MusicDataScanner.read(File)</code>
+	 * @param name the name of this album
 	 */
-	public Album() {
-		super(new Element(new Integer(id).toString()));
+	public Album(final String name) {
+		super(new Element(ELT_ALBUM));
+		setName(name);
 		id++;
+		setId(id);
 		trackList = new LinkedList<Track>();
 		tagState = TagEnum.NO_TAGS;
-	}
-	
-	/**
-	 * Constructor
-	 * @param name the name of this element
-	 */
-	public Album(String name) {
-		super(new Element(name));
-		id++;
 	}
 	
 	/**
