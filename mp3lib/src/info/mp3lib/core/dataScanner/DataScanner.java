@@ -15,7 +15,7 @@ import java.io.File;
 public class DataScanner {
 	
 	/** the unique instance of the singleton */
-	private static DataScanner instance;
+	private static DataScanner instance = null;
 	
 	private static final long serialVersionUID = -1963252596917406454L;
 
@@ -64,7 +64,7 @@ public class DataScanner {
 			{
 				// creates new Container if first.
 				if (album == null)
-					album = new Album();
+					album = new Album(fileList[i].getName());
 
 				// constructs new ScanMusicData from this File.
 				track = new Track(fileList[i]);
