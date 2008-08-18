@@ -1,43 +1,20 @@
 package info.mp3lib.util.string;
 /**
- * Provides methods to compare to compare two Strings.
- * Singleton, can be configured
+ * Provides methods to compare two Strings.</br>
+ * Use MatcherFactory.getStringMatcher(MatcherContext) to retrieve an Implementation
+ * @see MatcherFactory
+ * @see MatcherContext
  * @author Gab
  *
  */
-public class StringMatcher {
+public interface StringMatcher {
 
-	/** the unique instance */
-	private static StringMatcher instance;
-
-	private StringMatcher() {
-		// TODO
-	}
-
-	public static StringMatcher getInstance() {
-		if (instance == null) {
-			instance =  new StringMatcher();
-		}
-		return instance;
-	}
-	
 	/**
-	 * Configure this STringMatcher permissivity
-	 * @param iqv
+	 * Check if str1 match str2 according to the concrete matcher implementation
+	 * @param str1
+	 * @param str2
+	 * @return true if the two string match
 	 */
-	public void configure(int iqv) {
-		
-	}
-	
-	public boolean match(String str1, String str2) {
-		boolean match = false;
-		// TODO method implementation
-		return match;
-	}
-	
-	public boolean include(String contain, String included) {
-		boolean match = false;
-		// TODO method implementation
-		return match;
-	}
+	public boolean match(String str1, String str2);
+
 }
