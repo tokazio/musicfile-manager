@@ -1,5 +1,7 @@
 package info.mp3lib.core;
 
+import info.mp3lib.util.string.MatcherContext;
+import info.mp3lib.util.string.MatcherFactory;
 import info.mp3lib.util.string.StringMatcher;
 
 import java.util.Iterator;
@@ -172,7 +174,8 @@ public class Album extends XMLMusicElement {
 				}
 			} else if (tagState == TagEnum.ALL_SAME_TAGS) {
 				// match album of first and current track
-				if (!StringMatcher.getInstance().match(track.getAlbumName(), trackList.get(0).getAlbumName())) {
+				final StringMatcher tagMatcher = MatcherFactory.getInstance().getMatcher(MatcherContext.TAG);
+				if (!tagMatcher.match(track.getAlbumName(), trackList.get(0).getAlbumName())) {
 					tagState = TagEnum.SOME_SAME_TAGS;
 				}
 			} else if (tagState == TagEnum.SOME_SAME_TAGS) {
