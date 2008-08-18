@@ -1,0 +1,9 @@
+on considere 2 types d'implementation possibles:
+
+comparaison de noms de fichier (track)
+comparaison de noms de repertoire (album & artist)
+
+
+pour chacune de ces configs on consideres 2 listes 'en dur'
+- listes des RegExp à exclure des chaines comparés (rippded.by, encoded.by, etc...)
+- listes des RegExp entrainant un return false pour le match (.*liveL*, .&., etc...)
