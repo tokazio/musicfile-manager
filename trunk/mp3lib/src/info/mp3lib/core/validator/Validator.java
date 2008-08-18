@@ -117,9 +117,7 @@ public class Validator {
 		// Pour les tracks, il correspond au numéro de piste
 		album.setId(finalTag.id);
 		
-		// TODO WARNING : manipulation de xml pour creer ou déplacer un node XML
-		// quand on change le nom de l'artiste sur la méthode setArtist() !
-		album.setArtist(finalTag.artist);
+		album.moveTo(finalTag.artist);
 		
 		album.setName(finalTag.album);
 		album.setSize(finalTag.size);
