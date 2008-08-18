@@ -21,7 +21,7 @@ public class Mp3lib {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		Mp3lib m = new Mp3lib();
+//		Mp3lib m = new Mp3lib();
 		
 		final String musicDirectory = "E:/mp3test";
 		File musicFileDir = new File(musicDirectory); 
@@ -32,10 +32,7 @@ public class Mp3lib {
 		
 		System.out.println("Validation ...");
 		
-		
-		
-		
-		
+		Library.getInstance().validate();
 		
 	}
 

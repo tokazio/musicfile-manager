@@ -1,5 +1,6 @@
 package info.mp3lib.core;
 
+import info.mp3lib.core.validator.Validator;
 import info.mp3lib.util.string.MatcherContext;
 import info.mp3lib.util.string.MatcherFactory;
 import info.mp3lib.util.string.StringMatcher;
@@ -210,6 +211,15 @@ public class Album extends XMLMusicElement {
 			LOGGER.debug("Failure");
 		}
 		return success;
+	}
+	
+	/**
+	 * Launch validation procedure for this album...
+	 */
+	public void validate() {
+	    Validator vdt = new Validator(this);
+	    // Class entry point method:
+	    vdt.validate();
 	}
 	
 	/**

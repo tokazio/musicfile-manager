@@ -12,5 +12,12 @@ public enum TagEnum {
 	private TagEnum(final int pValue) {
 		value = pValue;
 	}
-	
+
+	/**
+	 * @return the value
+	 */
+	public int getValue() {
+	    return value;
+	}
+
 }
