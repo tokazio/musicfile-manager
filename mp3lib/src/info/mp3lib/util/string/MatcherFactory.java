@@ -60,6 +60,7 @@ public class MatcherFactory {
 	public StringMatcher getMatcher(MatcherContext.MatcherConfig config) {
 		StringMatcher matcher = null;
 		//TODO method implementation
+		matcher = new StringMatcherDummy(); //TODO rm
 		return matcher;
 	}
 }
