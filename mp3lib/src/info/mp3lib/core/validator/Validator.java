@@ -6,11 +6,8 @@ import info.mp3lib.util.cddb.CDDBquery;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
-import entagged.audioformats.AudioFile;
-import entagged.audioformats.Tag;
 import entagged.freedb.FreedbReadResult;
 
 public class Validator {
@@ -118,15 +115,15 @@ public class Validator {
 	public void updateXMLAlbum(TagInfos finalTag) {
 		// TODO Pour les albums, l'id peut correspondre a leur ordre de sortie
 		// Pour les tracks, il correspond au numéro de piste
-		album.getXMLElement().setId(finalTag.id);
+		album.setId(finalTag.id);
 		
 		// TODO WARNING : manipulation de xml pour creer ou déplacer un node XML
 		// quand on change le nom de l'artiste sur la méthode setArtist() !
-		album.getXMLElement().setArtist(finalTag.artist);
+		album.setArtist(finalTag.artist);
 		
-		album.getXMLElement().setName(finalTag.album);
-		album.getXMLElement().setSize(finalTag.size);
-		album.getXMLElement().setYear(finalTag.year);
+		album.setName(finalTag.album);
+		album.setSize(finalTag.size);
+		album.setYear(finalTag.year);
 	}
 
 	public void validate() {
@@ -199,24 +196,26 @@ public class Validator {
 		TagInfos tag = new TagInfos();
 		
 		// With TAG infos ..
-		if (cddb.getAlbum().equals(album.getTag().getAlbumName())) {
+		if (cddb.getAlbum().equals(album.getName())) {
 			tag.generateIQV(CDDB_ALBUM, TAG_ALBUM);
 		}
-		if (cddb.getArtist().equals(((AudioFile)album.getFile()).getTag().getArtist())) {
+		if (cddb.getArtist().equals(album.getArtist())) {
 			tag.generateIQV(CDDB_ARTIST, TAG_ARTIST);
 		}
+		/*
 		final int tracksNumber = cddb.getTracksNumber();
-		final List<Tag> tagTracks = ((AudioFile) album.getFile()).getTag().getTrack();
+		final List<Tag> tagTracks = ((AudioFile) album.getTrack();
 		for (int t = 0; t < tracksNumber && t < tagTracks.size(); t++) {
 			if (cddb.getTrackTitle(t).equals(
 					tagTracks.get(t).getTrack())) {
 				tag.generateIQV(CDDB_TRACK, TAG_TRACK);
 			}
 		}
+		*/
 		// With Context Infos ...
 		if (cddb.getAlbum().equals(album.getName())) {
 			tag.generateIQV(CDDB_ALBUM, CONTEXT_ALBUM);
-		} else if (cddb.getArtist().equals(album.getArtistName())) {
+		} else if (cddb.getArtist().equals(album.getArtist())) {
 			tag.generateIQV(CDDB_ALBUM, CONTEXT_ARTIST);
 		}
 		return tag;
