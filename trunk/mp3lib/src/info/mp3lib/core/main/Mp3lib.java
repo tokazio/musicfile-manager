@@ -26,9 +26,17 @@ public class Mp3lib {
 		final String musicDirectory = "E:/mp3test";
 		File musicFileDir = new File(musicDirectory); 
 		DataScanner.getInstance().read(musicFileDir);
-		LibraryDAO.getInstance().write(Library.getInstance(), "C:/Documents%20and%20Settings/AkS.ORDINATEUR/Bureau/");
+		LibraryDAO.getInstance().write(Library.getInstance(), "c:/zicfile.xml");
 		
-		System.out.println("Terminé.");
+		System.out.println("Scan complete !");
+		
+		System.out.println("Validation ...");
+		
+		
+		
+		
+		
+		
 	}
 
 	/**

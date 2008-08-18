@@ -1,6 +1,7 @@
 package info.mp3lib.core.validator;
 
 import info.mp3lib.core.Album;
+import info.mp3lib.core.Library;
 import info.mp3lib.core.Track;
 import info.mp3lib.util.cddb.CDDBquery;
 
@@ -78,6 +79,14 @@ public class Validator {
 	 * cddb_tags tracks_tag context_info
 	 */
 
+	public Validator(Library lib) {
+	    
+		this.album = album;
+		retrieveCDDB();
+		retrieveTAG();
+		retrieveCONTEXT();
+	}
+	
 	public Validator(Album album) {
 		this.album = album;
 		retrieveCDDB();
@@ -129,7 +138,7 @@ public class Validator {
 		 * 	A REVOIR PROCESSUS DE VALIDATION ...
 		 * 
 		 * dans l'idéal les différentes étapes seraient :
-		 *	- TESTER LA PERTINENCE DU CONTEXTE (bof ..)
+		 *	- TESTER LA PERTINENCE DU CONTEXTE (album...)
 		 *	- TESTER LA PERTINENCE DES TAGS AVEC LE CONTEXTE
 		 *	- TESTER LA PERTINENCE DE CDDB AVEC LES TAGS ET LE CONTEXTE
 		 *
@@ -147,7 +156,7 @@ public class Validator {
 		 *	- SELECTION DU TAG AVEC LE MEILLEUR INDICE
 		 *	- UPDATE XML des TAGS (Artist + Album + Tracks) avec IQV
 		 *	  (pas de gestion des doublons ici)
-		 *
+		 * 
 		 * 
 		 * a noter :
 		 *	*	cddb renvoie des infos sur un album ET ses tracks a la fois

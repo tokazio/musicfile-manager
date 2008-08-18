@@ -16,7 +16,7 @@ import entagged.freedb.FreedbTrack;
 
 public class CDDBquery extends entagged.freedb.Freedb {
 	public static void main(String[] args) {
-		new CDDBquery("C:/MP3/[ Ragga - Dancehall ]/Capleton/I testament","");
+		new CDDBquery("G:/MP3/[ Ragga - Dancehall ]/Capleton/I testament","");
 	}
 
 	/**
