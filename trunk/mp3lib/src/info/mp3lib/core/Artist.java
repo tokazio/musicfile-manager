@@ -5,6 +5,7 @@ import info.mp3lib.util.string.MatcherFactory;
 import info.mp3lib.util.string.StringMatcher;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -41,6 +42,7 @@ public class Artist extends XMLMusicElement {
 		setName(name);
 		id++;
 		setId(id);
+		albumList = new LinkedList<Album>();
 	}
 	
 	/**
@@ -94,6 +96,7 @@ public class Artist extends XMLMusicElement {
 	 */
 	public void add(Album album) {
 		albumList.add(album);
+		getElement().addContent(album.getElement());
 		if (album.isTagged()) {
 			if (tagState == TagEnum.NO_TAGS) {
 				if (albumList.size() == 1) {

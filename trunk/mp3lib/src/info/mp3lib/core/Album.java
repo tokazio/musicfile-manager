@@ -156,12 +156,12 @@ public class Album extends XMLMusicElement {
 	/**
 	 * Adds the given track to this album
 	 * @param track the track to add
-	 * @throws if the given track already has a parent.
+	 * @throws IllegalAddException if the given track already has a parent.
 	 */
 	public void add(Track track) throws IllegalAddException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug(new StringBuffer("Album [").append(getName()).append("]: Adding track [")
-					.append(track.getName()).append("]...").toString());
+					.append(track.getName()).append("], file [").append(track.getAbsolutePath()).append("]...").toString());
 		}
 		getElement().addContent(track.getElement()); // adds the track element to the album element
 		trackList.add(track); // adds the file to the album list

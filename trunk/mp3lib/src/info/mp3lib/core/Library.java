@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.jdom.Element;
 
 /**
  * Holds all existing artist in Map.<br/> Manages (creates and provides artists to the program) Unique instance in the program (Singleton)
@@ -14,6 +15,9 @@ public class Library {
 	
 	/** Apache log4j logger */
 	private final static Logger LOGGER = Logger.getLogger(Library.class.getName());
+	
+	/** the XML root element containing all artists elements */
+	private Element rootElement;
 
 	/** the list of existing artist in the library
 	 * <ul>
@@ -37,6 +41,7 @@ public class Library {
 	/** Constructor */
 	private Library() {
 		artistList = new HashMap<String, Artist>();
+		rootElement =  new Element(ROOT_ELT);
 	}
 	
 	/**
@@ -45,6 +50,7 @@ public class Library {
 	 */
 	public void add(final Artist artist) {
 		artistList.put(artist.getName(), artist);
+		rootElement.addContent(artist.getElement());
 	}
 	
 	/**
@@ -70,7 +76,7 @@ public class Library {
 		if (artist == null) {
 			LOGGER.debug("Does not exist, création...");
 			artist = new Artist(artistName);
-			artistList.put(artistName, artist);
+			add(artist);
 		}
 		return artist;
 	}
@@ -88,8 +94,19 @@ public class Library {
 		return artist.getAlbum(albumName);
 	}
 	
+	/**
+	 * Retrieves the XML root element holding all the artist element
+	 * @return the XML node
+	 */
+	public Element getRootElement() {
+		return rootElement;
+	}
+	
 /* ------------------------- CONSTANTS --------------------------- */
 	
 	/** The default name of an element denoting an undefined object*/
 	public final static String DEFAULT_UNKNOWN_ELT_NAME = "__unknown__";
+	
+	/** The default name of an element denoting an undefined object*/
+	public final static String ROOT_ELT = "artists";
 }

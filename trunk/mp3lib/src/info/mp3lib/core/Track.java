@@ -32,14 +32,12 @@ public class Track extends XMLMusicElement {
 	 * doesn't correspond to a valid audio file
 	 */
 	public Track(File audioFile) throws IllegalArgumentException {
-		super(new Element(ELT_ARTIST));
+		super(new Element(ELT_TRACK));
 		id++;
 		try {
 			musicFile = AudioFileIO.read(audioFile);
 			buildElementFromFile();
 		} catch (CannotReadException e) {
-				LOGGER.debug("the given file is not in a supported audio format : "
-						.concat(audioFile.getAbsolutePath()));
 				throw new IllegalArgumentException(e.getMessage());
 		}
 	}
@@ -163,13 +161,31 @@ public class Track extends XMLMusicElement {
 	}
 	
 	/**
+	 * Retrieves the absolute path of this track
+	 * @return the path
+	 */
+	public String getAbsolutePath() {
+		return musicFile.getAbsolutePath();
+	}
+	
+	/**
 	 * Retrieves the path attribute of the XML node
 	 * @return the path
 	 */
 	public String getPath() {
-		return (getElement().getParentElement().getAttributeValue(XMLMusicElement.ATTR_PATH));
+		return new StringBuffer(getElement().getParentElement().getAttributeValue(XMLMusicElement.ATTR_PATH))
+		.append(File.separator).append(getFileName()).toString();
 	}
 
+	/**
+	 * Retrieves the filename attribute of the XML node
+	 * @return the filename
+	 */
+	public String getFileName() {
+		return (getElement().getParentElement().getAttributeValue(XMLMusicElement.ATTR_FILENAME));
+	}
+
+	
 	/**
 	 * Returns true if the current file contains tag information.
 	 * @return true if file is tagged, else return false

@@ -7,21 +7,25 @@ import info.mp3lib.core.Track;
 
 import java.io.File;
 
+import org.apache.log4j.Logger;
+
 /**
  * Builds all the Album objects from the physical tree and stores them in a unique
  * Artist object
  */
 
 public class DataScanner {
-	
+
 	/** the unique instance of the singleton */
 	private static DataScanner instance = null;
-	
+
 	private static final long serialVersionUID = -1963252596917406454L;
+
+	private final static Logger LOGGER = Logger.getLogger(DataScanner.class.getName());
 
 	/** the unique artist in which store all the retrieved album */
 	private Artist scanList;
-	
+
 	/** static access to the singleton */
 	public static DataScanner getInstance() {
 		if (instance == null) {
@@ -29,7 +33,7 @@ public class DataScanner {
 		}
 		return instance;
 	}
-	
+
 	/**
 	 * Private Constructor.
 	 */
@@ -50,7 +54,6 @@ public class DataScanner {
 
 	public void read(File path) //throws BusinessException
 	{
-		Track track = null;
 		Album album = null;
 
 		// erreur d'initialisation
@@ -64,13 +67,15 @@ public class DataScanner {
 			{
 				// creates new Container if first.
 				if (album == null)
-					album = new Album(fileList[i].getName());
+					album = new Album(fileList[i].getParentFile().getName());
 
 				// constructs new ScanMusicData from this File.
-				track = new Track(fileList[i]);
-
-				// adds MusicData to its Container.
-				album.add(track);
+				try {
+					// adds MusicData to its Container.
+					album.add(new Track(fileList[i]));
+				} catch (IllegalArgumentException e) {
+					LOGGER.debug("the given file is not in a supported audio format : ".concat(fileList[i].getAbsolutePath()));
+				}
 			} else // sub folders
 			{
 				// recursively check sub directories
