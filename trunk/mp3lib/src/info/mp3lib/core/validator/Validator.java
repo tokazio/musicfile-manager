@@ -199,7 +199,7 @@ public class Validator {
 		if (cddb.getAlbum().equals(album.getName())) {
 			tag.generateIQV(CDDB_ALBUM, TAG_ALBUM);
 		}
-		if (cddb.getArtist().equals(album.getArtist())) {
+		if (cddb.getArtist().equals(album.getName())) {
 			tag.generateIQV(CDDB_ARTIST, TAG_ARTIST);
 		}
 		/*
@@ -215,7 +215,7 @@ public class Validator {
 		// With Context Infos ...
 		if (cddb.getAlbum().equals(album.getName())) {
 			tag.generateIQV(CDDB_ALBUM, CONTEXT_ALBUM);
-		} else if (cddb.getArtist().equals(album.getArtist())) {
+		} else if (cddb.getArtist().equals(album.getName())) {
 			tag.generateIQV(CDDB_ALBUM, CONTEXT_ARTIST);
 		}
 		return tag;
