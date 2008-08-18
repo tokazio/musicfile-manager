@@ -32,9 +32,9 @@ public class CDDBquery extends entagged.freedb.Freedb {
 			
 			File adir = new File(directory);
 			Album album = new Album(adir);
-			FreedbTrack[] tracks = new FreedbTrack[album.getLength()];
+			FreedbTrack[] tracks = new FreedbTrack[album.getSize()];
 			
-			for (int tId=0; tId < album.getLength(); tId++)
+			for (int tId=0; tId < album.getSize(); tId++)
 			{
 				Track track = (Track) album.getItem(tId);
 				FreedbTrack st = new SimpleTrack(track.getLength());
