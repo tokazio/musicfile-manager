@@ -8,4 +8,13 @@ public interface Context {
     
     public int getTracksIQV();
     
+    public String getAlbumName();
+    
+    public String getArtistName();
+    
+    public String[] getTracksName();
+    
+    public int[] getTracksLength();
+    
+    public int getTracksCount();
 }
