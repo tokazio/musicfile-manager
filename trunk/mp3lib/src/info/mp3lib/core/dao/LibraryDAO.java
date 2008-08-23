@@ -2,14 +2,20 @@ package info.mp3lib.core.dao;
 
 import info.mp3lib.core.Album;
 import info.mp3lib.core.Library;
+import info.mp3lib.core.XMLMusicElement;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.jdom.Element;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
+
+import com.antelmann.cddb.Artist;
 
 /**
  * Data Access Object for the <code>Library</code> class
@@ -56,8 +62,7 @@ public class LibraryDAO {
     /**
      * Save the given library on the file system
      * 
-     * @param lib
-     *                the <code>Library</code> to persist
+     * @param lib the <code>Library</code> to persist
      * @filePath the absolute path of the file in which writing the XML tree
      * @return true if the given library is successfully persisted, false
      *         otherwise
@@ -78,7 +83,22 @@ public class LibraryDAO {
 	    LOGGER.error(new StringBuffer("Unable to persist the library in the file [").append(filePath)
 		    .append("]:\n").append(e.getMessage()).toString());
 	}
-	return result;
+		return result;
     }
+    
+//    /** 
+//     * Adds a path attribute denoting the physical location on the file system of the audioFile
+//     * for all tracks Elements
+//     * @param lib the <code>Library</code> to process
+//     */
+//    private void addPersistenceData(Library lib) {
+//    	// retrieve the artist list
+//    	final List<Element> artistlist = lib.getRootElement().getChildren(XMLMusicElement.ELT_ARTIST);
+//    	for (Iterator it = artistlist.iterator(); it.hasNext();) {
+//			Element element = (Element) it.next();
+//			// retrieve the album list
+//			
+//		}
+//    }
 
 }

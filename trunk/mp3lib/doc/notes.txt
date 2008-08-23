@@ -12,3 +12,6 @@ NB :
 	
 RG0 - Un album appartient tjs à un artiste sauf au moment de sa création (DataScanner)
     - Un track appartient tjs à un album sauf au moment de sa création (DataScanner)
+    
+RG1 - Lorsque le mot CD est detecté
+=> contexte phy > si nom repertoire CD{1-9} on cherche le nom de l'album au niveau superieur
