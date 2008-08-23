@@ -108,41 +108,5 @@ public abstract class XMLMusicElement implements IXMLMusicElement {
 		}
 	}
 	
-	/* ------------------------- CONSTANTS --------------------------- */
-	
-	/** name attribute : used by artist, album, track */
-	public final static String ATTR_NAME = "name";
-	
-	/** id attribute : used by artist, album, track */
-	public final static String ATTR_ID = "id";
-	
-	/** code attribute : used by artist, album, track */
-	public final static String ATTR_CODE = "code";
-	
-	/** size attribute : used by album, track */
-	public final static String ATTR_SIZE = "size";
-	
-	/** style attribute : used by artist */
-	public final static String ATTR_STYLE = "style";
-	
-	/** path attribute : used by album */
-	public final static String ATTR_PATH = "path";
 
-	/** file name attribute : used by track */
-	public final static String ATTR_FILENAME = "filename";
-	
-	/** year attribute : used by album */
-	public final static String ATTR_YEAR = "year";
-	
-	/** length attribute : used by track */
-	public final static String ATTR_LENGTH = "length";
-	
-	/** XML artist element */
-	public final static String ELT_ARTIST = "artist";
-	
-	/** XML album element */
-	public final static String ELT_ALBUM = "album";
-	
-	/** XML track element */
-	public final static String ELT_TRACK = "track";
 }
