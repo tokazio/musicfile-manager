@@ -4,108 +4,107 @@ import info.mp3lib.core.TagEnum;
 
 public class TagContext implements Context {
 
-    public enum ArtistEnum {
-	NO_TAGS(0); // no artist is tagged
+	/**
+	 * Denotes the possible values for the quality index of the artist name deduction from the tag context
+	 */
+	public enum ArtistTagEnum {
+		NO_TAGS(0); // no artist is tagged
 
-	private int value;
+		private int value;
 
-	private ArtistEnum(final int pValue) {
-		value = pValue;
+		private ArtistTagEnum(final int pValue) {
+			value = pValue;
+		}
+		public int getValue() {
+			return value;
+		}
+	};
+
+	/**
+	 * Denotes the possible values for the quality index of the album name deduction from the tag context
+	 */
+	public enum AlbumTagEnum {
+		NO_TAGS(0); // no album is tagged
+
+		private int value;
+
+		private AlbumTagEnum(final int pValue) {
+			value = pValue;
+		}
+		public int getValue() {
+			return value;
+		}
+	};
+
+	/**
+	 * Denotes the possible values for the quality index of the tracks name deduction from the tag context
+	 */
+	public enum TrackTagEnum {
+		NO_TAGS(0); // no track is tagged
+
+		private int value;
+
+		private TrackTagEnum(final int pValue) {
+			value = pValue;
+		}
+
+		public int getValue() {
+			return value;
+		}
+	};
+
+	/** artist name quality index */
+	private ArtistTagEnum artistQI;
+
+	/** album name quality index */
+	private AlbumTagEnum albumQI;
+
+	/** tracks name quality index */
+	private TagEnum tracksQI;
+
+	@Override
+	public String getAlbumName() {
+		// TODO Auto-generated method stub
+		return null;
 	}
-	public int getValue() {
-	    return value;
-	}
-    };
-    
-    public enum AlbumEnum {
-	NO_TAGS(0); // no album is tagged
 
-	private int value;
-
-	private AlbumEnum(final int pValue) {
-		value = pValue;
-	}
-	public int getValue() {
-	    return value;
-	}
-    };
-    
-    public enum TrackEnum {
-	NO_TAGS(0); // no track is tagged
-
-	private int value;
-
-	private TrackEnum(final int pValue) {
-		value = pValue;
+	@Override
+	public String getArtistName() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public int getValue() {
-	    return value;
+	@Override
+	public int getTracksCount() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
-    };
-    
-    private ArtistEnum artistIQV;
-    private AlbumEnum albumIVQ;
-    private TagEnum tracksIQV;
-    
-    /* (non-Javadoc)
-     * @see info.mp3lib.core.validator.Context#getAlbumName()
-     */
-    @Override
-    public String getAlbumName() {
-	// TODO Auto-generated method stub
-	return null;
-    }
 
-    /* (non-Javadoc)
-     * @see info.mp3lib.core.validator.Context#getArtistName()
-     */
-    @Override
-    public String getArtistName() {
-	// TODO Auto-generated method stub
-	return null;
-    }
+	@Override
+	public int[] getTracksLength() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    /* (non-Javadoc)
-     * @see info.mp3lib.core.validator.Context#getTracksCount()
-     */
-    @Override
-    public int getTracksCount() {
-	// TODO Auto-generated method stub
-	return 0;
-    }
+	@Override
+	public String[] getTracksName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    /* (non-Javadoc)
-     * @see info.mp3lib.core.validator.Context#getTracksLength()
-     */
-    @Override
-    public int[] getTracksLength() {
-	// TODO Auto-generated method stub
-	return null;
-    }
+	@Override
+	public int getArtistQI() {
+		return artistQI.value;
+	}
 
-    /* (non-Javadoc)
-     * @see info.mp3lib.core.validator.Context#getTracksName()
-     */
-    @Override
-    public String[] getTracksName() {
-	// TODO Auto-generated method stub
-	return null;
-    }
+	@Override
+	public int getAlbumQI() {
+		return albumQI.value;
+	}
 
-    @Override
-    public int getArtistIQV() {
-	return artistIQV.value;
-    }
-    
-    @Override
-    public int getAlbumIQV() {
-	return albumIVQ.value;
-    }
-
-    @Override
-    public int getTracksIQV() {
-	return tracksIQV.getValue();
-    }
+	@Override
+	public int getTracksQI() {
+		return tracksQI.getValue();
+	}
 
 }
