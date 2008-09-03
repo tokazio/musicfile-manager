@@ -1,18 +1,20 @@
 package info.mp3lib.core.validator;
 
-import info.mp3lib.core.TagEnum;
-import info.mp3lib.core.validator.TagContext.AlbumTagEnum;
-import info.mp3lib.core.validator.TagContext.ArtistTagEnum;
+import info.mp3lib.core.Album;
+
 
 /**
- * Denotes all data deduced from the physical context and the quality index associated to these values
+ * Denotes all data deduced from the physical context of an album and the quality index associated to these values
  * TODO set the quality index value modifier parametrable
  * @author Gab
  */
 public class PhysicalContext implements Context {
 
+	/* ------------------------ QUALITY INDEX MODIFIERS ------------------------ */
 	/**
-	 * Denotes the possible values for the quality index of the artist name deduction from the tag context
+	 * Denotes the possible value modifiers for the quality index of the artist name deduction 
+	 * from the physical context<br/>
+	 * The final QI returned by the <code>getArtistQI()</code> method is a sum of all modifiers
 	 */
 	public enum ArtistPhysicalEnum {
 		/**
@@ -43,7 +45,7 @@ public class PhysicalContext implements Context {
 		 * is the same for all<br/>
 		 * this modifiers have a weak value because it overloads <code>OTHER_ALBUM_ARTIST_MATCH</code>
 		 */
-		ALL_ARTIST_TREE_IS_TAGGED_WITH_SAME_ARTIST (1)
+		ALL_ARTIST_TREE_TAGGED_WITH_SAME_ARTIST (1)
 		;
 
 		private int value;
@@ -51,6 +53,7 @@ public class PhysicalContext implements Context {
 		private ArtistPhysicalEnum(final int pValue) {
 			value = pValue;
 		}
+		
 		public int getValue() {
 			return value;
 		}
@@ -58,7 +61,7 @@ public class PhysicalContext implements Context {
 
 	/**
 	 * Denotes the possible value modifiers for the quality index of the album name deduction 
-	 * from the tag context<br/>
+	 * from the physical context<br/>
 	 * The final QI returned by the <code>getAlbumQI()</code> method is a sum of all modifiers
 	 */
 	public enum AlbumPhysicalEnum {
@@ -101,7 +104,7 @@ public class PhysicalContext implements Context {
 		 * All directories at the same level (not including this) are tagged and artist field
 		 * is the same for all
 		 */
-		ALL_ARTIST_TREE_IS_TAGGED_WITH_SAME_ARTIST (3)
+		ALL_ARTIST_TREE_TAGGED_WITH_SAME_ARTIST (3)
 		;
 
 		private int value;
@@ -109,6 +112,7 @@ public class PhysicalContext implements Context {
 		private AlbumPhysicalEnum(final int pValue) {
 			value = pValue;
 		}
+		
 		public int getValue() {
 			return value;
 		}
@@ -116,12 +120,20 @@ public class PhysicalContext implements Context {
 
 	/**
 	 * Denotes the possible value modifiers for the quality index of the tracks name deduction 
-	 * from the tag context<br/>
+	 * from the physical context<br/>
 	 * The final QI returned by the <code>getTracksQI()</code> method is a sum of all modifiers
 	 */
 	public enum TrackPhysicalEnum {
 		/**  The parent folder contains at less another folder */
 		NOT_LEAF(-1),
+		
+		/** 
+		 * The tracks names all contain the word defined as invalid in the program configuration
+		 * ("track", "piste", , ...)
+		 * this modifiers have a weak value because it overloads 
+		 * <code>REPEATING_SEQUENCE_NOT_IN_FOLDERNAME</code>
+		 */
+		CONTAINS_INVALID_WORD(-1),
 		
 		/** 
 		 * The tracks names all contain the same reapeating sequence wich is not include in 
@@ -159,6 +171,10 @@ public class PhysicalContext implements Context {
 		}
 	};
 
+	/* ------------------------ ATTRIBUTES ------------------------ */
+	/** The album from which is built this Context */
+	private Album album;
+	
 	/** artist name quality index modifiers */
 	private ArtistPhysicalEnum[] artistQIModifiers;
 
@@ -167,7 +183,13 @@ public class PhysicalContext implements Context {
 
 	/** tracks name quality index modifiers */
 	private TrackPhysicalEnum[] tracksQIModifiers;
-
+	
+	/* ----------------------- CONSTRUCTORS ----------------------- */
+	public PhysicalContext(final Album pAlbum) {
+		album = pAlbum;
+	}
+	
+	/* ------------------------- METHODS --------------------------- */
 	@Override
 	public int getAlbumQI() {
 		// TODO Auto-generated method stub
