@@ -12,6 +12,7 @@ package info.mp3lib.core.treeformater;
  *        |-- CD1 [optionnal]
  *        `-- CD2 [optionnal]
  * @author Gabriel Pala
+ * @deprecated
  */
 public class TreeFormatter {
 
