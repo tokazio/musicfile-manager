@@ -97,7 +97,7 @@ public abstract class XMLMusicElement implements IXMLMusicElement {
 	 * @throws IOException when an IO error occurs
 	 */
 	public void save() throws IOException {
-		File f = new File(Config.getInstance().getZicFilePath());
+		File f = new File(Config.getInstance().getLibraryFilePath());
 		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
 		PrintWriter pw = new PrintWriter(f);
 		try {

@@ -22,13 +22,27 @@ public final class StringUtils {
 	}
 	
 	/**
-	 * Checks if name doesn't correspond to some patterns like 'track 01' 
-	 * @param name the title of this track
-	 * @return true if name is a valid title else return false
+	 * retrieves the longest common substring of the two given string. (substrings are necessarily contiguous).
+	 * @param str1
+	 * @param str2
+	 * @return the longest common substring of the two given string, null if one of the two given 
+	 * string is null
 	 */
-	public final static boolean isValidTitle(String name) {
-		boolean valid = false;
+	public static String getLCSubstring(final String str1, final String str2) {
 		//TODO method implementation
-		return valid;
+		return "";
+	}
+	
+	/**
+	 * Builds a normalized string from the given one<br/>
+	 * Uses the configuration hold by the <code>Config</code> object
+	 * Replace all the character defined as separator by the separator defined
+	 * Replace all 
+	 * @param str
+	 * @return
+	 */
+	public static String normalize(final String str) {
+		String s = null;
+		return "";
 	}
 }

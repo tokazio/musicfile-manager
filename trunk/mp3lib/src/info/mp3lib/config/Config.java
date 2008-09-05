@@ -14,7 +14,11 @@ public class Config {
 		return instance;
 	}
 	
-	public String getZicFilePath() {
+	/**
+	 * Retrieves the path in which is located the library XML file.
+	 * @return the library XML file directory path
+	 */
+	public String getLibraryFilePath() {
 		// TODO method implementation
 		return null;
 	}
