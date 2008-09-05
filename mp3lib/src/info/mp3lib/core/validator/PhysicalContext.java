@@ -187,6 +187,9 @@ public class PhysicalContext implements Context {
 	/* ----------------------- CONSTRUCTORS ----------------------- */
 	public PhysicalContext(final Album pAlbum) {
 		album = pAlbum;
+		artistQIModifiers = new ArtistPhysicalEnum[5];
+		albumQIModifiers = new AlbumPhysicalEnum[8];
+		tracksQIModifiers = new TrackPhysicalEnum[6];
 	}
 	
 	/* ------------------------- METHODS --------------------------- */
