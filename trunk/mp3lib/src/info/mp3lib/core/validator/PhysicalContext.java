@@ -5,7 +5,7 @@ import info.mp3lib.core.Album;
 
 /**
  * Denotes all data deduced from the physical context of an album and the quality index associated to these values
- * TODO set the quality index value modifier parametrable
+ * /!\ all new modifiers added must be added in the config.properties file too
  * @author Gab
  */
 public class PhysicalContext implements Context {
@@ -26,13 +26,13 @@ public class PhysicalContext implements Context {
 		 * this parent directory name contains one of the word defined as invalid in the program configuration
 		 * ("compilation", ...) 
 		 */
-		CONTAINS_INVALID_WORD(-3),
+		CONTAINS_INVALIDER_WORD(-3),
 		
 		/** 
 		 * this parent directory name contains one of the word defined as quality index improver in the program 
 		 * configuration ("discography", "full discography", ...)
 		 */
-		CONTAINS_VALID_WORD(3),
+		CONTAINS_VALIDER_WORD(3),
 		
 		/** 
 		 * Some tracks contained in folders at the same level have the artist tag field matching
@@ -70,9 +70,9 @@ public class PhysicalContext implements Context {
 		
 		/** 
 		 * this directory name contains one of the word defined as invalid in the program configuration
-		 * ("compilation", "discography", "full discography", ...)  
+		 * ("compilation", "discography", ...)  
 		 */
-		CONTAINS_INVALID_WORD(-3),
+		CONTAINS_INVALIDER_WORD(-3),
 		
 		/**
 		 * Different artist tag field are present in tracks contained in directories at the same level
@@ -133,7 +133,7 @@ public class PhysicalContext implements Context {
 		 * this modifiers have a weak value because it overloads 
 		 * <code>REPEATING_SEQUENCE_NOT_IN_FOLDERNAME</code>
 		 */
-		CONTAINS_INVALID_WORD(-1),
+		CONTAINS_INVALIDER_WORD(-1),
 		
 		/** 
 		 * The tracks names all contain the same reapeating sequence wich is not include in 

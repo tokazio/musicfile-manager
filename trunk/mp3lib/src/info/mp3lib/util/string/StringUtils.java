@@ -35,14 +35,16 @@ public final class StringUtils {
 	
 	/**
 	 * Builds a normalized string from the given one<br/>
-	 * Uses the configuration hold by the <code>Config</code> object
-	 * Replace all the character defined as separator by the separator defined
-	 * Replace all 
-	 * @param str
-	 * @return
+	 * @param str the string to normalize
+	 * @param normalizeSeparator, if true replaces all the character defined as separator by the default 
+	 * one<br/> Uses the configuration hold by the <code>Config</code> object
+	 * @param noAccent, if true remove all accent
+	 * @param noCase, if true remove the case (@see <code>java.text.Collator</code>)
+	 * @return the normalized string
 	 */
-	public static String normalize(final String str) {
-		String s = null;
+	public static String normalize(final String str, final boolean normalizeSeparator, 
+			final boolean noAccent, final boolean noCase) {
+		//TODO method implementation
 		return "";
 	}
 }
