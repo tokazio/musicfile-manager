@@ -38,7 +38,7 @@ public class MatcherContext {
 	
 	/** 
 	 * if true, if one of the all RegExp in the exclude list is found in one of the two strings to compare, 
-	 * match will fail 
+	 * but not in both, match will fail 
 	 */
 	private boolean useExcludeList;
 	

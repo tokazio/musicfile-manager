@@ -4,13 +4,14 @@ import info.mp3lib.core.TagEnum;
 
 /**
  * Denotes all data deduced from tags of an album and the quality index associated to these values
- * TODO set the quality index value modifier parametrable
+ * /!\ all new modifiers added must be added in the config.properties file too
  * @author do - Gab
  */
 public class TagContext implements Context {
 
 	/**
-	 * Denotes the possible values for the quality index of the artist name deduction from the tag context
+	 * Denotes the possible value modifiers for the quality index of the artist name deduction from the tag 
+	 * context The final QI returned by the <code>getArtistQI()</code> method is a sum of all modifiers
 	 */
 	public enum ArtistTagEnum {
 		/** The artist field is missing for all the tracks of this album */
@@ -77,7 +78,7 @@ public class TagContext implements Context {
 		 * ("track", "piste", , ...)
 		 * this modifiers have a weak value because it overloads <code>REPEATING_SEQUENCE</code>
 		 */
-		CONTAINS_INVALID_WORD(-1),
+		CONTAINS_INVALIDER_WORD(-1),
 		
 		/** 
 		 * The title field of all tracks contains the same reapeating sequence wich is not include in 
