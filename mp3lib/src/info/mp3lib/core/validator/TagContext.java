@@ -16,12 +16,18 @@ public class TagContext implements Context {
 	public enum ArtistTagEnum {
 		/** The artist field is missing for all the tracks of this album */
 		NO_ARTIST_FIELD_SET(-5),
+		
+		/** The artist field is set for some tracks of this album */
+		SOME_ARTIST_FIELD_SET(2),
 
-		/** The artist field is set for all the tracks of this album */
-		ALL_ARTIST_FIELD_SET(5),
+		/** 
+		 * The artist field is set for all tracks of this album 
+		 * this modifiers have a weak value because it overloads <code>SOME_ARTIST_FIELD_SET</code>
+		 */
+		ALL_ARTIST_FIELD_SET(1),
 		
 		/** The artist field is not the same for all the tracks of this album */
-		SOME_DIFFERENT_ARTIST(-4);
+		SOME_DIFFERENT_ARTIST(-3);
 
 		private int value;
 
