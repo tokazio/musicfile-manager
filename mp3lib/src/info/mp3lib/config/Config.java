@@ -33,7 +33,7 @@ public class Config {
 	private String[] separators;
 	private String separator;
 	private String libraryFile;
-	private String[] includeList;
+	private String[] ignoreList;
 	private String[] excludeList;
 
 	/** Apache log4j logger */
@@ -74,7 +74,7 @@ public class Config {
 	 * @param str the string to check
 	 * @return true if the given string is valid, false otherwise
 	 */
-	private boolean isValidRegExpChar(final String str) {
+	private boolean isValidRegexChar(final String str) {
 		boolean valid = true;
 		if (str.length() < 3) {
 			if (str.length() == 2) {
@@ -123,7 +123,7 @@ public class Config {
 			int i = 0;
 			boolean valid = true;
 			while (i < separators.length && valid) {
-				valid = isValidRegExpChar(separators[i]);
+				valid = isValidRegexChar(separators[i]);
 			}
 			if (!valid) {
 				throw new ConfigurationException(new StringBuffer(key)
@@ -133,7 +133,7 @@ public class Config {
 		}
 		key = "SEPARATOR";
 		separator = config.getProperty(key);
-		if (separator == null ||  ! isValidRegExpChar(separator)) {
+		if (separator == null ||  ! isValidRegexChar(separator)) {
 			throw new ConfigurationException(new StringBuffer(key)
 			.append("configuration property is invalid, only regular expression denoting character are allowed")
 			.append("\ncheck the configuration file [").append(configFilePath).append("]").toString());
@@ -153,6 +153,33 @@ public class Config {
 		}
 	}
 	
+	/**
+	 * Loads and checks ignore or exclude list configuration attribute<br/>
+	 * @throws ConfigurationException if the property is missing / not set or contains
+	 * invalid expression
+	 */
+	private String[] loadLists(final String key) {
+		final String value = config.getProperty(key);
+		if (value == null) {
+			LOGGER.warn(key + MISSING_PROP_ERROR);
+			excludeList = new String[0];
+		} else {
+			excludeList = value.split(CONFIG_FILE_SEPARATOR);
+			// check excluded regular expressions validity
+			int i = 0;
+			boolean valid = true;
+			while (i < excludeList.length && valid) {
+				valid = isValidRegex(excludeList[i]);
+			}
+			if (!valid) {
+				throw new ConfigurationException(new StringBuffer(key)
+				.append("configuration property is invalid, only regular expression denoting character are allowed")
+				.append("\ncheck the configuration file [").append(configFilePath).append("]").toString());
+			}
+		}
+		return null;
+		// TODO: a fnirs
+	}
 	/**
 	 * Retrieves the given quality index modifier value and checks its validity
 	 * @param modifier the name of the modifier to retrieve (@see configuration properties file)
