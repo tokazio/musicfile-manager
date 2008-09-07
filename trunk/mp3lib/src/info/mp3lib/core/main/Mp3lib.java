@@ -1,8 +1,8 @@
 package info.mp3lib.core.main;
 
 import info.mp3lib.core.Library;
-import info.mp3lib.core.dao.LibraryDAO;
-import info.mp3lib.core.dataScanner.DataScanner;
+import info.mp3lib.core.dao.fs.DataScanner;
+import info.mp3lib.core.dao.xml.LibraryDAO;
 
 import java.io.File;
 import java.io.IOException;

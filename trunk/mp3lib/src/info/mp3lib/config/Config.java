@@ -26,10 +26,15 @@ public class Config {
 	/** the absolute path of the configuration file */
 	private String configFilePath;
 
-	/** configuration attributes */
+	/** 
+	 * configuration attributes for string manipulation
+	 * @see info.mp3lib.string.MatcherContext
+	 */
 	private String[] separators;
 	private String separator;
 	private String libraryFile;
+	private String[] includeList;
+	private String[] excludeList;
 
 	/** Apache log4j logger */
 	private final static Logger LOGGER = Logger.getLogger(Config.class.getName());
