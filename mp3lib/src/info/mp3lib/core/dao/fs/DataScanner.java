@@ -1,4 +1,4 @@
-package info.mp3lib.core.dataScanner;
+package info.mp3lib.core.dao.fs;
 
 import info.mp3lib.core.Album;
 import info.mp3lib.core.Artist;

@@ -1,21 +1,15 @@
-package info.mp3lib.core.dao;
+package info.mp3lib.core.dao.xml;
 
 import info.mp3lib.core.Album;
 import info.mp3lib.core.Library;
-import info.mp3lib.core.XMLMusicElement;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.jdom.Element;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
-
-import com.antelmann.cddb.Artist;
 
 /**
  * Data Access Object for the <code>Library</code> class
