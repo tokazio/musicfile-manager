@@ -78,13 +78,24 @@ public class Config {
 				}
 			}
 			if (valid) {
-				try {
-					Pattern.compile(str);
-				} catch (PatternSyntaxException e) {
-					valid = false;
-				}
+				valid = isValidRegex(str);
 			}
 		} else {
+			valid = false;
+		}
+		return valid;
+	}
+	
+	/**
+	 * Checks if the given string denote a valid regular expression
+	 * @param str the string to check
+	 * @return true if the given string is valid, false otherwise
+	 */	
+	private boolean isValidRegex(final String str) {
+		boolean valid = true;
+		try {
+			Pattern.compile(str);
+		} catch (PatternSyntaxException e) {
 			valid = false;
 		}
 		return valid;
@@ -136,6 +147,30 @@ public class Config {
 			throw new ConfigurationException(key + MISSING_PROP_ERROR);
 		}
 	}
+	
+	/**
+	 * Retrieves the given quality index modifier value and checks its validity
+	 * @param modifier the name of the modifier to retrieve (@see configuration properties file)
+	 * @return the given quality index modifier value
+	 * @throws ConfigurationException if the property is missing or is not a valid integer
+	 */
+	public int getQIModifier(final String modifier) {
+		int result = 0;
+		final String value = config.getProperty(modifier);
+		if (value == null) {
+			throw new ConfigurationException(modifier + MISSING_PROP_ERROR);
+		} else {
+			try {
+				result = Integer.parseInt(value);
+			} catch (NumberFormatException  e) {
+				throw new ConfigurationException(new StringBuffer(modifier)
+				.append("configuration property is invalid, only integer values are allowed")
+				.append("\ncheck the configuration file [").append(configFilePath).append("]").toString());
+			}
+			
+		}
+		return result;
+	}
 
 	/**
 	 * Retrieves the path in which is located the library XML file.
@@ -163,6 +198,58 @@ public class Config {
 
 	/** The separator used by the configuration file */
 	private final String CONFIG_FILE_SEPARATOR = ";";
+	
+	/**
+	 * Physical context quality index modifiers keys to access configuration data
+	 * @see <code>info.mp3lib.validator.PhysicalContext</code>
+	 */
+	private final static String PAR = "PHYSICAL.MODIFIER.ARTIST.";
+	public final static String PAR_SOME_DIFFERENT_ARTIST_IN_TREE = PAR + "SOME_DIFFERENT_ARTIST_IN_TREE";
+	public final static String PAR_CONTAINS_INVALIDER_WORD = PAR + "CONTAINS_INVALIDER_WORD";
+	public final static String PAR_CONTAINS_VALIDER_WORD = PAR + "CONTAINS_VALIDER_WORD";
+	public final static String PAR_OTHER_ALBUM_ARTIST_MATCH = PAR + "OTHER_ALBUM_ARTIST_MATCH";
+	public final static String PAR_ALL_ARTIST_TREE_TAGGED_WITH_SAME_ARTIST = PAR + "ALL_ARTIST_TREE_TAGGED_WITH_SAME_ARTIST";
 
+	private final static String PAL = "PHYSICAL.MODIFIER.ALBUM.";
+	public final static String PAL_NOT_LEAF = PAL + "NOT_LEAF";
+	public final static String PAL_CONTAINS_INVALIDER_WORD = PAL + "CONTAINS_INVALIDER_WORD";
+	public final static String PAL_SOME_DIFFERENT_ARTIST_IN_TREE = PAL + "SOME_DIFFERNT_ARTIST_IN_TREE";
+	public final static String PAL_OTHER_ALBUM_ARTIST_MATCH = PAL + "OTHER_ALBUM_ARTIST_MATCH";
+	public final static String PAL_NAME_FIRST_PART_MATCH_PARENT = PAL + "NAME_FIRST_PART_MATCH_PARENT";
+	public final static String PAL_NAME_FIRST_PART_MATCH_OTHER_ALBUM_ARTIST = PAL + "NAME_FIRST_PART_MATCH_OTHER_ALBUM_ARTIST";
+	public final static String PAL_ALL_ARTIST_TREE_WELL_FORMED = PAL + "ALL_ARTIST_TREE_WELL_FORMED";
+	public final static String PAL_ALL_ARTIST_TREE_TAGGED_WITH_SAME_ARTIST = PAL + "ALL_ARTIST_TREE_TAGGED_WITH_SAME_ARTIST";
 
+	private final static String PTR = "PHYSICAL.MODIFIER.TRACK.";
+	public final static String PTR_NOT_LEAF = PTR + "NOT_LEAF";
+	public final static String PTR_CONTAINS_INVALIDER_WORD = PTR + "CONTAINS_INVALIDER_WORD";
+	public final static String PTR_REPEATING_SEQUENCE_NOT_IN_FOLDERNAME = PTR + "REPEATING_SEQUENCE_NOT_IN_FOLDERNAME";
+	public final static String PTR_NO_ALPHADECIMAL_VARIABLE_SEQUENCE =PTR + "NO_ALPHADECIMAL_VARIABLE_SEQUENCE";
+	public final static String PTR_BIG_VARIABLE_SEQUENCE = PTR + "BIG_VARIABLE_SEQUENCE";
+	public final static String PTR_REPEATING_SEQUENCE_IN_FOLDERNAME = PTR + "REPEATING_SEQUENCE_IN_FOLDERNAME";
+
+	/**
+	 * Tag context quality index modifiers keys to access configuration data
+	 * @see <code>info.mp3lib.validator.TagContext</code>
+	 */
+	private final static String TAR = "TAG.MODIFIER.ARTIST.";
+	public final static String TAR_NO_ARTIST_FIELD_SET = TAR + "NO_ARTIST_FIELD_SET";
+	public final static String TAR_SOME_ARTIST_FIELD_SET = TAR + "SOME_ARTIST_FIELD_SET";
+	public final static String TAR_ALL_ARTIST_FIELD_SET = TAR + "ALL_ARTIST_FIELD_SET";
+	public final static String TAR_SOME_DIFFERENT_ARTIST = TAR + "SOME_DIFFERENT_ARTIST";
+
+	private final static String TAL = "TAG.MODIFIER.ALBUM.";
+	public final static String TAL_NO_ALBUM_FIELD_SET = TAL + "NO_ALBUM_FIELD_SET";
+	public final static String TAL_ALL_TITLE_FIELD_SET = TAL + "ALL_TITLE_FIELD_SET";
+	public final static String TAL_SOME_DIFFERENT_ALBUM = TAL + "SOME_DIFFERENT_ALBUM";
+	public final static String TAL_SOME_DIFFERENT_ARTIST = TAL + "SOME_DIFFERENT_ARTIST";
+
+	private final static String TTR = "TAG.MODIFIER.TRACK.";
+	public final static String TTR_NO_TITLE_FIELD_SET = TTR + "NO_TITLE_FIELD_SET";
+	public final static String TTR_ALL_TITLE_FIELD_SET = TTR + "ALL_TITLE_FIELD_SET";
+	public final static String TTR_CONTAINS_INVALIDER_WORD = TTR + "CONTAINS_INVALIDER_WORD";
+	public final static String TTR_REPEATING_SEQUENCE = TTR + "REPEATING_SEQUENCE";
+	public final static String TTR_NO_ALPHADECIMAL_VARIABLE_SEQUENCE = TTR + "NO_ALPHADECIMAL_VARIABLE_SEQUENCE";
+	public final static String TTR_BIG_VARIABLE_SEQUENCE = TTR + "BIG_VARIABLE_SEQUENCE";
+	
 }

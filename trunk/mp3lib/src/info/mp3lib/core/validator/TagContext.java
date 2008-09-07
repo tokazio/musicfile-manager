@@ -1,5 +1,6 @@
 package info.mp3lib.core.validator;
 
+import info.mp3lib.config.Config;
 import info.mp3lib.core.TagEnum;
 
 /**
@@ -15,19 +16,23 @@ public class TagContext implements Context {
 	 */
 	public enum ArtistTagEnum {
 		/** The artist field is missing for all the tracks of this album */
-		NO_ARTIST_FIELD_SET(-5),
+		NO_ARTIST_FIELD_SET(Config.getInstance()
+				.getQIModifier(Config.TAR_NO_ARTIST_FIELD_SET)),
 		
 		/** The artist field is set for some tracks of this album */
-		SOME_ARTIST_FIELD_SET(2),
+		SOME_ARTIST_FIELD_SET(Config.getInstance()
+				.getQIModifier(Config.TAR_SOME_ARTIST_FIELD_SET)),
 
 		/** 
 		 * The artist field is set for all tracks of this album 
 		 * this modifiers have a weak value because it overloads <code>SOME_ARTIST_FIELD_SET</code>
 		 */
-		ALL_ARTIST_FIELD_SET(1),
+		ALL_ARTIST_FIELD_SET(Config.getInstance()
+				.getQIModifier(Config.TAR_ALL_ARTIST_FIELD_SET)),
 		
 		/** The artist field is not the same for all the tracks of this album */
-		SOME_DIFFERENT_ARTIST(-3);
+		SOME_DIFFERENT_ARTIST(Config.getInstance()
+				.getQIModifier(Config.TAR_SOME_DIFFERENT_ARTIST));
 
 		private int value;
 
@@ -46,16 +51,20 @@ public class TagContext implements Context {
 	 */
 	public enum AlbumTagEnum {
 		/** The album field is missing for all the tracks of this album */
-		NO_ALBUM_FIELD_SET(-5),
+		NO_ALBUM_FIELD_SET(Config.getInstance()
+				.getQIModifier(Config.TAL_NO_ALBUM_FIELD_SET)),
 
 		/** The album field is set for all the tracks of this album */
-		ALL_TITLE_FIELD_SET(5),
+		ALL_TITLE_FIELD_SET(Config.getInstance()
+				.getQIModifier(Config.TAL_ALL_TITLE_FIELD_SET)),
 		
 		/** The album field is not the same for all the tracks of this album */
-		SOME_DIFFERENT_ALBUM(-4),
+		SOME_DIFFERENT_ALBUM(Config.getInstance()
+				.getQIModifier(Config.TAL_SOME_DIFFERENT_ALBUM)),
 		
 		/** The artist field is not the same for all the tracks of this album */
-		SOME_DIFFERENT_ARTIST(-2)
+		SOME_DIFFERENT_ARTIST(Config.getInstance()
+				.getQIModifier(Config.TAL_SOME_DIFFERENT_ARTIST))
 		;
 		private int value;
 
@@ -74,37 +83,43 @@ public class TagContext implements Context {
 	 */
 	public enum TrackTagEnum {
 		/** The field title is missing for all the tracks of this album */
-		NO_TITLE_FIELD_SET(-5),
+		NO_TITLE_FIELD_SET(Config.getInstance()
+				.getQIModifier(Config.TTR_NO_TITLE_FIELD_SET)),
 		
 		/** The field title is set for all the tracks of this album */
-		ALL_TITLE_FIELD_SET(2),
+		ALL_TITLE_FIELD_SET(Config.getInstance()
+				.getQIModifier(Config.TTR_ALL_TITLE_FIELD_SET)),
 		
 		/** 
 		 * The title field of all tracks contains the word defined as invalid in the program configuration
 		 * ("track", "piste", , ...)
 		 * this modifiers have a weak value because it overloads <code>REPEATING_SEQUENCE</code>
 		 */
-		CONTAINS_INVALIDER_WORD(-1),
+		CONTAINS_INVALIDER_WORD(Config.getInstance()
+				.getQIModifier(Config.TTR_CONTAINS_INVALIDER_WORD)),
 		
 		/** 
 		 * The title field of all tracks contains the same reapeating sequence wich is not include in 
 		 * the parent folders name (2 level up, 3 if the parent folder contain "CD.*\d" regex)
 		 */
-		REPEATING_SEQUENCE(-3),
+		REPEATING_SEQUENCE(Config.getInstance()
+				.getQIModifier(Config.TTR_REPEATING_SEQUENCE)),
 		
 		/** 
 		 * Once eliminated the common repeating sequence for the title field of all tracks, the remaining 
 		 * variable sequence is short (less than 3 char) or only composed of decimal characters<br/>
 		 * overloads <code>REPEATING_SEQUENCE</code>
 		 */
-		NO_ALPHADECIMAL_VARIABLE_SEQUENCE(-2),
+		NO_ALPHADECIMAL_VARIABLE_SEQUENCE(Config.getInstance()
+				.getQIModifier(Config.TTR_NO_ALPHADECIMAL_VARIABLE_SEQUENCE)),
 
 		/** 
 		 * Once eliminated the common repeating sequence for the title field of all tracks, the remaining 
 		 * variable sequence is important (more than 2 char) and composed of alphadecimal (not only decimal)
 		 * characters
 		 */
-		BIG_VARIABLE_SEQUENCE (3);
+		BIG_VARIABLE_SEQUENCE (Config.getInstance()
+				.getQIModifier(Config.TTR_BIG_VARIABLE_SEQUENCE));
 
 
 		private int value;
