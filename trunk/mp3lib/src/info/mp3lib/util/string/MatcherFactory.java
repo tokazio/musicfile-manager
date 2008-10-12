@@ -19,7 +19,7 @@ public class MatcherFactory {
 
 	/**
 	 * private constructor<BR/>
-	 * Loads the default configuration from properties files
+	 * Loads the default configuration from properties files and builds
 	 */
 	private void MatcherFactory() {
 		//TODO method implementation

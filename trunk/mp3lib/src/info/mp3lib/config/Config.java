@@ -63,8 +63,8 @@ public class Config {
 			throw new ConfigurationException(new StringBuffer("The configuration file [")
 			.append(configFilePath).append("] can't be found :\n").append(e.getMessage()).toString());
 		} catch (IOException e) {
-			throw new ConfigurationException(new StringBuffer("The configuration file [")
-			.append(configFilePath).append("] can't be read :\n").append(e.getMessage()).toString());
+			throw new ConfigurationException(new StringBuffer("Unable to load configuration file [")
+			.append(configFilePath).append("]:\n").append(e.getMessage()).toString());
 		}
 //		System.getProperties("user.dir")
 	}
@@ -173,7 +173,7 @@ public class Config {
 			}
 			if (!valid) {
 				throw new ConfigurationException(new StringBuffer(key)
-				.append("configuration property is invalid, only regular expression denoting character are allowed")
+				.append("configuration property is invalid, only regular expression are allowed")
 				.append("\ncheck the configuration file [").append(configFilePath).append("]").toString());
 			}
 		}
@@ -196,7 +196,8 @@ public class Config {
 				result = Integer.parseInt(value);
 			} catch (NumberFormatException  e) {
 				throw new ConfigurationException(new StringBuffer(modifier)
-				.append("configuration property is invalid, only integer values are allowed")
+				.append("configuration property [").append(modifier)
+				.append("] is invalid, only integer values are allowed")
 				.append("\ncheck the configuration file [").append(configFilePath).append("]").toString());
 			}
 			
