@@ -1,5 +1,7 @@
 package info.mp3lib.config;
 
+import info.mp3lib.util.cddb.IDBQuery;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -241,7 +243,7 @@ public class Config {
 	 * @return implementation class used for tag database access.
 	 */
 	@SuppressWarnings("unchecked")
-	public Class getTagDatabaseAccessImpl() {
+	public Class<IDBQuery> getTagDatabaseAccessImpl() {
 		return tagDatabaseAccessImpl;
 	}
 
