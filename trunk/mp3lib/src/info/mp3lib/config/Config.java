@@ -35,6 +35,11 @@ public class Config {
 	private String libraryFile;
 	private String[] ignoreList;
 	private String[] excludeList;
+	
+	
+	/** Implementation class for <code>IDBQuery</code>ie. tag database access */
+	@SuppressWarnings("unchecked")
+	private Class tagDatabaseAccessImpl;
 
 	/** Apache log4j logger */
 	private final static Logger LOGGER = Logger.getLogger(Config.class.getName());
@@ -59,6 +64,9 @@ public class Config {
 			config.load(new FileInputStream(configFile));
 			loadLibraryFilePath();
 			loadSeparators();
+			loadTagDatabaseAccessImpl();
+			ignoreList = getList("DEFAULT.IGNORED");
+			excludeList = getList("DEFAULT.EXCLUDED");
 		} catch (FileNotFoundException e) {
 			throw new ConfigurationException(new StringBuffer("The configuration file [")
 			.append(configFilePath).append("] can't be found :\n").append(e.getMessage()).toString());
@@ -125,8 +133,8 @@ public class Config {
 				valid = isValidRegexChar(separators[i]);
 			}
 			if (!valid) {
-				throw new ConfigurationException(new StringBuffer(key)
-				.append("configuration property is invalid, only regular expression denoting character are allowed")
+				throw new ConfigurationException(new StringBuffer("configuration property [").append(key)
+				.append("] is invalid, only regular expression denoting character are allowed")
 				.append("\ncheck the configuration file [").append(configFilePath).append("]").toString());
 			}
 		}
@@ -136,8 +144,8 @@ public class Config {
 			LOGGER.warn(key + MISSING_PROP_ERROR);
 		}
 		else if (! isValidRegexChar(separator)) {
-			throw new ConfigurationException(new StringBuffer(key)
-			.append("configuration property is invalid, only regular expression denoting character are allowed")
+			throw new ConfigurationException(new StringBuffer("configuration property [").append(key)
+			.append("] is invalid, only regular expression denoting character are allowed")
 			.append("\ncheck the configuration file [").append(configFilePath).append("]").toString());
 		}
 			
@@ -147,11 +155,33 @@ public class Config {
 	 * Loads and checks LIBRARY_FILE configuration attribute<br/>
 	 * @throws ConfigurationException if the property is missing or not set
 	 */
+	private void loadTagDatabaseAccessImpl() {
+		final String key = "TAG_DATABASE_ACCESS_IMPL";
+		final String className = config.getProperty(key);
+		if (className == null) {
+			throw new ConfigurationException(key + MISSING_PROP_ERROR);
+		} else {
+			try {
+				Class.forName(className);
+			} catch (ClassNotFoundException e) {
+				throw new ConfigurationException(new StringBuffer("configuration property [").append(key)
+						.append("] is invalid, the class denoted by the given property does not exist")
+						.append("\ncheck the configuration file [").append(configFilePath).append("]").toString());
+			}
+		}
+	}
+	
+	/**
+	 * Loads and checks LIBRARY_FILE configuration attribute<br/>
+	 * @throws ConfigurationException if the property is missing or not set
+	 */
 	private void loadLibraryFilePath() {
 		final String key = "LIBRARY_FILE";
 		libraryFile = config.getProperty(key);
 		if (libraryFile == null) {
-			throw new ConfigurationException(key + MISSING_PROP_ERROR);
+			throw new ConfigurationException(new StringBuffer("configuration property [").append(key)
+					.append("] is invalid, only integer values are allowed")
+					.append("\ncheck the configuration file [").append(configFilePath).append("]").toString());
 		}
 	}
 	
@@ -175,8 +205,7 @@ public class Config {
 				valid = isValidRegex(result[i]);
 			}
 			if (!valid) {
-				throw new ConfigurationException(new StringBuffer(key)
-				.append("configuration property [").append(key)
+				throw new ConfigurationException(new StringBuffer("configuration property [").append(key)
 				.append("] is invalid, only integer values are allowed")
 				.append("\ncheck the configuration file [").append(configFilePath).append("]").toString());
 			}
@@ -199,14 +228,21 @@ public class Config {
 			try {
 				result = Integer.parseInt(value);
 			} catch (NumberFormatException  e) {
-				throw new ConfigurationException(new StringBuffer(modifier)
-				.append("configuration property [").append(modifier)
+				throw new ConfigurationException(new StringBuffer("configuration property [").append(modifier)
 				.append("] is invalid, only integer values are allowed")
 				.append("\ncheck the configuration file [").append(configFilePath).append("]").toString());
 			}
 			
 		}
 		return result;
+	}
+	
+	/**
+	 * @return implementation class used for tag database access.
+	 */
+	@SuppressWarnings("unchecked")
+	public Class getTagDatabaseAccessImpl() {
+		return tagDatabaseAccessImpl;
 	}
 
 	/**
@@ -224,6 +260,22 @@ public class Config {
 	 */
 	public String[] getSeparators() {
 		return separators;
+	}
+	
+	public String getSeparator() {
+		return separator;
+	}
+
+	public String getLibraryFile() {
+		return libraryFile;
+	}
+
+	public String[] getIgnoreList() {
+		return ignoreList;
+	}
+
+	public String[] getExcludeList() {
+		return excludeList;
 	}
 
 	/* ------------------------ CONSTANTS ------------------------ */
@@ -295,4 +347,5 @@ public class Config {
 	public final static String TTR_BIG_VARIABLE_SEQUENCE = TTR + "BIG_VARIABLE_SEQUENCE";
 	
 	public final static String T_TRACK_TITLE_INVALIDERS = "TAG.TRACK_TITLE_INVALIDERS";
+
 }
