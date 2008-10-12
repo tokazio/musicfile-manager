@@ -9,10 +9,11 @@ import java.util.Iterator;
 
 import entagged.freedb.FreedbException;
 import entagged.freedb.FreedbQueryResult;
+import entagged.freedb.FreedbReadResult;
 
 public class FreeDBQuery extends entagged.freedb.Freedb implements IDBQuery {
     
-    private DBResult[] freedbResult;
+    private FreeDBResult[] freedbResult;
 
     public FreeDBQuery() {
 	super();
@@ -46,15 +47,10 @@ public class FreeDBQuery extends entagged.freedb.Freedb implements IDBQuery {
 	return freedbResult;
     }
     
-    public DBResult read(FreedbQueryResult query) throws FreedbException {
-	    //Create the command to be sent to freedb
-	    String command = getReadCommand(query);
-        
-	    //Send the command, and read the answer
-	    String queryAnswer = askFreedb(command);
+    public FreeDBResult readResult(FreedbQueryResult query) throws FreedbException {
 		
 	    //Parse the result
-	    return new DBResult(queryAnswer, query.isExactMatch());
+	    return new FreeDBResult(super.read(query));
     }
     
     @Override
@@ -69,7 +65,7 @@ public class FreeDBQuery extends entagged.freedb.Freedb implements IDBQuery {
 	return query(tracks);
     }
     
-    public DBResult[] queryAlbumInfos(Album album) {
+    public FreeDBResult[] queryAlbumInfos(Album album) {
 	// retrieve track length
 	float size[] = new float[album.getSize()];
 	Iterator<Track> iterator = album.getTrackIterator();
@@ -83,9 +79,9 @@ public class FreeDBQuery extends entagged.freedb.Freedb implements IDBQuery {
 	    result = query(size);
 
 	    // submit Track query 
-	    freedbResult = new DBResult[result.length];
+	    freedbResult = new FreeDBResult[result.length];
 	    for (int i = 0; i < result.length; i++) {
-		freedbResult[i] = (DBResult) read(result[i]);
+		freedbResult[i] = (FreeDBResult) readResult(result[i]);
 	    }
 
 	} catch (FreedbException e) {

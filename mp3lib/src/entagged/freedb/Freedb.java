@@ -128,7 +128,7 @@ public class Freedb {
 		return output;
     }
     
-    private String askFreedb(String command) throws FreedbException {
+    protected String askFreedb(String command) throws FreedbException {
     	//System.out.println("Asking freedb");
     	setupConnection();
 		URL url = null;
@@ -227,7 +227,7 @@ public class Freedb {
 		return command.toString();
     }
     
-    private String getReadCommand(FreedbQueryResult query) {
+    protected String getReadCommand(FreedbQueryResult query) {
 		return "cddb+read+" + query.getCategory() + "+" + query.getDiscId();
 	}
 	

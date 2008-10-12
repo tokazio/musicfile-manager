@@ -2,7 +2,9 @@ package info.mp3lib.core.validator;
 
 import info.mp3lib.core.Album;
 import info.mp3lib.core.Track;
-import info.mp3lib.util.cddb.CDDBquery;
+import info.mp3lib.util.cddb.DBConnector;
+import info.mp3lib.util.cddb.DBResult;
+import info.mp3lib.util.cddb.ITagQueryResult;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,7 +15,7 @@ import entagged.freedb.FreedbReadResult;
 public class Validator {
 
 	Album album = null;
-	FreedbReadResult[] cddbInfos = null;
+	ITagQueryResult[] cddbInfos = null;
 	HashMap<String,TagInfos> tagInfos = new HashMap<String,TagInfos>();
 
 	private class TagInfos {
@@ -87,8 +89,7 @@ public class Validator {
 
 	public void retrieveCDDB() {
 		// retrieve CDDB album infos
-		CDDBquery cddb = new CDDBquery();
-		cddbInfos = cddb.queryAlbumInfos(album);
+		cddbInfos = DBConnector.getImpl().queryAlbum(album);
 	}
 
 	/**
@@ -165,7 +166,7 @@ public class Validator {
 		// Validation CDDB (for each possibilities)
 		if (cddbInfos.length != 0) {
 			for (int i = 0; i < cddbInfos.length; i++) {
-				tagInfos.put("cddb_"+i, CDDBResultValidation(cddbInfos[i]));
+				tagInfos.put("cddb_"+i, DBResultValidation(cddbInfos[i]));
 			}
 		} else {
 			// no CDDB result : low level IQV => back to TAG infos
@@ -190,7 +191,7 @@ public class Validator {
 	 * @param cddb
 	 * @return
 	 */
-	public TagInfos CDDBResultValidation(FreedbReadResult cddb) {
+	public TagInfos DBResultValidation(ITagQueryResult cddb) {
 		TagInfos tag = new TagInfos();
 		
 		// With TAG infos ..
