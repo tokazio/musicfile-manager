@@ -1,11 +1,27 @@
 package info.mp3lib.util.cddb;
 
+import info.mp3lib.config.Config;
 import info.mp3lib.config.ConfigurationException;
-import info.mp3lib.core.Album;
 
-public class DBConnector implements IDBQuery {
+public class DBConnector {
 
-    /** PRIVATE STATIC ACCESS */
+    /** ----- PUBLIC STATIC ACCESS ----- */
+    
+    public static IDBQuery getImpl() {
+	if (getInstance().queryImplInstance == null) {
+	    Class<IDBQuery> dbquery = Config.getInstance().getTagDatabaseAccessImpl();
+	    try {
+		getInstance().queryImplInstance = (IDBQuery) dbquery.newInstance();
+	    } catch (Exception e) {
+		new ConfigurationException(new StringBuffer("Unable to instanciate class implementation of IDBQuery [")
+		.append(dbquery.getName()).append("]\nCause was: ").append(e.getMessage()).toString());
+	    }
+	}
+	return getInstance().queryImplInstance;
+    }
+    
+    /** ----- PRIVATE STATIC ACCESS ----- */
+    
     private static DBConnector instance = null;
     
     private DBConnector() {
@@ -20,32 +36,9 @@ public class DBConnector implements IDBQuery {
 	}
 	return instance;
     }
-    /** -------------------- */
     
-    /** PRIVATE INSTANCE ACCESS */
-    private IDBQuery impl = null;
+    /** ----- PRIVATE INSTANCE ACCESS ----- */
     
-    private static IDBQuery getImpl() {
-	if (getInstance().impl == null) {
-	    String implName = "FreeDBQuery";
-	    //TODO: read config
-	    
-//	    ResourceBundle.getBundle(baseName).getS
-	    
-	    try {
-		getInstance().impl = (IDBQuery) Class.forName(implName).newInstance();
-	    } catch (Exception e) {
-		//TODO: CONFIG.JAVA MODIFICATION
-		new ConfigurationException("Unable to load the implementation class for tag DataBase access defined in config file: "+e.getMessage());
-	    }
-	}
-	return getInstance().impl;
-    }
-    
-    
-    /** */
-    public ITagQueryResult[] queryAlbum(Album album) {
-	return getImpl().queryAlbum(album);
-    }
+    private IDBQuery queryImplInstance = null;
     
 }
