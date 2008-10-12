@@ -109,14 +109,13 @@ public class Config {
 	/**
 	 * Loads and checks SEPARATORS and DEFAULT.SEPARATOR configuration attributes<br/>
 	 * log a warn if the property is missing or not set
-	 * @throws ConfigurationException if one of the loaded separator is invalid
+	 * @throws ConfigurationException if loaded separator is invalid
 	 */
 	private void loadSeparators() {
 		String key = "SEPARATORS";
 		final String value = config.getProperty(key);
 		if (value == null) {
 			LOGGER.warn(key + MISSING_PROP_ERROR);
-			separators = new String[0];
 		} else {
 			separators = value.split(CONFIG_FILE_SEPARATOR);
 			// check separator validity
@@ -133,7 +132,10 @@ public class Config {
 		}
 		key = "SEPARATOR";
 		separator = config.getProperty(key);
-		if (separator == null ||  ! isValidRegexChar(separator)) {
+		if (separator == null) {
+			LOGGER.warn(key + MISSING_PROP_ERROR);
+		}
+		else if (! isValidRegexChar(separator)) {
 			throw new ConfigurationException(new StringBuffer(key)
 			.append("configuration property is invalid, only regular expression denoting character are allowed")
 			.append("\ncheck the configuration file [").append(configFilePath).append("]").toString());
@@ -154,32 +156,34 @@ public class Config {
 	}
 	
 	/**
-	 * Loads and checks ignore or exclude list configuration attribute<br/>
+	 * Retrieves and checks list configuration attribute denoted by the given key<br/>
+	 * @return an array of regexp if the given attribute is not empty, null otherwise
 	 * @throws ConfigurationException if the property is missing / not set or contains
 	 * invalid expression
 	 */
-	private String[] loadLists(final String key) {
+	public String[] getList(final String key) {
 		final String value = config.getProperty(key);
+		String[] result = null;
 		if (value == null) {
 			LOGGER.warn(key + MISSING_PROP_ERROR);
-			excludeList = new String[0];
-		} else {
-			excludeList = value.split(CONFIG_FILE_SEPARATOR);
+		} else if (value.trim().length() != 0) {
+			result = value.split(CONFIG_FILE_SEPARATOR);
 			// check excluded regular expressions validity
 			int i = 0;
 			boolean valid = true;
-			while (i < excludeList.length && valid) {
-				valid = isValidRegex(excludeList[i]);
+			while (i < result.length && valid) {
+				valid = isValidRegex(result[i]);
 			}
 			if (!valid) {
 				throw new ConfigurationException(new StringBuffer(key)
-				.append("configuration property is invalid, only regular expression are allowed")
+				.append("configuration property [").append(key)
+				.append("] is invalid, only integer values are allowed")
 				.append("\ncheck the configuration file [").append(configFilePath).append("]").toString());
 			}
 		}
-		return null;
-		// TODO: a fnirs
+		return result;
 	}
+	
 	/**
 	 * Retrieves the given quality index modifier value and checks its validity
 	 * @param modifier the name of the modifier to retrieve (@see configuration properties file)
@@ -214,7 +218,7 @@ public class Config {
 	}
 
 	/**
-	 * Retrieves all characters defined as separators, an empty array if the associated property is not
+	 * Retrieves all characters defined as separators, null if the associated property is not
 	 * set or missing in the configuration file.
 	 * @return all characters defined as separators
 	 */
@@ -260,7 +264,12 @@ public class Config {
 	public final static String PTR_NO_ALPHADECIMAL_VARIABLE_SEQUENCE =PTR + "NO_ALPHADECIMAL_VARIABLE_SEQUENCE";
 	public final static String PTR_BIG_VARIABLE_SEQUENCE = PTR + "BIG_VARIABLE_SEQUENCE";
 	public final static String PTR_REPEATING_SEQUENCE_IN_FOLDERNAME = PTR + "REPEATING_SEQUENCE_IN_FOLDERNAME";
-
+	
+	public final static String P_TRACK_TITLE_INVALIDERS = "PHYSICAL.TRACK_TITLE_INVALIDERS";
+	public final static String P_ARTIST_NAME_INVALIDERS = "PHYSICAL.ARTIST_NAME_INVALIDERS";
+	public final static String P_ARTIST_NAME_VALIDERS = "PHYSICAL.ARTIST_NAME_VALIDERS";
+	public final static String P_ALBUM_NAME_INVALIDERS = "PHYSICAL.ALBUM_NAME_INVALIDERS";
+	
 	/**
 	 * Tag context quality index modifiers keys to access configuration data
 	 * @see <code>info.mp3lib.validator.TagContext</code>
@@ -285,4 +294,5 @@ public class Config {
 	public final static String TTR_NO_ALPHADECIMAL_VARIABLE_SEQUENCE = TTR + "NO_ALPHADECIMAL_VARIABLE_SEQUENCE";
 	public final static String TTR_BIG_VARIABLE_SEQUENCE = TTR + "BIG_VARIABLE_SEQUENCE";
 	
+	public final static String T_TRACK_TITLE_INVALIDERS = "TAG.TRACK_TITLE_INVALIDERS";
 }

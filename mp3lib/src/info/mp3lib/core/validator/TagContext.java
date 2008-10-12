@@ -189,5 +189,9 @@ public class TagContext implements Context {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
+	
+	/* ------------------------- CONSTANTS --------------------------- */
+	/** all words (regexp) defined as invalid in a track title. */
+	private final static String[] TRACK_TITLE_INVALIDERS = 
+		Config.getInstance().getList(Config.T_TRACK_TITLE_INVALIDERS);
 }

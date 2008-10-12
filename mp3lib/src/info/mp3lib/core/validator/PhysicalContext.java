@@ -1,5 +1,7 @@
 package info.mp3lib.core.validator;
 
+import java.util.Arrays;
+
 import info.mp3lib.config.Config;
 import info.mp3lib.core.Album;
 
@@ -258,5 +260,20 @@ public class PhysicalContext implements Context {
 		return null;
 	}
 	
+	/* ------------------------- CONSTANTS --------------------------- */
+	/** all words (regexp) defined as invalid in a track title. */
+	private final static String[] TRACK_TITLE_INVALIDERS = 
+		Config.getInstance().getList(Config.P_TRACK_TITLE_INVALIDERS);
 	
+	/** all words (regexp) defined as invalid in an artist name. */
+	private final static String[] ARTIST_NAME_INVALIDERS = 
+		Config.getInstance().getList(Config.P_ARTIST_NAME_INVALIDERS);
+	
+	/** all words (regexp) that prove that an artist name must be the valid one. */
+	private final static String[] ARTIST_NAME_VALIDERS = 
+		Config.getInstance().getList(Config.P_ARTIST_NAME_VALIDERS);
+	
+	/** all words (regexp) that prove that an album name must the a valid one. */
+	private final static String[] ALBUM_NAME_INVALIDERS = 
+		Config.getInstance().getList(Config.P_ALBUM_NAME_INVALIDERS);
 }
