@@ -24,6 +24,11 @@ public interface StringMatcher {
 	 */
 	public String compile(String str);
 	
+	/**
+	 * Retrieves a compiled pattern from the given string
+	 * @param str
+	 * @return the given string in a compiled pattern
+	 */
 	public StringPattern getPattern(String str);
 
 }

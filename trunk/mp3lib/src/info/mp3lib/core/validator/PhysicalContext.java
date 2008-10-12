@@ -1,7 +1,5 @@
 package info.mp3lib.core.validator;
 
-import java.util.Arrays;
-
 import info.mp3lib.config.Config;
 import info.mp3lib.core.Album;
 
@@ -209,9 +207,15 @@ public class PhysicalContext implements Context {
 		artistQIModifiers = new ArtistPhysicalEnum[5];
 		albumQIModifiers = new AlbumPhysicalEnum[8];
 		tracksQIModifiers = new TrackPhysicalEnum[6];
+		
 	}
 	
 	/* ------------------------- METHODS --------------------------- */
+	private void processArtistContext() {
+		//TODO
+		
+	}
+	
 	@Override
 	public int getAlbumQI() {
 		// TODO Auto-generated method stub
