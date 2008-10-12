@@ -18,4 +18,18 @@ public class StringMatcherDummy implements StringMatcher {
 		return result;
 	}
 
+	@Override
+	public String compile(String str) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public StringPattern getPattern(String str) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
+
 }
