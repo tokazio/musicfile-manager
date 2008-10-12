@@ -5,6 +5,6 @@ import info.mp3lib.core.Album;
 
 public interface IDBQuery {
 
-    public ITagQueryResult[] queryAlbum(Album album);
+    public abstract ITagQueryResult[] queryAlbum(Album album);
     
 }
