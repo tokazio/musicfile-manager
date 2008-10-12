@@ -350,4 +350,17 @@ public class Config {
 	
 	public final static String T_TRACK_TITLE_INVALIDERS = "TAG.TRACK_TITLE_INVALIDERS";
 
+	/**
+	 * DBSelector quality index modifiers keys.
+	 * Supposed to compare a DBResult with a Generic Context.
+	 * used in -> ITagQueryResult (compareTo(Context))
+	 */
+	private final static String DAL = "DB.MODIFIER.ALBUM.";
+	public final static String DAL_SAME_ARTIST = DAL + "SAME_ARTIST";
+	public final static String DAL_SAME_ALBUM = DAL + "SAME_ALBUM";
+	public final static String DAL_SAME_DISCID = DAL + "SAME_DISCID";
+	public final static String DAL_SAME_GENRE = TTR + "SAME_GENRE";
+	public final static String DAL_SAME_YEAR = DAL + "SAME_YEAR";
+	public final static String DAL_GOOD_QUALITY = DAL + "GOOD_QUALITY";
+	
 }
