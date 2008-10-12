@@ -1,5 +1,6 @@
 package info.mp3lib.util.cddb;
 
+
 public interface ITagQueryResult {
     
     public int compareTo(Object o);
