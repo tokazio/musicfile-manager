@@ -1,5 +1,7 @@
 package info.mp3lib.util.string;
 
+import java.io.File;
+
 /**
  * Implements useful method to manipulate Strings
  * @author Gab
@@ -10,7 +12,7 @@ public final class StringUtils {
 	 * @param fileName the name of a file
 	 * @return the file name without its extension
 	 */
-	public final static String removeExtension(String fileName) {
+	public final static String removeExtension(final String fileName) {
 		String name = fileName;
 		if (!fileName.trim().isEmpty()) {
 			final int dotPosition = name.lastIndexOf('.');
@@ -19,6 +21,15 @@ public final class StringUtils {
 			}
 		}
 		return name;
+	}
+	
+	/**
+	 * Retrieves the name of the parent folder of the file denoted by given filename
+	 * @param fileName the name of a file
+	 * @return the parent name
+	 */
+	public final static String getParentFolderName(final String fileName) {
+		return new File(fileName).getParentFile().getName();
 	}
 	
 	/**
