@@ -267,6 +267,7 @@ public class Freedb {
         //Send the command, and read the answer
         String queryAnswer = askFreedb(command);
 		
+        System.out.println("CDDB ANSWER: "+queryAnswer);
         //Parse the result
         StringTokenizer st = new StringTokenizer( queryAnswer, "\n" );
 
