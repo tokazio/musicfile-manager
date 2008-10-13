@@ -1,8 +1,12 @@
 package info.mp3lib.core.validator;
 
+import java.util.Arrays;
+import java.util.Iterator;
+
 import info.mp3lib.config.Config;
 import info.mp3lib.core.Album;
 import info.mp3lib.core.TagEnum;
+import info.mp3lib.core.Track;
 
 /**
  * Denotes all data deduced from tags of an album and the quality index associated to these values
@@ -11,6 +15,11 @@ import info.mp3lib.core.TagEnum;
  */
 public class TagContext implements Context {
 
+    	private Album album;
+    	
+    	private String albumName;
+    	private String[] tracksName;
+    
 	/**
 	 * Denotes the possible value modifiers for the quality index of the artist name deduction from the tag 
 	 * context The final QI returned by the <code>getArtistQI()</code> method is a sum of all modifiers
@@ -141,11 +150,76 @@ public class TagContext implements Context {
 	private AlbumTagEnum[] albumQI;
 
 	/** tracks name quality index modifiers */
-	private TagEnum[] tracksQI;
+	private TrackTagEnum[] tracksQI;
 
 	public TagContext(Album album) {
 	    // TODO: MAKE CONSTRUCTOR
+	    this.album = album;
+	    tracksName = new String[album.getSize()];
+	    artistQI = new ArtistTagEnum[album.getSize()];
+	    albumQI = new AlbumTagEnum[album.getSize()];
+	    tracksQI = new TrackTagEnum[album.getSize()];
 	}
+	
+	
+	public void processAlbumContext() {
+	    /**
+	     * up if FIELDS are SET or SAME ...
+	     */
+	    
+	    
+	    //TODO try to get best Album and Artist name ...
+	    String bestAlbumName = null, bestArtistName = null; 
+	    
+	    if (album.getTagState().equals(TagEnum.ALL_SAME_TAGS)) {
+		Track firstOne = album.getTrackIterator().next();
+		bestAlbumName = firstOne.getAlbumName();
+		bestArtistName = firstOne.getArtistName();
+	    }
+	    
+	    else {
+		// iterate ONCE
+		boolean continueLoop = true;
+		int i = 0;
+		for (Iterator<Track> iTrack = album.getTrackIterator(); iTrack.hasNext() && continueLoop; i++) {
+		    Track track = iTrack.next();
+		    /** @set Track name */
+		    tracksName[i] = track.getName();
+
+		    /** @CHECK NO_TITLE_FIELD_SET */
+		    if (album.getTagState().equals(TagEnum.NO_TAGS)) {
+			/** @set all QI */
+			tracksQI[i] = TrackTagEnum.NO_TITLE_FIELD_SET;
+			albumQI[i] = AlbumTagEnum.NO_ALBUM_FIELD_SET;
+			artistQI[i] = ArtistTagEnum.NO_ARTIST_FIELD_SET;
+		    }
+		    // TODO: Add to Album.add() ALL/SAME_ALBUM and ALL/SAME_ARTIST difference
+		    else {
+			/** @CHECK ALL_TITLE_FIELD_SET */
+			if (album.getTagState().equals(TagEnum.ALL_SAME_TAGS)) { //ARTIST.
+			    artistQI[i] = ArtistTagEnum.ALL_ARTIST_FIELD_SET;
+			}
+			if (album.getTagState().equals(TagEnum.ALL_SAME_TAGS)) { //ALBUM.
+			    albumQI[i] = AlbumTagEnum.ALL_TITLE_FIELD_SET;
+			}
+			
+		    }
+		    
+		    
+		    
+		    // no album or artist access
+		    if (!album.getTagState().equals(TagEnum.ALL_SAME_TAGS)) {
+			// Track validation
+			
+		    }
+		    
+
+		    
+		}
+	    }
+	    
+	}
+	
 	
 	@Override
 	public String getAlbumName() {
