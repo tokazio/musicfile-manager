@@ -96,7 +96,6 @@ public class Album extends XMLMusicElement {
 	 * @return the size
 	 */
 	public int getSize() {
-	    System.out.println("SIZE: "+trackList.size());
 	    return trackList.size();
 //		return Integer.parseInt(getElement().getAttributeValue(XMLMusicElement.ATTR_SIZE));
 	}
