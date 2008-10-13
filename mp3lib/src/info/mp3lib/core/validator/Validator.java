@@ -2,10 +2,7 @@ package info.mp3lib.core.validator;
 
 import info.mp3lib.core.Album;
 import info.mp3lib.util.cddb.DBConnector;
-import info.mp3lib.util.cddb.DBResult;
 import info.mp3lib.util.cddb.ITagQueryResult;
-import info.mp3lib.util.cddb.TagResult;
-import info.mp3lib.util.cddb.FreeDB.FreeDBResult;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -75,7 +72,7 @@ public class Validator {
 //		bestOne.setAlbum()
 	    }
 	    
-	    // TODO: (and to think) write album to tag ......
+	    // TODO: (and to think) write album to tag / XML or what ......
 //	    album.write(bestOne);
 	}
 	

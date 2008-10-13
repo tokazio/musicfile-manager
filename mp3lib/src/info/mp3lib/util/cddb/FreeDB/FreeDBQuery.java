@@ -9,7 +9,6 @@ import java.util.Iterator;
 
 import entagged.freedb.FreedbException;
 import entagged.freedb.FreedbQueryResult;
-import entagged.freedb.FreedbReadResult;
 
 public class FreeDBQuery extends entagged.freedb.Freedb implements IDBQuery {
     
@@ -48,11 +47,8 @@ public class FreeDBQuery extends entagged.freedb.Freedb implements IDBQuery {
     }
     
     public FreeDBResult readResult(FreedbQueryResult query) throws FreedbException {
-	System.out.println("DEBUG: query : "+query.getAlbum());
-	FreedbReadResult dbRes = super.read(query);
-	System.out.println("DEBUG: dbRes : "+dbRes.getAlbum());
 	    //Parse the result
-	    return new FreeDBResult(dbRes);
+	    return new FreeDBResult(super.read(query));
     }
     
     @Override
@@ -77,7 +73,6 @@ public class FreeDBQuery extends entagged.freedb.Freedb implements IDBQuery {
 	}
 	try {
 	    // submit Album query
-	    System.out.println("queryAlbum (size:"+size.length+")");
 	    FreedbQueryResult[] result = null;
 	    result = query(size);
 
