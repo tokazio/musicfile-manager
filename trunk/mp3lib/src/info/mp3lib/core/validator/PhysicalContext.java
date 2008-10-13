@@ -2,6 +2,8 @@ package info.mp3lib.core.validator;
 
 import info.mp3lib.config.Config;
 import info.mp3lib.core.Album;
+import info.mp3lib.core.validator.cache.CachedContextBean;
+import info.mp3lib.core.validator.cache.ContextCache;
 
 
 /**
@@ -192,6 +194,15 @@ public class PhysicalContext implements Context {
 	/** The album from which is built this Context */
 	private Album album;
 	
+	/** the album name deduced from the context */
+	private String albumName;
+	
+	/** the artist name deduced from the context */
+	private String artistName;
+	
+	/** the tracks name name deduced from the context */
+	private String[] tracksName;
+	
 	/** artist name quality index modifiers */
 	private ArtistPhysicalEnum[] artistQIModifiers;
 
@@ -204,6 +215,9 @@ public class PhysicalContext implements Context {
 	/* ----------------------- CONSTRUCTORS ----------------------- */
 	public PhysicalContext(final Album pAlbum) {
 		album = pAlbum;
+		albumName = album.getName();
+		artistName = album.getFile().getParentFile().getName();
+		tracksName = album.getTracksName();
 		artistQIModifiers = new ArtistPhysicalEnum[5];
 		albumQIModifiers = new AlbumPhysicalEnum[8];
 		tracksQIModifiers = new TrackPhysicalEnum[6];
@@ -211,8 +225,19 @@ public class PhysicalContext implements Context {
 	}
 	
 	/* ------------------------- METHODS --------------------------- */
+	/** 
+	 * Some tracks contained in folders at the same level have the artist tag field matching
+	 * the parent directory name
+	 */
+	//OTHER_ALBUM_ARTIST_MATCH
 	private void processArtistContext() {
-		//TODO
+		final ContextCache cache = ContextCache.getInstance();
+		CachedContextBean context = null;
+		// if the artist context have been already computed and cached
+		if ((context = cache.getCache(artistName)) != null) {
+			album.getFile();
+			//TODO reflechir
+		}
 		
 	}
 	

@@ -43,13 +43,13 @@ public class MatcherContext {
 	private boolean useExcludeList;
 	
 	/** 
-	 * if true, only regExp in the given ignore list (and not the default one) will be removed from the
+	 * if false, only regExp in the given ignore list (and not the default one) will be removed from the
 	 * two strings to compare 
 	 */
 	private boolean useDefaultIgnoreList;
 	
 	/** 
-	 * if true, if one of the all word in the given exclude (and not the default one) list is found in one 
+	 * if false, if one of the all word in the given exclude (and not the default one) list is found in one 
 	 * of the two strings to compare, match will fail 
 	 */
 	private boolean useDefaultExcludeList;

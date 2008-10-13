@@ -9,22 +9,13 @@ import info.mp3lib.core.validator.TagContext.ArtistTagEnum;
 
 /**
  * Manages caching of data and quality index deduced to an artist level analysis to avoid
- * redundant computation for different artist in the same directory
+ * redundant computation for different album located in the same directory
  * @author Gab
  */
 public class ContextCache {
 	
-	private static class artistContext {
-		/** all the artist names present in the current parent directory */
-		private String[] artistNames[];
-		
-		/** artist name quality index modifiers */
-		private ArtistTagEnum[] artistQI;
-		
-		
-	}
-	//TODO reflechir
-	private static Map<String, artistContext> artistContexts;
+	/** Holds the cached data **/
+	private static Map<String, CachedContextBean> artistContexts;
 	
 	/** the unique instance of the singleton */
 	private static ContextCache instance;
@@ -38,6 +29,19 @@ public class ContextCache {
 			instance = new ContextCache();
 		}
 		return instance;
+	}
+	
+	/**
+	 * Returns the value to which the specified key is mapped, or null if this map contains no mapping for the key.  
+	 * @param key the folder name for which look for a cached value
+	 * @return The context if there is one in the cache denoted by this key, null otherwise
+	 */
+	public CachedContextBean getCache(final String key) {
+		return artistContexts.get(key);
+	}
+	
+	public void setCache(final String key, final CachedContextBean context) {
+		artistContexts.put(key, context);
 	}
 	
 }
