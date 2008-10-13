@@ -10,4 +10,8 @@ public class DBException extends Exception {
 	super(e);
     }
 
+    public DBException(String strMessage) {
+	super(strMessage);
+    }
+
 }

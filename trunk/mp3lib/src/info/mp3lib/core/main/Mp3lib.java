@@ -33,7 +33,9 @@ public class Mp3lib {
 	System.out.println("Scan complete !");
 	
 	// Save library to XML
-	LibraryDAO.getInstance().write(Library.getInstance(), xmlLibrary);
+	if (LibraryDAO.getInstance().write(Library.getInstance(), xmlLibrary) == false) {
+	    System.out.println("ERROR: unknow when execute LibraryDAO.getInstance().write ");
+	}
 	
 	// TODO: reload library from existing XML if user-requested ..
 	

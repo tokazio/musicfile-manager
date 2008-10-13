@@ -289,7 +289,8 @@ public class Freedb {
 			return queryResults;
 		}
 		else
-			throw new FreedbException("Server returned : "+queryAnswer);
+		    return null;
+//			throw new FreedbException("Server returned : "+queryAnswer);
     }
     
     public FreedbQueryResult[] query(FreedbTrack[] tracks) throws FreedbException {

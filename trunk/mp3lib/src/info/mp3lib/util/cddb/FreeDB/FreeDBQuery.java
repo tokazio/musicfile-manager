@@ -9,7 +9,6 @@ import java.util.Iterator;
 
 import entagged.freedb.FreedbException;
 import entagged.freedb.FreedbQueryResult;
-import entagged.freedb.FreedbReadResult;
 
 public class FreeDBQuery extends entagged.freedb.Freedb implements IDBQuery {
     
@@ -78,11 +77,16 @@ public class FreeDBQuery extends entagged.freedb.Freedb implements IDBQuery {
 	    FreedbQueryResult[] result = null;
 	    result = query(size);
 
-	    // submit Track query 
-	    freedbResult = new FreeDBResult[result.length];
-	    for (int i = 0; i < result.length; i++) {
-		freedbResult[i] = (FreeDBResult) readResult(result[i]);
+	    if (result != null) {
+		    // submit Track query 
+		    freedbResult = new FreeDBResult[result.length];
+		    for (int i = 0; i < result.length; i++) {
+			freedbResult[i] = (FreeDBResult) readResult(result[i]);
+		    }		
+	    } else {
+		freedbResult = null;
 	    }
+
 
 	} catch (FreedbException e) {
 	    e.printStackTrace();

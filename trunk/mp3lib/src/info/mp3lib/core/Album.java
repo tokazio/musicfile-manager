@@ -35,7 +35,7 @@ public class Album extends XMLMusicElement {
 	
 	/**
 	 * Constructs a new empty Album.
-	 * This method should not be called directly, used by <code>MusicDataScanner.read(File)</code>
+	 * This method should not be called directly, used by <code>DataScanner.read(File)</code>
 	 * @param name the name of this album
 	 */
 	public Album(final String name) {
@@ -45,6 +45,8 @@ public class Album extends XMLMusicElement {
 		setId(id);
 		trackList = new LinkedList<Track>();
 		tagState = TagEnum.NO_TAGS;
+		LOGGER.warn("NO XML UPDATE OF PHYSICAL TAG !!!");
+		// TODO:  XML UPDATE OF PHYSICAL TAGs..
 	}
 	
 	/**
@@ -94,7 +96,9 @@ public class Album extends XMLMusicElement {
 	 * @return the size
 	 */
 	public int getSize() {
-		return Integer.parseInt(getElement().getAttributeValue(XMLMusicElement.ATTR_SIZE));
+	    System.out.println("SIZE: "+trackList.size());
+	    return trackList.size();
+//		return Integer.parseInt(getElement().getAttributeValue(XMLMusicElement.ATTR_SIZE));
 	}
 
 	/**
@@ -166,6 +170,7 @@ public class Album extends XMLMusicElement {
 		}
 		getElement().addContent(track.getElement()); // adds the track element to the album element
 		trackList.add(track); // adds the file to the album list
+//		setSize(getSize()+1); // update album size
 		if (track.isTagged()) {
 			if (tagState == TagEnum.NO_TAGS) {
 				if (trackList.size() == 1) {

@@ -59,10 +59,11 @@ public class Config {
 	 * Retrieves the configuration properties file.
 	 * @throws ConfigurationException if the configuration properties file can't be read or is not found
 	 */
-	public Config() {
+	private Config() {
 		File configFile = new File(CONFIG_FILE);
 		try {
 			configFilePath = configFile.getPath();
+			config = new Properties();
 			config.load(new FileInputStream(configFile));
 			loadLibraryFilePath();
 			loadSeparators();
@@ -113,6 +114,7 @@ public class Config {
 		} catch (PatternSyntaxException e) {
 			valid = false;
 		}
+		LOGGER.warn("isValidRegex("+str+") returns: "+valid);
 		return valid;
 	}
 
@@ -133,6 +135,7 @@ public class Config {
 			boolean valid = true;
 			while (i < separators.length && valid) {
 				valid = isValidRegexChar(separators[i]);
+				i++;
 			}
 			if (!valid) {
 				throw new ConfigurationException(new StringBuffer("configuration property [").append(key)
@@ -140,7 +143,7 @@ public class Config {
 				.append("\ncheck the configuration file [").append(configFilePath).append("]").toString());
 			}
 		}
-		key = "SEPARATOR";
+		key = "DEFAULT.SEPARATOR";
 		separator = config.getProperty(key);
 		if (separator == null) {
 			LOGGER.warn(key + MISSING_PROP_ERROR);
@@ -164,7 +167,7 @@ public class Config {
 			throw new ConfigurationException(key + MISSING_PROP_ERROR);
 		} else {
 			try {
-				Class.forName(className);
+			    tagDatabaseAccessImpl = Class.forName(className);
 			} catch (ClassNotFoundException e) {
 				throw new ConfigurationException(new StringBuffer("configuration property [").append(key)
 						.append("] is invalid, the class denoted by the given property does not exist")
@@ -205,6 +208,7 @@ public class Config {
 			boolean valid = true;
 			while (i < result.length && valid) {
 				valid = isValidRegex(result[i]);
+				i++;
 			}
 			if (!valid) {
 				throw new ConfigurationException(new StringBuffer("configuration property [").append(key)
@@ -285,7 +289,7 @@ public class Config {
 	private String MISSING_PROP_ERROR = " property is not set or missing, configuration file may be corrupted";
 
 	/** The relative path of the configuration file */
-	private final String CONFIG_FILE = "../config/config.properties";
+	private final String CONFIG_FILE = "mp3lib/config/config.properties";
 
 	/** The separator used by the configuration file */
 	private final String CONFIG_FILE_SEPARATOR = ";";
