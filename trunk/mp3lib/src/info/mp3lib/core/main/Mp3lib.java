@@ -25,6 +25,8 @@ public class Mp3lib {
 	final String musicDirectory = "E:/mp3test";
 	// Set XML library file path
 	final String xmlLibrary = "E:/zicfile.xml";
+	// set tagged XML library
+	final String xmlTagLibrary = "E:/zicfile-TAGGED.xml";
 	
 	
 	// Launch SCAN procedure : Fill Library
@@ -44,6 +46,11 @@ public class Mp3lib {
 	Library.getInstance().validate();
 	System.out.println("Validation complete !");
 
+	// Save library to XML with UPDATES
+	if (LibraryDAO.getInstance().write(Library.getInstance(), xmlTagLibrary) == false) {
+	    System.out.println("ERROR: unknow when execute LibraryDAO.getInstance().write ");
+	}
+	
     }
 
     /**

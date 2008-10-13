@@ -1,6 +1,7 @@
 package info.mp3lib.core;
 
 import info.mp3lib.core.validator.Validator;
+import info.mp3lib.util.cddb.ITagQueryResult;
 import info.mp3lib.util.string.MatcherContext;
 import info.mp3lib.util.string.MatcherFactory;
 import info.mp3lib.util.string.StringMatcher;
@@ -81,7 +82,25 @@ public class Album extends XMLMusicElement {
 		}
 	}
 
-	/* ------------------------- METHODS --------------------------- */	
+	/* ------------------------- METHODS --------------------------- */
+	
+	/**
+	 * TODO: set new tags for this album
+	 */
+	public void write(ITagQueryResult tag) {
+	    if (!getArtistName().equals(tag.getArtist())) {
+		this.moveTo(tag.getArtist());
+	    }
+	    if (!getName().equals(tag.getAlbum())) {
+		this.setName(tag.getAlbum());
+	    }
+	    if (getYear() != Integer.parseInt(tag.getYear())) {
+		this.setYear(Integer.parseInt(tag.getYear()));
+	    }
+	    //TODO ... other fields ??
+	}
+	
+	
 	/**
 	 * Retrieves the name of the parent artist element
 	 * @return the artist
