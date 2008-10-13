@@ -6,6 +6,7 @@ import info.mp3lib.util.string.MatcherContext;
 import info.mp3lib.util.string.MatcherFactory;
 import info.mp3lib.util.string.StringMatcher;
 
+import java.io.File;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,21 +24,22 @@ public class Album extends XMLMusicElement {
 	/* ------------------------ ATTRIBUTES ------------------------ */
 	/** Apache log4j logger */
 	private final static Logger LOGGER = Logger.getLogger(Album.class.getName());
-	
+
 	/** The tag state of this album */
 	private TagEnum tagState;
-	
+
 	/** Collection of Tracks */
 	private List<Track> trackList;
-	
+
 	/** Total number of ALbum */
 	private static int id = 0;
 	/* ----------------------- CONSTRUCTORS ----------------------- */
-	
+
 	/**
 	 * Constructs a new empty Album.
 	 * This method should not be called directly, used by <code>DataScanner.read(File)</code>
-	 * @param name the name of this album
+	 * @param name the name of this album.<br/>
+	 * Initialized with the physical name of the original album folder by <code>DataScanner.read(File)</code>
 	 */
 	public Album(final String name) {
 		super(new Element(ELT_ALBUM));
@@ -49,7 +51,7 @@ public class Album extends XMLMusicElement {
 		LOGGER.warn("NO XML UPDATE OF PHYSICAL TAG !!!");
 		// TODO:  XML UPDATE OF PHYSICAL TAGs..
 	}
-	
+
 	/**
 	 * Constructs a new Album from the Element specified.
 	 * @param Element a zicfile album element
@@ -64,43 +66,43 @@ public class Album extends XMLMusicElement {
 		List<Element> listTrackElement = albumElement.getChildren();
 		trackList = new LinkedList<Track>(); //TODO remove
 		for (Iterator<Element> iterator = listTrackElement.iterator(); iterator
-				.hasNext();) {
+		.hasNext();) {
 			final Element trackElement = iterator.next();
 			try {
 				trackList.add(new Track(trackElement)); // TODO use add method instead
 			} catch (IllegalArgumentException e) {
 				LOGGER.warn(new StringBuffer("Unable to build a Track from ")
-						.append(trackElement.getAttribute(XMLMusicElement.ATTR_NAME))
-						.append(" : ")
-						.append(e.getMessage()).toString());
+				.append(trackElement.getAttribute(XMLMusicElement.ATTR_NAME))
+				.append(" : ")
+				.append(e.getMessage()).toString());
 			}
 		}
 		if (trackList.isEmpty()) {
 			throw new IllegalArgumentException(new StringBuffer("Album [")
-					.append(albumElement.getAttribute(XMLMusicElement.ATTR_NAME))
-					.append("] does not contain any valid audio files").toString());
+			.append(albumElement.getAttribute(XMLMusicElement.ATTR_NAME))
+			.append("] does not contain any valid audio files").toString());
 		}
 	}
 
 	/* ------------------------- METHODS --------------------------- */
-	
+
 	/**
 	 * TODO: set new tags for this album
 	 */
 	public void write(ITagQueryResult tag) {
-	    if (!getArtistName().equals(tag.getArtist())) {
-		this.moveTo(tag.getArtist());
-	    }
-	    if (!getName().equals(tag.getAlbum())) {
-		this.setName(tag.getAlbum());
-	    }
-	    if (getYear() != Integer.parseInt(tag.getYear())) {
-		this.setYear(Integer.parseInt(tag.getYear()));
-	    }
-	    //TODO ... tracks & other fields ...
+		if (!getArtistName().equals(tag.getArtist())) {
+			this.moveTo(tag.getArtist());
+		}
+		if (!getName().equals(tag.getAlbum())) {
+			this.setName(tag.getAlbum());
+		}
+		if (getYear() != Integer.parseInt(tag.getYear())) {
+			this.setYear(Integer.parseInt(tag.getYear()));
+		}
+		//TODO ... other fields ??
 	}
-	
-	
+
+
 	/**
 	 * Retrieves the name of the parent artist element
 	 * @return the artist
@@ -115,7 +117,7 @@ public class Album extends XMLMusicElement {
 	 * @return the size
 	 */
 	public int getSize() {
-	    return trackList.size();
+		return trackList.size();
 //		return Integer.parseInt(getElement().getAttributeValue(XMLMusicElement.ATTR_SIZE));
 	}
 
@@ -158,7 +160,7 @@ public class Album extends XMLMusicElement {
 				LOGGER.warn(new StringBuffer("Data corruption, XOM and Object model for the album [")
 				.append(getName()).append("], id [").append(getId()).append("] are desynchronised")
 				.toString());
-				
+
 				// remove the artist if empty
 				if (artist.isEmpty()) {
 					library.remove(artist);
@@ -167,7 +169,7 @@ public class Album extends XMLMusicElement {
 		}
 		library.getArtist(artistName).add(this);
 	}
-	
+
 	/**
 	 * Sets the given year as XML element attribute
 	 * @param year the year to set
@@ -175,7 +177,7 @@ public class Album extends XMLMusicElement {
 	public void setYear(final int year) {
 		getElement().setAttribute(XMLMusicElement.ATTR_YEAR, new Integer(year).toString());
 	}
-	
+
 	/**
 	 * Adds the given track to this album
 	 * @param track the track to add
@@ -215,7 +217,7 @@ public class Album extends XMLMusicElement {
 			}
 		}
 	}
-	
+
 	/**
 	 * Removes the given track from this album
 	 * @param track the track to remove
@@ -235,16 +237,16 @@ public class Album extends XMLMusicElement {
 		}
 		return success;
 	}
-	
+
 	/**
 	 * Launch validation procedure for this album...
 	 */
 	public void validate() {
-	    Validator vdt = new Validator(this);
-	    // Class entry point method:
-	    vdt.validate();
+		Validator vdt = new Validator(this);
+		// Class entry point method:
+		vdt.validate();
 	}
-	
+
 	/**
 	 * Retrieves an iterator on the track collection of this album
 	 * @return a track iterator
@@ -252,7 +254,7 @@ public class Album extends XMLMusicElement {
 	public Iterator<Track> getTrackIterator() {
 		return trackList.iterator();
 	}
-	
+
 	/**
 	 * Checks if the current directory contains at less one file containing tag information.
 	 * @return true if album tracks are tagged, else return false
@@ -260,7 +262,7 @@ public class Album extends XMLMusicElement {
 	public boolean isTagged() {
 		return tagState != TagEnum.NO_TAGS;
 	}
-	
+
 	/**
 	 * Checks if at less more than half of music files of the current directory contains different values
 	 * compared two by two for tags artist or album
@@ -269,7 +271,7 @@ public class Album extends XMLMusicElement {
 	public boolean isCompilation() {
 		return tagState == TagEnum.ALL_DIFF_TAGS || tagState == TagEnum.SOME_DIFF_TAGS;
 	}
-	
+
 	/**
 	 * Checks if the track list of this album contains no elements. 
 	 * @return true if this album is empty
@@ -277,11 +279,34 @@ public class Album extends XMLMusicElement {
 	public boolean isEmpty() {
 		return trackList.isEmpty();
 	}
-	
+
 	/**
 	 * @return the tagState
 	 */
 	public TagEnum getTagState() {
 		return tagState;
+	}
+
+	/**
+	 * Retrieves The parent folder of the first track of this album.<br/>
+	 * /!\ At some point of its lifecycle an album can holds tracks located in different directories
+	 * TODO rajouter un attribut fsSynchronisation
+	 * @return the original folder from which this album was build
+	 */
+	public File getFile() {
+		return trackList.get(1).getFile().getParentFile();
+	}
+
+	/**
+	 * @return an array of all the name of tracks contained in this album
+	 */
+	public String[] getTracksName() {
+		final String[] result = new String[trackList.size()];
+		int i = 0;
+		for (Iterator<Track> iterator = trackList.iterator(); iterator.hasNext();) {
+			result[i] = iterator.next().getFileName();
+			i++;
+		}
+		return result;
 	}
 }

@@ -202,6 +202,14 @@ public class Track extends XMLMusicElement {
 	public Tag getTag() {
 		return musicFile.getTag();
 	}
+	
+	/**
+	 * Retrieve the file associated to the audio file.
+	 * @return a file pointer on this track file
+	 */
+	public File getFile() {
+		return musicFile;
+	}
 
 	/**
 	 * build the track Element from informations retrieved from the audio file
