@@ -1,5 +1,8 @@
+- Implementation de PhysicalContext et TagContext :
+	-> 13.10.2008 : les getters sur context ne renvoient rien (null).
+
 - Implementer StringMatcher et son systeme de config --Conception a discutter -- => Kiri [0%]
-	-> 13.10.2008 : bug actuel lors des tests sur l'appel à StringMatcherDummy (cf. MatcherFactory)
+	-> 13.10.2008 : bouchon non lié aux bugs -> StringMatcherDummy (cf. MatcherFactory)
 
 - Revoir le processus de validation (voire threadé ..) et prérequis de Validator.validate() => All [10%]
 	-> 13.10.2008 : tests concluants pr la construction Objet, XML et le requetage CDDB..
