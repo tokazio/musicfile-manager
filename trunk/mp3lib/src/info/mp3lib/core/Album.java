@@ -97,7 +97,7 @@ public class Album extends XMLMusicElement {
 	    if (getYear() != Integer.parseInt(tag.getYear())) {
 		this.setYear(Integer.parseInt(tag.getYear()));
 	    }
-	    //TODO ... other fields ??
+	    //TODO ... tracks & other fields ...
 	}
 	
 	
