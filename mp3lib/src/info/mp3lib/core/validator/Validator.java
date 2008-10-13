@@ -73,7 +73,7 @@ public class Validator {
 	    }
 	    
 	    // TODO: (and to think) write album to tag / XML or what ......
-//	    album.write(bestOne);
+	    album.write(bestOne);
 	}
 	
 	public void retrieveCDDB() {
