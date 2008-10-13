@@ -77,7 +77,7 @@ public class LibraryDAO {
 	    LOGGER.error(new StringBuffer("Unable to persist the library in the file [").append(filePath)
 		    .append("]:\n").append(e.getMessage()).toString());
 	}
-		return result;
+	return result;
     }
     
 //    /** 

@@ -1,7 +1,15 @@
-- Implementer la classe config => Gab [0%]
 - Implementer StringMatcher et son systeme de config --Conception a discutter -- => Kiri [0%]
-- Tester le package core => Gab/Do [0%]
+	-> 13.10.2008 : bug actuel lors des tests sur l'appel à StringMatcherDummy (cf. MatcherFactory)
+
+- Revoir le processus de validation (voire threadé ..) et prérequis de Validator.validate() => All [10%]
+	-> 13.10.2008 : tests concluants pr la construction Objet, XML et le requetage CDDB..
+	-> TODO importants sur Validator.validate()
+	-> TODO: implementation d'un TagSelector si aucun résultat CDDB.
+
+- Tester le package core => Gab/Do [40%]
+- Implementer la classe config => Gab [75%]
 - Etudier le systeme CDDB - reflechir a un solution de recoupement des resultats 
-d'une requête avec le contexte => Do [0%]
-- Reflechir à la conception des classes representant le contexte => All [0%]
-- Reflechir à la conception du systeme de supression des doublons (classement ?)
+d'une requête avec le contexte => Do [75%]
+- Reflechir à la conception des classes representant le contexte => All [75%]
+
+- Reflechir à la conception du systeme de supression des doublons (classement ?) => All [1%]

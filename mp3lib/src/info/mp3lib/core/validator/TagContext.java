@@ -1,6 +1,7 @@
 package info.mp3lib.core.validator;
 
 import info.mp3lib.config.Config;
+import info.mp3lib.core.Album;
 import info.mp3lib.core.TagEnum;
 
 /**
@@ -142,6 +143,10 @@ public class TagContext implements Context {
 	/** tracks name quality index modifiers */
 	private TagEnum[] tracksQI;
 
+	public TagContext(Album album) {
+	    // TODO: MAKE CONSTRUCTOR
+	}
+	
 	@Override
 	public String getAlbumName() {
 		// TODO Auto-generated method stub

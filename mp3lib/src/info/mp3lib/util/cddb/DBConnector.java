@@ -13,6 +13,7 @@ public class DBConnector {
 	    try {
 		getInstance().queryImplInstance = (IDBQuery) dbquery.newInstance();
 	    } catch (Exception e) {
+		System.out.println("ERROR: "+e.getMessage()+" / "+e.getLocalizedMessage()+" class: "+e.getClass()+" cause: "+e.getCause());
 		new ConfigurationException(new StringBuffer("Unable to instanciate class implementation of IDBQuery [")
 		.append(dbquery.getName()).append("]\nCause was: ").append(e.getMessage()).toString());
 	    }
@@ -24,15 +25,9 @@ public class DBConnector {
     
     private static DBConnector instance = null;
     
-    private DBConnector() {
-	if (instance == null) {
-	    instance = new DBConnector();
-	}
-    }
-    
     private static DBConnector getInstance() {
 	if (instance == null) {
-	    new DBConnector();
+	    instance = new DBConnector();
 	}
 	return instance;
     }
