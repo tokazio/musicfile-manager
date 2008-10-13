@@ -51,6 +51,14 @@ public class Mp3lib {
 	    System.out.println("ERROR: unknow when execute LibraryDAO.getInstance().write ");
 	}
 	
+	// TODO : Gestion des doublons
+	
+	
+	// TODO: Validation utilisateur (graphique)
+	
+	
+	// TODO: Apply Tags 'n Tree 
+	
     }
 
     /**
