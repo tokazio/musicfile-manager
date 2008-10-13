@@ -47,6 +47,8 @@ public abstract class DBResult implements ITagQueryResult {
 	
 	int finalIQV = 0;
 	
+	System.out.println("context.getAlbumName(): "+context.getAlbumName());
+	
 	// TODO : compare each field ...
 	StringMatcher matcher = MatcherFactory.getInstance().getMatcher(MatcherContext.TAG);
 	if (matcher.match(getAlbum(), context.getAlbumName())) {
@@ -68,138 +70,6 @@ public abstract class DBResult implements ITagQueryResult {
 //	context.getTracksName();
 	
 	return finalIQV;
-    }
-    
-    /* (non-Javadoc)
-     * @see info.mp3lib.util.cddb.ITagQueryResult#compareTo(java.lang.Object)
-     */
-    @Override
-    public int compareTo(Object o) {
-	// TODO : compare each field ...
-	return 0;
-    }
-
-    @Override
-    public String getAlbum() {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    @Override
-    public String getAlbumComment() {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    @Override
-    public String getArtist() {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    @Override
-    public String getCategory() {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    /* (non-Javadoc)
-     * @see info.mp3lib.util.cddb.ITagQueryResult#getDiscId()
-     */
-    @Override
-    public String getDiscId() {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    /* (non-Javadoc)
-     * @see info.mp3lib.util.cddb.ITagQueryResult#getGenre()
-     */
-    @Override
-    public String getGenre() {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    /* (non-Javadoc)
-     * @see info.mp3lib.util.cddb.ITagQueryResult#getQuality()
-     */
-    @Override
-    public int getQuality() {
-	// TODO Auto-generated method stub
-	return 0;
-    }
-
-    /* (non-Javadoc)
-     * @see info.mp3lib.util.cddb.ITagQueryResult#getTrackComment(int)
-     */
-    @Override
-    public String getTrackComment(int i) {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    /* (non-Javadoc)
-     * @see info.mp3lib.util.cddb.ITagQueryResult#getTrackDuration(int)
-     */
-    @Override
-    public int getTrackDuration(int i) {
-	// TODO Auto-generated method stub
-	return 0;
-    }
-
-    /* (non-Javadoc)
-     * @see info.mp3lib.util.cddb.ITagQueryResult#getTrackNumber(int)
-     */
-    @Override
-    public int getTrackNumber(int i) {
-	// TODO Auto-generated method stub
-	return 0;
-    }
-
-    /* (non-Javadoc)
-     * @see info.mp3lib.util.cddb.ITagQueryResult#getTracksNumber()
-     */
-    @Override
-    public int getTracksNumber() {
-	// TODO Auto-generated method stub
-	return 0;
-    }
-
-    /* (non-Javadoc)
-     * @see info.mp3lib.util.cddb.ITagQueryResult#getTrackTitle(int)
-     */
-    @Override
-    public String getTrackTitle(int i) {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    /* (non-Javadoc)
-     * @see info.mp3lib.util.cddb.ITagQueryResult#getYear()
-     */
-    @Override
-    public String getYear() {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    /* (non-Javadoc)
-     * @see info.mp3lib.util.cddb.ITagQueryResult#isExactMatch()
-     */
-    @Override
-    public boolean isExactMatch() {
-	// TODO Auto-generated method stub
-	return false;
-    }
-
-    /* (non-Javadoc)
-     * @see info.mp3lib.util.cddb.ITagQueryResult#swapTracks(int, int)
-     */
-    @Override
-    public void swapTracks(int i1, int i2) {
-	// TODO Auto-generated method stub
-	
     }
     
 }
