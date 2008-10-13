@@ -49,7 +49,7 @@ public abstract class DBResult implements ITagQueryResult {
 	
 	System.out.println("context.getAlbumName(): "+context.getAlbumName());
 	
-	// TODO : compare each field ...
+	// TODO : compare each field ... prendre en compte les champs null -> modifiers
 	StringMatcher matcher = MatcherFactory.getInstance().getMatcher(MatcherContext.TAG);
 	if (matcher.match(getAlbum(), context.getAlbumName())) {
 	    finalIQV += AlbumTagResultEnum.SAME_ALBUM.getValue();
