@@ -87,9 +87,9 @@ public class Config {
 	 */
 	private boolean isValidRegexChar(final String str) {
 		boolean valid = true;
-		if (str.length() < 3) {
-			if (str.length() == 2) {
-				if (str.startsWith("\\")) {
+		if (str.length() < 4) {
+			if (str.length() == 3) {
+				if (!str.startsWith("\\")) {
 					valid = false;
 				}
 			}
@@ -114,7 +114,6 @@ public class Config {
 		} catch (PatternSyntaxException e) {
 			valid = false;
 		}
-		LOGGER.warn("isValidRegex("+str+") returns: "+valid);
 		return valid;
 	}
 

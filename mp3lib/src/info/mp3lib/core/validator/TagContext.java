@@ -164,7 +164,9 @@ public class TagContext implements Context {
 	
 	public void processAlbumContext() {
 	    /**
-	     * up if FIELDS are SET or SAME ...
+	     * -> up if FIELDS are SET or SAME ... need modifiers
+	     * 
+	     * -> incrémentation impossible sur tablo d'enum ..
 	     */
 	    
 	    
