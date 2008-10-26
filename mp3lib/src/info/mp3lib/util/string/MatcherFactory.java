@@ -1,14 +1,14 @@
 package info.mp3lib.util.string;
 
 /**
- * Allows to retrieve different implementation of the Matcher Interface<BR/>
+ * Allows to retrieve different implementation of the <code>StringMatcher</code> Interface<BR/>
  * Singleton, use <code>MatcherFactory.getInstance()</code> to retrieve an instance
  * Use:
  * <ul>
- * <li><code>getMatcher(MatcherContext.FILE)</code> to retrieve the default file name comparator 
- * <li><code>getMatcher(MatcherContext.FOLDER)</code> to retrieve the default folder name comparator 
- * <li><code>getMatcher(MatcherContext.TAG)</code> to retrieve the default tag attribute comparator 
- * <li><code>getMatcher(MatcherContext)</code>
+ * <li><code>getMatcher(MatcherConfig.FILE)</code> to retrieve the default file name comparator 
+ * <li><code>getMatcher(MatcherConfig.FOLDER)</code> to retrieve the default folder name comparator 
+ * <li><code>getMatcher(MatcherConfig.TAG)</code> to retrieve the default tag attribute comparator 
+ * <li><code>getMatcher(MatcherConfig)</code>
  * </ul>
  * @author Gab
  */
@@ -38,10 +38,10 @@ public class MatcherFactory {
 	
 	/**
 	 * Builds a Matcher implementation according to the given context
-	 * @param context a parameter object defining the matcher configuration
+	 * @param config a parameter object defining the matcher configuration
 	 * @return a <code>StringMatcher</code> implementation
 	 */
-	public StringMatcher getMatcher(MatcherConfig context) {
+	public StringMatcher getMatcher(MatcherConfig config) {
 		StringMatcher matcher = null;
 		//TODO method implementation
 		return matcher;
@@ -51,9 +51,9 @@ public class MatcherFactory {
 	 * Builds a Matcher implementation according to the given context
 	 * @param config a default configuration constant among
 	 * <ul>
-	 * <li><code>MatcherContext.FILE</code>
-	 * <li><code>MatcherContext.FOLDER</code>
-	 * <li><code>MatcherContext.TAG</code>
+	 * <li><code>MatcherConfig.FILE</code>
+	 * <li><code>MatcherConfig.FOLDER</code>
+	 * <li><code>MatcherConfig.TAG</code>
 	 * </ul>
 	 * @return a <code>StringMatcher</code> implementation
 	 */

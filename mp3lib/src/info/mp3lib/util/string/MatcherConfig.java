@@ -21,7 +21,7 @@ public class MatcherConfig {
 	/** if false the given string will be compared ignoring case */
 	private boolean caseSensitive;
 	
-	/** if false all accent will be removed from the given string before comparaison */
+	/** if false all accent will be removed from the given string before comparison */
 	private boolean accentSensitive;
 	
 	/** if true all the character defined as separator will be replaced by the separator defined */

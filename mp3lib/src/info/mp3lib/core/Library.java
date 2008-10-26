@@ -3,6 +3,8 @@ package info.mp3lib.core;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -14,10 +16,10 @@ import org.jdom.Element;
  * @uml.dependency   supplier="info.mp3lib.core.Artist" stereotypes="Standard::Create"
  */
 public class Library {
-	
+
 	/** Apache log4j logger */
 	private final static Logger LOGGER = Logger.getLogger(Library.class.getName());
-	
+
 	/** the XML root element containing all artists elements */
 	private Element rootElement;
 
@@ -28,10 +30,10 @@ public class Library {
 	 * </ul>
 	 */
 	private Map<String, Artist> artistList;
-	
+
 	/** the unique instance of the singleton */
 	private static Library instance;
-	
+
 	/** static access to the singleton */
 	public static Library getInstance() {
 		if (instance == null) {
@@ -39,13 +41,13 @@ public class Library {
 		}
 		return instance;
 	}
-	
+
 	/** Constructor */
 	private Library() {
 		artistList = new HashMap<String, Artist>();
 		rootElement =  new Element(ROOT_ELT);
 	}
-	
+
 	/**
 	 * Add the given artist to this librairy
 	 * @param artist the artist to add
@@ -54,7 +56,7 @@ public class Library {
 		artistList.put(artist.getName(), artist);
 		rootElement.addContent(artist.getElement());
 	}
-	
+
 	/**
 	 * remove the given artist from this librairy
 	 * @param artist the artist to remove
@@ -62,7 +64,7 @@ public class Library {
 	public boolean remove(final Artist artist) {
 		return (artistList.remove(artist.getName()) != null);
 	}
-	
+
 	/**
 	 * If it exists retrieves the artist denoted by the given name else creates it and 
 	 * add it to the library
@@ -82,7 +84,7 @@ public class Library {
 		}
 		return artist;
 	}
-	
+
 	/**
 	 * If it exists retrieves the album denoted by the given name in the artist denoted by the given name, 
 	 * else creates the album and add it to the artist which is created too if it does not exist and added 
@@ -95,7 +97,7 @@ public class Library {
 		final Artist artist = getArtist(artistName);
 		return artist.getAlbum(albumName);
 	}
-	
+
 	/**
 	 * Retrieves the XML root element holding all the artist element
 	 * @return the XML node
@@ -108,23 +110,44 @@ public class Library {
 	 * Validate each albums of this library
 	 */
 	public void validate() {
-	    Collection<Artist> collection = artistList.values();
-	    Artist artist;
-	    Album album;
-	    for (Iterator<Artist> iterArt = collection.iterator(); iterArt.hasNext();) {
-		artist = iterArt.next();
-		for (Iterator<Album> iterAlb = artist.getAlbumIterator(); iterAlb.hasNext();) {
-		    album = iterAlb.next();
-		    album.validate();
+		Collection<Artist> collection = artistList.values();
+		Artist artist;
+		Album album;
+		for (Iterator<Artist> iterArt = collection.iterator(); iterArt.hasNext();) {
+			artist = iterArt.next();
+			for (Iterator<Album> iterAlb = artist.getAlbumIterator(); iterAlb.hasNext();) {
+				album = iterAlb.next();
+				album.validate();
+			}
 		}
-	    }
 	}
-	
-/* ------------------------- CONSTANTS --------------------------- */
-	
+
+	/**
+	 * @param folderPath the path of the folder in with are located the expected albums
+	 * @return all albums located in the folder denoted by the given path
+	 */
+	public Album[] getAlbumsLocatedIn(final String folderPath) {
+		Iterator<String> artistIt = artistList.keySet().iterator();
+		final List<Album> albums = new LinkedList<Album>();
+		String artistName = null;
+		Iterator<Album> albumIt = null;
+		while(artistIt.hasNext()) {
+			albumIt = artistList.get(artistIt.next()).getAlbumIterator();
+			while (albumIt.hasNext()) {
+				final Album album = (Album) albumIt.next();
+				if (album.getParentPath().equals(folderPath)) {
+					albums.add(album);
+				}
+			}
+		}
+		return albums.toArray(new Album[albums.size()]);
+	}
+
+	/* ------------------------- CONSTANTS --------------------------- */
+
 	/** The default name of an element denoting an undefined object*/
 	public final static String DEFAULT_UNKNOWN_ELT_NAME = "__unknown__";
-	
+
 	/** The default name of an element denoting an undefined object*/
 	public final static String ROOT_ELT = "artists";
 }

@@ -8,8 +8,8 @@ import info.mp3lib.config.Config;
 import info.mp3lib.core.validator.TagContext.ArtistTagEnum;
 
 /**
- * Manages caching of data and quality index deduced to an artist level analysis to avoid
- * redundant computation for different album located in the same directory
+ * Manages caching for data and quality index deduced to an artist level analysis to avoid
+ * redundant computation for different albums located in the same directory
  * @author Gab
  */
 public class ContextCache {
