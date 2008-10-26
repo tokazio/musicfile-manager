@@ -3,7 +3,7 @@ package info.mp3lib.util.string;
  * Provides methods to compare two Strings.</br>
  * Use MatcherFactory.getStringMatcher(MatcherContext) to retrieve an Implementation
  * @see MatcherFactory
- * @see MatcherContext
+ * @see MatcherConfig
  * @author Gab
  *
  */

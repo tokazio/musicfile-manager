@@ -2,7 +2,7 @@ package info.mp3lib.core;
 
 import info.mp3lib.core.validator.Validator;
 import info.mp3lib.util.cddb.ITagQueryResult;
-import info.mp3lib.util.string.MatcherContext;
+import info.mp3lib.util.string.MatcherConfig;
 import info.mp3lib.util.string.MatcherFactory;
 import info.mp3lib.util.string.StringMatcher;
 
@@ -200,7 +200,7 @@ public class Album extends XMLMusicElement {
 				}
 			} else if (tagState == TagEnum.ALL_SAME_TAGS) {
 				// match album of first and current track
-				final StringMatcher tagMatcher = MatcherFactory.getInstance().getMatcher(MatcherContext.TAG);
+				final StringMatcher tagMatcher = MatcherFactory.getInstance().getMatcher(MatcherConfig.TAG);
 				if (!tagMatcher.match(track.getAlbumName(), trackList.get(0).getAlbumName())) {
 					tagState = TagEnum.SOME_SAME_TAGS;
 				}

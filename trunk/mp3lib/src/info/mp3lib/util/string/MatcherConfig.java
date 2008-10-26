@@ -9,7 +9,7 @@ import java.util.List;
  * Uses the configuration hold by the <code>Config</code> object<br/>
  * @author gab
  */
-public class MatcherContext {
+public class MatcherConfig {
 
 	/* ------------------------ ATTRIBUTES ------------------------ */
 	/** if true the java method <code>equals()</code> will be used to check equality (increase performance) */
@@ -67,7 +67,7 @@ public class MatcherContext {
 	private List<String> ignoreList;
 	
 	/** predefined configuration */
-	public enum MatcherConfig {
+	public enum DefaultMatcherConfig {
 		FILE,
 		FOLDER,
 		TAG;
@@ -75,7 +75,7 @@ public class MatcherContext {
 
 	/* ----------------------- CONSTRUCTORS ----------------------- */
 	/** Default Constructor. */
-	public MatcherContext() {
+	public MatcherConfig() {
 		setAccentSensitive(true);
 		setCaseSensitive(true);
 		setInclusionMatch(false);
@@ -261,12 +261,12 @@ public class MatcherContext {
 	
 	/* ------------------------ CONSTANTS ------------------------- */
 	/** denote a StringMatcher implementation configured to compare file names */
-	public final static MatcherConfig FILE = MatcherConfig.FILE;
+	public final static DefaultMatcherConfig FILE = DefaultMatcherConfig.FILE;
 
 	/** denote a StringMatcher implementation configured to compare folders names */
-	public final static MatcherConfig FOLDER = MatcherConfig.FOLDER;
+	public final static DefaultMatcherConfig FOLDER = DefaultMatcherConfig.FOLDER;
 	
 	/** denote a StringMatcher implementation configured to compare tag values */
-	public final static MatcherConfig TAG = MatcherConfig.TAG;
+	public final static DefaultMatcherConfig TAG = DefaultMatcherConfig.TAG;
 
 }

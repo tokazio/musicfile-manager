@@ -1,6 +1,6 @@
 package info.mp3lib.core;
 
-import info.mp3lib.util.string.MatcherContext;
+import info.mp3lib.util.string.MatcherConfig;
 import info.mp3lib.util.string.MatcherFactory;
 import info.mp3lib.util.string.StringMatcher;
 
@@ -105,7 +105,7 @@ public class Artist extends XMLMusicElement {
 					tagState = TagEnum.SOME_SAME_TAGS;
 				}
 			} else if (tagState == TagEnum.ALL_SAME_TAGS) {
-				final StringMatcher tagMatcher = MatcherFactory.getInstance().getMatcher(MatcherContext.TAG);
+				final StringMatcher tagMatcher = MatcherFactory.getInstance().getMatcher(MatcherConfig.TAG);
 				// match album of first and current track
 				if (!tagMatcher.match(album.getArtistName(), albumList.get(0).getArtistName())) {
 					tagState = TagEnum.SOME_SAME_TAGS;
