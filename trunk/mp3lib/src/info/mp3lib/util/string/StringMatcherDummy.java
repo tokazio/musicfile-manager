@@ -7,6 +7,8 @@ package info.mp3lib.util.string;
 @Deprecated
 public class StringMatcherDummy implements StringMatcher {
 
+	/** String processing configuration */
+	private MatcherConfig config;
 	@Override
 	public boolean match(String str1, String str2) {
 		boolean result = false;

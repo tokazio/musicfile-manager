@@ -9,8 +9,11 @@ import info.mp3lib.core.validator.PhysicalContext.ArtistPhysicalEnum;
 import info.mp3lib.core.validator.TagContext.ArtistTagEnum;
 
 public class CachedContextBean {
-	/** all the artist names present in the current parent directory */
-	private String[] artistNames[];
+	/** all the artist names deduced from tag present in the current 'artist' directory */
+	private String[] artistNames;
+	
+	/** If true, all album of this context have tag state <code>TagEnum.ALL_SAME_TAGS</code> */
+	private boolean allALbumHighestState;
 	
 	/** artist name quality index modifiers */
 	private ArtistPhysicalEnum[] artistQIModifiers;
@@ -18,14 +21,14 @@ public class CachedContextBean {
 	/**
 	 * @return the artistNames
 	 */
-	public String[][] getArtistNames() {
+	public String[] getArtistNames() {
 		return artistNames;
 	}
 
 	/**
-	 * @param artistNames the artistNames to set
+	 * @param artistNames the artist names to set
 	 */
-	public void setArtistNames(String[][] artistNames) {
+	public void setArtistNames(String[] artistNames) {
 		this.artistNames = artistNames;
 	}
 

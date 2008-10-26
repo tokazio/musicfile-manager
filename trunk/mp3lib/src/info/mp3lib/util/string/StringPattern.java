@@ -1,10 +1,10 @@
 package info.mp3lib.util.string;
 
 /**
- * Denotes a compiled string and its matcher context.<br/>
+ * Denotes a compiled string and its matcher config.<br/>
  * <br/><code>
  * StringMatcher matcher = [...];<br/>
- * StringPattern pattern = matcher.compile("toto");<br/>
+ * StringPattern pattern = matcher.getPattern("toto");<br/>
  * pattern.match("tata");
  * <br/></code><br/>gives the same result than:<br/>
  * <br/><code>

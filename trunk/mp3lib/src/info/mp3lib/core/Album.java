@@ -288,13 +288,22 @@ public class Album extends XMLMusicElement {
 	}
 
 	/**
-	 * Retrieves The parent folder of the first track of this album.<br/>
+	 * Retrieves the parent folder of the first track of this album.<br/>
 	 * /!\ At some point of its lifecycle an album can holds tracks located in different directories
 	 * TODO rajouter un attribut fsSynchronisation
 	 * @return the original folder from which this album was build
 	 */
 	public File getFile() {
 		return trackList.get(1).getFile().getParentFile();
+	}
+	
+	/**
+	 * Retrieves the parent file path of the current album
+	 * @return the parent of the original folder path from which this album was build
+	 * @see <code>Album.getFile()</code>
+	 */
+	public String getParentPath() {
+		return getFile().getParentFile().getPath();
 	}
 
 	/**
@@ -308,5 +317,14 @@ public class Album extends XMLMusicElement {
 			i++;
 		}
 		return result;
+	}
+	
+	/**
+	 * Convenient method to retrieve the first track of this album to avoid redundant analysis when tag state
+	 * is <code>TagEnum.ALL_SAME_TAGS</code>
+	 * @return the first track of this album
+	 */
+	public Track getFirstTrack() {
+		return trackList.get(0);
 	}
 }
