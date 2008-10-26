@@ -2,7 +2,7 @@ package info.mp3lib.util.cddb;
 
 import info.mp3lib.config.Config;
 import info.mp3lib.core.validator.Context;
-import info.mp3lib.util.string.MatcherContext;
+import info.mp3lib.util.string.MatcherConfig;
 import info.mp3lib.util.string.MatcherFactory;
 import info.mp3lib.util.string.StringMatcher;
 
@@ -50,7 +50,7 @@ public abstract class DBResult implements ITagQueryResult {
 	System.out.println("context.getAlbumName(): "+context.getAlbumName());
 	
 	// TODO : compare each field ... prendre en compte les champs null -> modifiers
-	StringMatcher matcher = MatcherFactory.getInstance().getMatcher(MatcherContext.TAG);
+	StringMatcher matcher = MatcherFactory.getInstance().getMatcher(MatcherConfig.TAG);
 	if (matcher.match(getAlbum(), context.getAlbumName())) {
 	    finalIQV += AlbumTagResultEnum.SAME_ALBUM.getValue();
 	}

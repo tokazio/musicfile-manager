@@ -41,7 +41,7 @@ public class MatcherFactory {
 	 * @param context a parameter object defining the matcher configuration
 	 * @return a <code>StringMatcher</code> implementation
 	 */
-	public StringMatcher getMatcher(MatcherContext context) {
+	public StringMatcher getMatcher(MatcherConfig context) {
 		StringMatcher matcher = null;
 		//TODO method implementation
 		return matcher;
@@ -57,7 +57,7 @@ public class MatcherFactory {
 	 * </ul>
 	 * @return a <code>StringMatcher</code> implementation
 	 */
-	public StringMatcher getMatcher(MatcherContext.MatcherConfig config) {
+	public StringMatcher getMatcher(MatcherConfig.DefaultMatcherConfig config) {
 		StringMatcher matcher = null;
 		//TODO method implementation
 		matcher = new StringMatcherDummy(); //TODO rm

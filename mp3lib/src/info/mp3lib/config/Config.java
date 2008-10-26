@@ -30,7 +30,7 @@ public class Config {
 
 	/** 
 	 * configuration attributes for string manipulation
-	 * @see info.mp3lib.string.MatcherContext
+	 * @see info.mp3lib.string.MatcherConfig
 	 */
 	private String[] separators;
 	private String separator;
