@@ -1,6 +1,7 @@
 package info.mp3lib.util.string;
 
 import java.io.File;
+import java.util.regex.Pattern;
 
 /**
  * Implements useful method to manipulate Strings

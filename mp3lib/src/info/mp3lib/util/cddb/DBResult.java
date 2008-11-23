@@ -17,17 +17,17 @@ public abstract class DBResult implements ITagQueryResult {
 	/**
 	 * Different artist tag field are present in tracks contained in directories at the same level
 	 */
-	SAME_ALBUM(Config.getInstance().getQIModifier(Config.DAL_SAME_ARTIST)),
+	SAME_ALBUM(Config.getConfig().getQIModifier(Config.DAL_SAME_ARTIST)),
 
-	SAME_ARTIST(Config.getInstance().getQIModifier(Config.DAL_SAME_ALBUM)),
+	SAME_ARTIST(Config.getConfig().getQIModifier(Config.DAL_SAME_ALBUM)),
 	
-	SAME_DISCID(Config.getInstance().getQIModifier(Config.DAL_SAME_DISCID)),
+	SAME_DISCID(Config.getConfig().getQIModifier(Config.DAL_SAME_DISCID)),
 	
-	SAME_GENRE(Config.getInstance().getQIModifier(Config.DAL_SAME_GENRE)),
+	SAME_GENRE(Config.getConfig().getQIModifier(Config.DAL_SAME_GENRE)),
 	
-	SAME_YEAR(Config.getInstance().getQIModifier(Config.DAL_SAME_YEAR)),
+	SAME_YEAR(Config.getConfig().getQIModifier(Config.DAL_SAME_YEAR)),
 	
-	GOOD_QUALITY(Config.getInstance().getQIModifier(Config.DAL_GOOD_QUALITY))
+	GOOD_QUALITY(Config.getConfig().getQIModifier(Config.DAL_GOOD_QUALITY))
 	;
 			
 	private int value;

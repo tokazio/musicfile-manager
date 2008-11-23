@@ -12,6 +12,10 @@ import info.mp3lib.core.TagEnum;
 import info.mp3lib.core.Track;
 import info.mp3lib.core.validator.cache.CachedContextBean;
 import info.mp3lib.core.validator.cache.ContextCache;
+import info.mp3lib.util.string.MatcherConfig;
+import info.mp3lib.util.string.MatcherFactory;
+import info.mp3lib.util.string.StringMatcher;
+import info.mp3lib.util.string.StringPattern;
 
 /**
  * Denotes all data deduced from the physical context of an album and the quality index associated to these values
@@ -30,28 +34,28 @@ public class PhysicalContext implements Context {
 		/**
 		 * Different artist tag field are present in tracks contained in directories at the same level
 		 */
-		SOME_DIFFERENT_ARTIST_IN_TREE(Config.getInstance().getQIModifier(
+		SOME_DIFFERENT_ARTIST_IN_TREE(Config.getConfig().getQIModifier(
 				Config.PAR_SOME_DIFFERENT_ARTIST_IN_TREE)),
 
 		/** 
 		 * this parent directory name contains one of the word defined as invalid in the program configuration
 		 * ("compilation", ...) 
 		 */
-		CONTAINS_INVALIDER_WORD(Config.getInstance().getQIModifier(
+		CONTAINS_INVALIDER_WORD(Config.getConfig().getQIModifier(
 				Config.PAR_CONTAINS_INVALIDER_WORD)),
 
 		/** 
 		 * this parent directory name contains one of the word defined as quality index improver in the program 
 		 * configuration ("discography", "full discography", ...)
 		 */
-		CONTAINS_VALIDER_WORD(Config.getInstance().getQIModifier(
+		CONTAINS_VALIDER_WORD(Config.getConfig().getQIModifier(
 				Config.PAR_CONTAINS_VALIDER_WORD)),
 
 		/** 
 		 * Some tracks contained in folders at the same level have the artist tag field matching
 		 * the parent directory name
 		 */
-		OTHER_ALBUM_ARTIST_MATCH(Config.getInstance().getQIModifier(
+		OTHER_ALBUM_ARTIST_MATCH(Config.getConfig().getQIModifier(
 				Config.PAR_OTHER_ALBUM_ARTIST_MATCH)),
 
 		/** 
@@ -59,7 +63,7 @@ public class PhysicalContext implements Context {
 		 * is the same for all<br/>
 		 * this modifiers have a weak value because it overloads <code>OTHER_ALBUM_ARTIST_MATCH</code>
 		 */
-		ALL_ARTIST_TREE_TAGGED_WITH_SAME_ARTIST(Config.getInstance()
+		ALL_ARTIST_TREE_TAGGED_WITH_SAME_ARTIST(Config.getConfig()
 				.getQIModifier(
 						Config.PAR_ALL_ARTIST_TREE_TAGGED_WITH_SAME_ARTIST));
 
@@ -81,37 +85,37 @@ public class PhysicalContext implements Context {
 	 */
 	public static enum AlbumPhysicalEnum {
 		/**  This directory contains at less another folder */
-		NOT_LEAF(Config.getInstance().getQIModifier(Config.PAL_NOT_LEAF)),
+		NOT_LEAF(Config.getConfig().getQIModifier(Config.PAL_NOT_LEAF)),
 
 		/** 
 		 * this directory name contains one of the word defined as invalid in the program configuration
 		 * ("compilation", "discography", ...)  
 		 */
-		CONTAINS_INVALIDER_WORD(Config.getInstance().getQIModifier(
+		CONTAINS_INVALIDER_WORD(Config.getConfig().getQIModifier(
 				Config.PAL_CONTAINS_INVALIDER_WORD)),
 
 		/**
 		 * Different artist tag field are present in tracks contained in directories at the same level
 		 */
-		SOME_DIFFERENT_ARTIST_IN_TREE(Config.getInstance().getQIModifier(
+		SOME_DIFFERENT_ARTIST_IN_TREE(Config.getConfig().getQIModifier(
 				Config.PAL_SOME_DIFFERENT_ARTIST_IN_TREE)),
 
 		/** 
 		 * Some tracks contained in directories at the same level have the artist tag field matching
 		 * the parent directory name
 		 */
-		OTHER_ALBUM_ARTIST_MATCH(Config.getInstance().getQIModifier(
+		OTHER_ALBUM_ARTIST_MATCH(Config.getConfig().getQIModifier(
 				Config.PAL_OTHER_ALBUM_ARTIST_MATCH)),
 
 		/** 
 		 * The first part of this directory name contains the parent directory name<br/>
 		 * album name is the remaining sequence
 		 */
-		NAME_FIRST_PART_MATCH_PARENT(Config.getInstance().getQIModifier(
+		NAME_FIRST_PART_MATCH_PARENT(Config.getConfig().getQIModifier(
 				Config.PAL_NAME_FIRST_PART_MATCH_PARENT)),
 
 		/** The first part of this directory name contains the artist tag field of same level directories */
-		NAME_FIRST_PART_MATCH_OTHER_ALBUM_ARTIST(Config.getInstance()
+		NAME_FIRST_PART_MATCH_OTHER_ALBUM_ARTIST(Config.getConfig()
 				.getQIModifier(
 						Config.PAL_NAME_FIRST_PART_MATCH_OTHER_ALBUM_ARTIST)),
 
@@ -119,7 +123,7 @@ public class PhysicalContext implements Context {
 		 * All directories at the same level (including this) are leaf directories and contains 
 		 * some music files
 		 */
-		ALL_ARTIST_TREE_WELL_FORMED(Config.getInstance().getQIModifier(
+		ALL_ARTIST_TREE_WELL_FORMED(Config.getConfig().getQIModifier(
 				Config.PAL_ALL_ARTIST_TREE_WELL_FORMED)),
 
 		/** 
@@ -154,35 +158,35 @@ public class PhysicalContext implements Context {
 		 * this modifiers have a weak value because it overloads 
 		 * <code>REPEATING_SEQUENCE_NOT_IN_FOLDERNAME</code>
 		 */
-		CONTAINS_INVALIDER_WORD(Config.getInstance().getQIModifier(
+		CONTAINS_INVALIDER_WORD(Config.getConfig().getQIModifier(
 				Config.PTR_CONTAINS_INVALIDER_WORD)),
 
 		/** 
 		 * The tracks names all contain the same reapeating sequence wich is not include in 
 		 * the parent folders name (2 level up, 3 if the parent folder contain "CD.*\d" regex)
 		 */
-		REPEATING_SEQUENCE_NOT_IN_FOLDERNAME(Config.getInstance()
+		REPEATING_SEQUENCE_NOT_IN_FOLDERNAME(Config.getConfig()
 				.getQIModifier(Config.PTR_REPEATING_SEQUENCE_IN_FOLDERNAME)),
 
 		/** 
 		 * Once eliminated the common repeating sequence the variable sequence is short (less than 3 char)
 		 * or only composed of decimal characters
 		 */
-		NO_ALPHADECIMAL_VARIABLE_SEQUENCE(Config.getInstance().getQIModifier(
+		NO_ALPHADECIMAL_VARIABLE_SEQUENCE(Config.getConfig().getQIModifier(
 				Config.PTR_NO_ALPHADECIMAL_VARIABLE_SEQUENCE)),
 
 		/** 
 		 * Once eliminated the common repeating sequence all tracks have an important (more than 2 char)
 		 * alphadecimal (not only decimal) remaining variable sequence
 		 */
-		BIG_VARIABLE_SEQUENCE(Config.getInstance().getQIModifier(
+		BIG_VARIABLE_SEQUENCE(Config.getConfig().getQIModifier(
 				Config.PTR_BIG_VARIABLE_SEQUENCE)),
 
 		/** 
 		 * The tracks names all contain the same reapeating sequence wich is include in 
 		 * the parent folders name (2 level up, 3 if the parent folder contain "CD.*\d" regex)
 		 */
-		REPEATING_SEQUENCE_IN_FOLDERNAME(Config.getInstance().getQIModifier(
+		REPEATING_SEQUENCE_IN_FOLDERNAME(Config.getConfig().getQIModifier(
 				Config.PTR_REPEATING_SEQUENCE_IN_FOLDERNAME)), ;
 
 		private int value;
@@ -217,6 +221,12 @@ public class PhysicalContext implements Context {
 
 	/** tracks name quality index modifiers */
 	private TrackPhysicalEnum[] tracksQIModifiers;
+	
+	/** all artist tag of all tracks contained in folders at the same level */
+	private String[] artistNames;
+	
+	/** the instance of matcher used for comparison */ 
+	private StringMatcher matcher;
 
 	/* ----------------------- CONSTRUCTORS ----------------------- */
 	public PhysicalContext(final Album pAlbum) {
@@ -227,40 +237,38 @@ public class PhysicalContext implements Context {
 		artistQIModifiers = new ArtistPhysicalEnum[5];
 		albumQIModifiers = new AlbumPhysicalEnum[8];
 		tracksQIModifiers = new TrackPhysicalEnum[6];
-
+		matcher = MatcherFactory.getInstance().getMatcher(MatcherConfig.FILE);
 	}
 
 	/* ------------------------- METHODS --------------------------- */
-	/** 
-	 * Some tracks contained in folders at the same level have the artist tag field matching
-	 * the parent directory name
-	 */
-	//OTHER_ALBUM_ARTIST_MATCH
-	private void processArtistContext() {
-
-	}
-
 	/**
 	 * Retrieves all artist tag of all tracks contained in folders at the same level<br/>
-	 * Retrieves it from cache if one of the album located at this folder level have been already computed, 
-	 * else look for its in the <code>Album</code> objects and caches the result for future usage.
-	 * @return all artist tag names in this 'artist'
+	 * Retrieves it and the associated modifiers from cache if one of the album located at this folder level 
+	 * have been already computed, else look for its in the <code>Album</code> objects , computes the 
+	 * modifiers and caches the result for future usage.
+	 * Checks if the given artist name contains words defined as validers or invaliders
 	 */
-	private String[] getAllArtistNames() {
-		final File parentFolder = album.getFile().getParentFile();
+	private void processArtistContext() {
+		final String parentFolderPath = album.getFile().getParentFile().getPath();
 		final ContextCache cache = ContextCache.getInstance();
 		CachedContextBean context = null;
-		String[] artistTagNames = null;
+		final StringPattern artistNamePattern = matcher.getPattern(album.getArtistName());
+		int otherMatchCount = 0;
+		boolean someDifferent = false;
 		// if the artist context have been already computed and cached
-		if ((context = cache.getCache(parentFolder.getPath())) != null) {
+		if ((context = cache.get(parentFolderPath)) != null) {
 			// retrieve data from cache
-			artistTagNames = context.getArtistNames();
+			artistNames = context.getArtistNames();
+			artistQIModifiers = context.getArtistQIModifiers();
 		} else {
+			// retrieves all albums located at the same folder level than the current one 
+			// and compute all modifiers
 			final List<String> artistTagNameList = new LinkedList<String>();
-			// retrieve all albums located at the same folder level than the current one
 			final Album[] albums = Library.getInstance().getAlbumsLocatedIn(
-					parentFolder.getPath());
+					parentFolderPath);
+			
 			for (int i = 0; i < albums.length; i++) {
+				Iterator<Track> trackIt;
 				// if all track tagged with same artist name
 				if (albums[i].getTagState() == TagEnum.ALL_SAME_TAGS) {
 					// retrieve the artist name of the first track
@@ -268,17 +276,59 @@ public class PhysicalContext implements Context {
 							.getArtistName());
 				} else {
 					// retrieve the artist name off all tracks
-					final Iterator<Track> trackIt = albums[i]
-							.getTrackIterator();
+					trackIt  = albums[i].getTrackIterator();
+					String artistName;
+					Track track;
 					while (trackIt.hasNext()) {
-						artistTagNameList.add(trackIt.next().getArtistName());
+						track =  trackIt.next();
+						artistName = track.getArtistName();
+						artistTagNameList.add(artistName);
+						// modify the modifiers according to the current artist name
+						if (track.isTagged()) {
+							if (artistNamePattern.match(track.getArtistName())) {
+								otherMatchCount ++;
+							} else {
+								someDifferent = true;
+							}
+						}
 					}
 				}
 			}
-			artistTagNames = artistTagNameList
+			if (otherMatchCount == artistTagNameList.size()) {
+				artistQIModifiers[0] = ArtistPhysicalEnum.ALL_ARTIST_TREE_TAGGED_WITH_SAME_ARTIST;
+			} else {
+				if (someDifferent) {
+					artistQIModifiers[4] = ArtistPhysicalEnum.SOME_DIFFERENT_ARTIST_IN_TREE;
+				}
+				if (otherMatchCount > 0) {
+					artistQIModifiers[3] = ArtistPhysicalEnum.OTHER_ALBUM_ARTIST_MATCH;
+				}
+			}
+			artistNames = artistTagNameList
 					.toArray(new String[artistTagNameList.size()]);
 		}
-		return artistTagNames;
+		// store current data in cache
+		context.setArtistQIModifiers(artistQIModifiers);
+		context.setArtistNames(artistNames);
+		cache.put(parentFolderPath, context);
+		
+		// Checks if the given artist name contains words defined as validers or invaliders
+		if (Config.getConfig().getListAsPattern(Config.P_ARTIST_NAME_INVALIDERS)
+				.matcher(artistName).matches()) {
+			artistQIModifiers[1] = ArtistPhysicalEnum.CONTAINS_INVALIDER_WORD;
+		}
+		if (Config.getConfig().getListAsPattern(Config.P_ARTIST_NAME_VALIDERS)
+				.matcher(artistName).matches()) {
+			artistQIModifiers[1] = ArtistPhysicalEnum.CONTAINS_VALIDER_WORD;
+		}
+	}
+	
+	private void processAlbumContext() {
+		
+	}
+	
+	private void processTrackContext() {
+		
 	}
 
 	@Override
@@ -331,18 +381,18 @@ public class PhysicalContext implements Context {
 
 	/* ------------------------- CONSTANTS --------------------------- */
 	/** all words (regexp) defined as invalid in a track title. */
-	private final static String[] TRACK_TITLE_INVALIDERS = Config.getInstance()
+	private final static String[] TRACK_TITLE_INVALIDERS = Config.getConfig()
 			.getList(Config.P_TRACK_TITLE_INVALIDERS);
 
 	/** all words (regexp) defined as invalid in an artist name. */
-	private final static String[] ARTIST_NAME_INVALIDERS = Config.getInstance()
+	private final static String[] ARTIST_NAME_INVALIDERS = Config.getConfig()
 			.getList(Config.P_ARTIST_NAME_INVALIDERS);
 
 	/** all words (regexp) that prove that an artist name must be the valid one. */
-	private final static String[] ARTIST_NAME_VALIDERS = Config.getInstance()
+	private final static String[] ARTIST_NAME_VALIDERS = Config.getConfig()
 			.getList(Config.P_ARTIST_NAME_VALIDERS);
 
 	/** all words (regexp) that prove that an album name must the a valid one. */
-	private final static String[] ALBUM_NAME_INVALIDERS = Config.getInstance()
+	private final static String[] ALBUM_NAME_INVALIDERS = Config.getConfig()
 			.getList(Config.P_ALBUM_NAME_INVALIDERS);
 }

@@ -9,7 +9,7 @@ public class DBConnector {
     
     public static IDBQuery getImpl() {
 	if (getInstance().queryImplInstance == null) {
-	    Class<IDBQuery> dbquery = Config.getInstance().getTagDatabaseAccessImpl();
+	    Class<IDBQuery> dbquery = Config.getConfig().getTagDatabaseAccessImpl();
 	    try {
 		getInstance().queryImplInstance = (IDBQuery) dbquery.newInstance();
 	    } catch (Exception e) {
