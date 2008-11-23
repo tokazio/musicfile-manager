@@ -1,10 +1,5 @@
 package info.mp3lib.core.validator;
 
-import java.io.File;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
 import info.mp3lib.config.Config;
 import info.mp3lib.core.Album;
 import info.mp3lib.core.Library;
@@ -16,6 +11,10 @@ import info.mp3lib.util.string.MatcherConfig;
 import info.mp3lib.util.string.MatcherFactory;
 import info.mp3lib.util.string.StringMatcher;
 import info.mp3lib.util.string.StringPattern;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Denotes all data deduced from the physical context of an album and the quality index associated to these values
@@ -33,6 +32,7 @@ public class PhysicalContext implements Context {
 	public static enum ArtistPhysicalEnum {
 		/**
 		 * Different artist tag field are present in tracks contained in directories at the same level
+		 * (including this)
 		 */
 		SOME_DIFFERENT_ARTIST_IN_TREE(Config.getConfig().getQIModifier(
 				Config.PAR_SOME_DIFFERENT_ARTIST_IN_TREE)),
@@ -52,8 +52,8 @@ public class PhysicalContext implements Context {
 				Config.PAR_CONTAINS_VALIDER_WORD)),
 
 		/** 
-		 * Some tracks contained in folders at the same level have the artist tag field matching
-		 * the parent directory name
+		 * Some tracks contained in folders at the same level (including this) have the artist tag field 
+		 * matching the parent directory name
 		 */
 		OTHER_ALBUM_ARTIST_MATCH(Config.getConfig().getQIModifier(
 				Config.PAR_OTHER_ALBUM_ARTIST_MATCH)),
@@ -238,6 +238,9 @@ public class PhysicalContext implements Context {
 		albumQIModifiers = new AlbumPhysicalEnum[8];
 		tracksQIModifiers = new TrackPhysicalEnum[6];
 		matcher = MatcherFactory.getInstance().getMatcher(MatcherConfig.FILE);
+		processArtistContext();
+		processAlbumContext();
+		processTrackContext();
 	}
 
 	/* ------------------------- METHODS --------------------------- */
@@ -247,6 +250,7 @@ public class PhysicalContext implements Context {
 	 * have been already computed, else look for its in the <code>Album</code> objects , computes the 
 	 * modifiers and caches the result for future usage.
 	 * Checks if the given artist name contains words defined as validers or invaliders
+	 * // TODO exclure le repertoire courant du calcul de certains modifier
 	 */
 	private void processArtistContext() {
 		final String parentFolderPath = album.getFile().getParentFile().getPath();
@@ -266,26 +270,34 @@ public class PhysicalContext implements Context {
 			final List<String> artistTagNameList = new LinkedList<String>();
 			final Album[] albums = Library.getInstance().getAlbumsLocatedIn(
 					parentFolderPath);
-			
+			Track track;
 			for (int i = 0; i < albums.length; i++) {
 				Iterator<Track> trackIt;
 				// if all track tagged with same artist name
 				if (albums[i].getTagState() == TagEnum.ALL_SAME_TAGS) {
 					// retrieve the artist name of the first track
-					artistTagNameList.add(albums[i].getFirstTrack()
-							.getArtistName());
+					track = albums[i].getFirstTrack();
+					artistTagNameList.add(
+							track.getArtistName());
+					// modify the modifiers according to the current artist name
+					if (track.isTagged()) {
+						if (artistNamePattern.match(track.getArtistName())) {
+							otherMatchCount ++;
+						} else {
+							someDifferent = true;
+						}
+					}
 				} else {
 					// retrieve the artist name off all tracks
 					trackIt  = albums[i].getTrackIterator();
 					String artistName;
-					Track track;
 					while (trackIt.hasNext()) {
 						track =  trackIt.next();
 						artistName = track.getArtistName();
 						artistTagNameList.add(artistName);
 						// modify the modifiers according to the current artist name
 						if (track.isTagged()) {
-							if (artistNamePattern.match(track.getArtistName())) {
+							if (artistNamePattern.match(artistName)) {
 								otherMatchCount ++;
 							} else {
 								someDifferent = true;
