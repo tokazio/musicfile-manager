@@ -79,7 +79,7 @@ public class Track extends XMLMusicElement {
 	}
 
 	/**
-	 * Retrieves the of the parent artist element
+	 * Retrieves the name of the parent artist element
 	 * @return the artist
 	 */
 	public String getArtistName() {

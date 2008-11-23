@@ -47,7 +47,7 @@ public class Config {
 	private final static Logger LOGGER = Logger.getLogger(Config.class.getName());
 
 	/** static access to the singleton */
-	public static Config getInstance() {
+	public static Config getConfig() {
 		if (instance == null) {
 			instance = new Config();
 		}
@@ -191,8 +191,9 @@ public class Config {
 	
 	/**
 	 * Retrieves and checks list configuration attribute denoted by the given key<br/>
+	 * Build a reg-exp pattern matching all word or reg-exp contained in the given list
 	 * @return an array of regexp if the given attribute is not empty, null otherwise
-	 * @throws ConfigurationException if the property is missing / not set or contains
+	 * @throws ConfigurationException if the property is missing or contains
 	 * invalid expression
 	 */
 	public String[] getList(final String key) {
@@ -201,17 +202,56 @@ public class Config {
 		if (value == null) {
 			LOGGER.warn(key + MISSING_PROP_ERROR);
 		} else if (value.trim().length() != 0) {
-			result = value.split(CONFIG_FILE_SEPARATOR);
+			final String[] list = value.split(CONFIG_FILE_SEPARATOR);
 			// check excluded regular expressions validity
-			int i = 0;
-			boolean valid = true;
-			while (i < result.length && valid) {
-				valid = isValidRegex(result[i]);
-				i++;
+			StringBuffer regexp = new StringBuffer();
+			for (int i = 0; i < list.length; i++) {
+				regexp.append("(").append(list[i]).append(")");
+				if (i != list.length - 1) {
+					regexp.append("|");
+				}
 			}
-			if (!valid) {
+			try {
+				Pattern.compile(regexp.toString());
+			} catch (PatternSyntaxException e) {
 				throw new ConfigurationException(new StringBuffer("configuration property [").append(key)
-				.append("] is invalid, only integer values are allowed")
+				.append("] is invalid, only regexp values are allowed,\n")
+				.append("Syntax error is: ").append(e.getMessage())
+				.append("\ncheck the configuration file [").append(configFilePath).append("]").toString());
+			}
+			result = value.split(";");
+		}
+		return result;
+	}
+	
+	/**
+	 * Retrieves and checks list configuration attribute denoted by the given key<br/>
+	 * Build a reg-exp pattern matching all word or reg-exp contained in the given list
+	 * @return an array of regexp if the given attribute is not empty, null otherwise
+	 * @throws ConfigurationException if the property is missing or contains
+	 * invalid expression
+	 */
+	public Pattern getListAsPattern(final String key) {
+		final String value = config.getProperty(key);
+		Pattern result = null;
+		if (value == null) {
+			LOGGER.warn(key + MISSING_PROP_ERROR);
+		} else if (value.trim().length() != 0) {
+			final String[] list = value.split(CONFIG_FILE_SEPARATOR);
+			// check excluded regular expressions validity
+			StringBuffer regexp = new StringBuffer();
+			for (int i = 0; i < list.length; i++) {
+				regexp.append("(").append(list[i]).append(")");
+				if (i != list.length - 1) {
+					regexp.append("|");
+				}
+			}
+			try {
+				result = Pattern.compile(regexp.toString());
+			} catch (PatternSyntaxException e) {
+				throw new ConfigurationException(new StringBuffer("configuration property [").append(key)
+				.append("] is invalid, only regexp values are allowed,\n")
+				.append("Syntax error is: ").append(e.getMessage())
 				.append("\ncheck the configuration file [").append(configFilePath).append("]").toString());
 			}
 		}
