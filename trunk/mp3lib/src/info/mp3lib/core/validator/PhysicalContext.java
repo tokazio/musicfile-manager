@@ -250,7 +250,7 @@ public class PhysicalContext implements Context {
 	 * have been already computed, else look for its in the <code>Album</code> objects , computes the 
 	 * modifiers and caches the result for future usage.
 	 * Checks if the given artist name contains words defined as validers or invaliders
-	 * // TODO exclure le repertoire courant du calcul de certains modifier
+	 * exclure le repertoire courant du calcul de certains modifier
 	 */
 	private void processArtistContext() {
 		final String parentFolderPath = album.getFile().getParentFile().getPath();
