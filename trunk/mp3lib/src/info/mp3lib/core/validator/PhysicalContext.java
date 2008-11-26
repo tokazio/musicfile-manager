@@ -21,6 +21,14 @@ import java.util.List;
  * /!\ all new modifiers added must be added in the config.properties file too
  * @author Gab
  */
+/*
+ * NOTES:
+ * => ALL_ARTIST_TREE_TAGGED_WITH_SAME_ARTIST
+ * 	- impossible de ne considerer l'album courant comme les autres sinon le fait qu'il ne soit pas tagge
+ * 	l'andicape à mort. (pas le role de physicall context)
+ *	TODO reflechir a une solution pr permettre a une minorité d'album de ce contexte (mais plusieurs) de ne
+ *	pas être taggés et de qd mm profiter du bonus (pas prioritaire)
+ */
 public class PhysicalContext implements Context {
 
 	/* ------------------------ QUALITY INDEX MODIFIERS ------------------------ */
@@ -59,7 +67,7 @@ public class PhysicalContext implements Context {
 				Config.PAR_OTHER_ALBUM_ARTIST_MATCH)),
 
 		/** 
-		 * All directories at the same level (not including this) are tagged and artist field
+		 * All directories at the same level are tagged (the current can not be) and artist field
 		 * is the same for all<br/>
 		 * this modifiers have a weak value because it overloads <code>OTHER_ALBUM_ARTIST_MATCH</code>
 		 */
@@ -127,7 +135,7 @@ public class PhysicalContext implements Context {
 				Config.PAL_ALL_ARTIST_TREE_WELL_FORMED)),
 
 		/** 
-		 * All directories at the same level (not including this) are tagged and artist field
+		 * All directories at the same level are tagged (the current can not be) and artist field
 		 * is the same for all
 		 */
 		ALL_ARTIST_TREE_TAGGED_WITH_SAME_ARTIST(3);
@@ -273,15 +281,16 @@ public class PhysicalContext implements Context {
 			Track track;
 			for (int i = 0; i < albums.length; i++) {
 				Iterator<Track> trackIt;
+				String artistName;
 				// if all track tagged with same artist name
 				if (albums[i].getTagState() == TagEnum.ALL_SAME_TAGS) {
 					// retrieve the artist name of the first track
 					track = albums[i].getFirstTrack();
-					artistTagNameList.add(
-							track.getArtistName());
+					artistName = track.getTag().getFirstArtist();
+					artistTagNameList.add(artistName);
 					// modify the modifiers according to the current artist name
 					if (track.isTagged()) {
-						if (artistNamePattern.match(track.getArtistName())) {
+						if (artistNamePattern.match(artistName)) {
 							otherMatchCount ++;
 						} else {
 							someDifferent = true;
@@ -290,10 +299,10 @@ public class PhysicalContext implements Context {
 				} else {
 					// retrieve the artist name off all tracks
 					trackIt  = albums[i].getTrackIterator();
-					String artistName;
+					
 					while (trackIt.hasNext()) {
 						track =  trackIt.next();
-						artistName = track.getArtistName();
+						artistName = track.getTag().getFirstArtist();
 						artistTagNameList.add(artistName);
 						// modify the modifiers according to the current artist name
 						if (track.isTagged()) {

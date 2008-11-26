@@ -177,6 +177,10 @@ public interface Tag {
 
 	public String getFirstAlbum();
 
+	/**
+	 * Convenient method (result can't be null)
+	 * @return the first artist name if it exist, empty string otherwise
+	 */
 	public String getFirstArtist();
 
 	public String getFirstComment();
