@@ -16,6 +16,8 @@ import org.apache.log4j.Logger;
  * Holds the application configuration attributes loaded from the configuration properties file.<br/>
  * Singleton.
  * @author Gab
+ * TODO:  reflechir a l'interet des listes en tant que telle (une regexp ne suffit elle pas)
+ * ABSOLUMENT: persister en attribut le resultat de la methode getListAsPattern et rendre celle ci private
  */
 public class Config {
 
@@ -40,8 +42,7 @@ public class Config {
 	
 	
 	/** Implementation class for <code>IDBQuery</code>ie. tag database access */
-	@SuppressWarnings("unchecked")
-	private Class tagDatabaseAccessImpl;
+	private Class<IDBQuery> tagDatabaseAccessImpl;
 
 	/** Apache log4j logger */
 	private final static Logger LOGGER = Logger.getLogger(Config.class.getName());
@@ -159,6 +160,7 @@ public class Config {
 	 * Loads and checks LIBRARY_FILE configuration attribute<br/>
 	 * @throws ConfigurationException if the property is missing or not set
 	 */
+	@SuppressWarnings("unchecked")
 	private void loadTagDatabaseAccessImpl() {
 		final String key = "TAG_DATABASE_ACCESS_IMPL";
 		final String className = config.getProperty(key);
@@ -166,7 +168,7 @@ public class Config {
 			throw new ConfigurationException(key + MISSING_PROP_ERROR);
 		} else {
 			try {
-			    tagDatabaseAccessImpl = Class.forName(className);
+			    tagDatabaseAccessImpl =(Class<IDBQuery>) Class.forName(className);
 			} catch (ClassNotFoundException e) {
 				throw new ConfigurationException(new StringBuffer("configuration property [").append(key)
 						.append("] is invalid, the class denoted by the given property does not exist")
@@ -285,7 +287,6 @@ public class Config {
 	/**
 	 * @return implementation class used for tag database access.
 	 */
-	@SuppressWarnings("unchecked")
 	public Class<IDBQuery> getTagDatabaseAccessImpl() {
 		return tagDatabaseAccessImpl;
 	}
