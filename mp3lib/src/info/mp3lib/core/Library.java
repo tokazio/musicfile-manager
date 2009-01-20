@@ -73,7 +73,7 @@ public class Library {
 	 */
 	public Artist getArtist(final String artistName) {
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug(new StringBuffer("Asked for artist [").append(artistName).append("]...").toString());
+			LOGGER.debug(new StringBuilder("Asked for artist [").append(artistName).append("]...").toString());
 		}
 		Artist artist = null;
 		artist = artistList.get(artistName);

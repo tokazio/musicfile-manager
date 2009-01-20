@@ -131,7 +131,7 @@ public class Artist extends XMLMusicElement {
 	 */
 	public boolean remove(Album album) {
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug(new StringBuffer("Artist [").append(getName()).append("]: Removing Album [")
+			LOGGER.debug(new StringBuilder("Artist [").append(getName()).append("]: Removing Album [")
 					.append(album.getName()).append("]...").toString());
 		}
 		boolean success = false;
@@ -160,7 +160,7 @@ public class Artist extends XMLMusicElement {
 	 */
 	public Album getAlbum(final String albumName) {
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug(new StringBuffer("Asked for album [").append(albumName).append("]...").toString());
+			LOGGER.debug(new StringBuilder("Asked for album [").append(albumName).append("]...").toString());
 		}
 		Album album = null;
 		final Iterator<Album> it = getAlbumIterator();

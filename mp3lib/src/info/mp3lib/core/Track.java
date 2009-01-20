@@ -110,7 +110,7 @@ public class Track extends XMLMusicElement {
 			// and remove the track from it
 			if (!album.remove(this)) {
 				// warn if the track was in the XOM but not in the object model
-				LOGGER.warn(new StringBuffer("Data corruption, XOM and Object model for the track [")
+				LOGGER.warn(new StringBuilder("Data corruption, XOM and Object model for the track [")
 				.append(getName()).append("], id [").append(getId()).append("] are desynchronised")
 				.toString());
 				
@@ -173,7 +173,7 @@ public class Track extends XMLMusicElement {
 	 * @return the path
 	 */
 	public String getPath() {
-		return new StringBuffer(getElement().getParentElement().getAttributeValue(XMLMusicElement.ATTR_PATH))
+		return new StringBuilder(getElement().getParentElement().getAttributeValue(XMLMusicElement.ATTR_PATH))
 		.append(File.separator).append(getFileName()).toString();
 	}
 

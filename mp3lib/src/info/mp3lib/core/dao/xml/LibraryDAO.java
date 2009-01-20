@@ -43,11 +43,11 @@ public class LibraryDAO {
 	    if (xmlFile.canRead()) {
 		// TODO check extension, implement
 	    } else {
-		LOGGER.error(new StringBuffer("The given file [").append(filePath)
+		LOGGER.error(new StringBuilder("The given file [").append(filePath)
 			.append("] is not readable").toString());
 	    }
 	} else {
-	    LOGGER.error(new StringBuffer("The given file [").append(filePath).append("] does not exist")
+	    LOGGER.error(new StringBuilder("The given file [").append(filePath).append("] does not exist")
 		    .toString());
 	}
 	return result;
@@ -74,7 +74,7 @@ public class LibraryDAO {
 	    result = true;
 	    fos.close();
 	} catch (IOException e) {
-	    LOGGER.error(new StringBuffer("Unable to persist the library in the file [").append(filePath)
+	    LOGGER.error(new StringBuilder("Unable to persist the library in the file [").append(filePath)
 		    .append("]:\n").append(e.getMessage()).toString());
 	}
 	return result;

@@ -26,7 +26,7 @@ public class KiriStringMatcher {
 		lg_ch1 = s1.length();
 		str1 = new String(s1);
 		//System.out.println("s1 avant : "+str1);
-		s1 = StringOperation.sansAccent(str1);
+		s1 = StringUtils.normalize(str1, false, true, false); // remove accents
 		//System.out.println("s1 apres : "+s1);
 		ch1 = new char[lg_ch1];
 		ch1 = s1.toCharArray();
@@ -34,7 +34,7 @@ public class KiriStringMatcher {
 		lg_ch2 = s2.length();
 		str2 = new String(s2);
 		//System.out.println("s2 avant : "+str2);
-		s2 = StringOperation.sansAccent(str2);
+		s2 = s1 = StringUtils.normalize(str1, false, true, false); // remove accents
 		//System.out.println("s2 apres : "+s2);
 		ch2 = new char[lg_ch2];
 		ch2 = s2.toCharArray();
