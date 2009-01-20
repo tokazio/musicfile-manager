@@ -72,10 +72,10 @@ public class Config {
 			ignoreList = getList("DEFAULT.IGNORED");
 			excludeList = getList("DEFAULT.EXCLUDED");
 		} catch (FileNotFoundException e) {
-			throw new ConfigurationException(new StringBuffer("The configuration file [")
+			throw new ConfigurationException(new StringBuilder("The configuration file [")
 			.append(configFilePath).append("] can't be found :\n").append(e.getMessage()).toString());
 		} catch (IOException e) {
-			throw new ConfigurationException(new StringBuffer("Unable to load configuration file [")
+			throw new ConfigurationException(new StringBuilder("Unable to load configuration file [")
 			.append(configFilePath).append("]:\n").append(e.getMessage()).toString());
 		}
 //		System.getProperties("user.dir")
@@ -138,7 +138,7 @@ public class Config {
 				i++;
 			}
 			if (!valid) {
-				throw new ConfigurationException(new StringBuffer("configuration property [").append(key)
+				throw new ConfigurationException(new StringBuilder("configuration property [").append(key)
 				.append("] is invalid, only regular expression denoting character are allowed")
 				.append("\ncheck the configuration file [").append(configFilePath).append("]").toString());
 			}
@@ -149,7 +149,7 @@ public class Config {
 			LOGGER.warn(key + MISSING_PROP_ERROR);
 		}
 		else if (! isValidRegexChar(separator)) {
-			throw new ConfigurationException(new StringBuffer("configuration property [").append(key)
+			throw new ConfigurationException(new StringBuilder("configuration property [").append(key)
 			.append("] is invalid, only regular expression denoting character are allowed")
 			.append("\ncheck the configuration file [").append(configFilePath).append("]").toString());
 		}
@@ -170,7 +170,7 @@ public class Config {
 			try {
 			    tagDatabaseAccessImpl =(Class<IDBQuery>) Class.forName(className);
 			} catch (ClassNotFoundException e) {
-				throw new ConfigurationException(new StringBuffer("configuration property [").append(key)
+				throw new ConfigurationException(new StringBuilder("configuration property [").append(key)
 						.append("] is invalid, the class denoted by the given property does not exist")
 						.append("\ncheck the configuration file [").append(configFilePath).append("]").toString());
 			}
@@ -185,7 +185,7 @@ public class Config {
 		final String key = "LIBRARY_FILE";
 		libraryFile = config.getProperty(key);
 		if (libraryFile == null) {
-			throw new ConfigurationException(new StringBuffer("configuration property [").append(key)
+			throw new ConfigurationException(new StringBuilder("configuration property [").append(key)
 					.append("] is invalid, only integer values are allowed")
 					.append("\ncheck the configuration file [").append(configFilePath).append("]").toString());
 		}
@@ -206,7 +206,7 @@ public class Config {
 		} else if (value.trim().length() != 0) {
 			final String[] list = value.split(CONFIG_FILE_SEPARATOR);
 			// check excluded regular expressions validity
-			StringBuffer regexp = new StringBuffer();
+			StringBuilder regexp = new StringBuilder();
 			for (int i = 0; i < list.length; i++) {
 				regexp.append("(").append(list[i]).append(")");
 				if (i != list.length - 1) {
@@ -216,7 +216,7 @@ public class Config {
 			try {
 				Pattern.compile(regexp.toString());
 			} catch (PatternSyntaxException e) {
-				throw new ConfigurationException(new StringBuffer("configuration property [").append(key)
+				throw new ConfigurationException(new StringBuilder("configuration property [").append(key)
 				.append("] is invalid, only regexp values are allowed,\n")
 				.append("Syntax error is: ").append(e.getMessage())
 				.append("\ncheck the configuration file [").append(configFilePath).append("]").toString());
@@ -241,7 +241,7 @@ public class Config {
 		} else if (value.trim().length() != 0) {
 			final String[] list = value.split(CONFIG_FILE_SEPARATOR);
 			// check excluded regular expressions validity
-			StringBuffer regexp = new StringBuffer();
+			StringBuilder regexp = new StringBuilder();
 			for (int i = 0; i < list.length; i++) {
 				regexp.append("(").append(list[i]).append(")");
 				if (i != list.length - 1) {
@@ -251,7 +251,7 @@ public class Config {
 			try {
 				result = Pattern.compile(regexp.toString());
 			} catch (PatternSyntaxException e) {
-				throw new ConfigurationException(new StringBuffer("configuration property [").append(key)
+				throw new ConfigurationException(new StringBuilder("configuration property [").append(key)
 				.append("] is invalid, only regexp values are allowed,\n")
 				.append("Syntax error is: ").append(e.getMessage())
 				.append("\ncheck the configuration file [").append(configFilePath).append("]").toString());
@@ -275,7 +275,7 @@ public class Config {
 			try {
 				result = Integer.parseInt(value);
 			} catch (NumberFormatException  e) {
-				throw new ConfigurationException(new StringBuffer("configuration property [").append(modifier)
+				throw new ConfigurationException(new StringBuilder("configuration property [").append(modifier)
 				.append("] is invalid, only integer values are allowed")
 				.append("\ncheck the configuration file [").append(configFilePath).append("]").toString());
 			}

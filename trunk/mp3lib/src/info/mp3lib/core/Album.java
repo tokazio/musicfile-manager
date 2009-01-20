@@ -71,14 +71,14 @@ public class Album extends XMLMusicElement {
 			try {
 				trackList.add(new Track(trackElement)); // TODO use add method instead
 			} catch (IllegalArgumentException e) {
-				LOGGER.warn(new StringBuffer("Unable to build a Track from ")
+				LOGGER.warn(new StringBuilder("Unable to build a Track from ")
 				.append(trackElement.getAttribute(XMLMusicElement.ATTR_NAME))
 				.append(" : ")
 				.append(e.getMessage()).toString());
 			}
 		}
 		if (trackList.isEmpty()) {
-			throw new IllegalArgumentException(new StringBuffer("Album [")
+			throw new IllegalArgumentException(new StringBuilder("Album [")
 			.append(albumElement.getAttribute(XMLMusicElement.ATTR_NAME))
 			.append("] does not contain any valid audio files").toString());
 		}
@@ -157,7 +157,7 @@ public class Album extends XMLMusicElement {
 			// and remove the album from it
 			if (!artist.remove(this)) {
 				// warn if the album was in the XOM but not in the object model
-				LOGGER.warn(new StringBuffer("Data corruption, XOM and Object model for the album [")
+				LOGGER.warn(new StringBuilder("Data corruption, XOM and Object model for the album [")
 				.append(getName()).append("], id [").append(getId()).append("] are desynchronised")
 				.toString());
 
@@ -185,7 +185,7 @@ public class Album extends XMLMusicElement {
 	 */
 	public void add(Track track) throws IllegalAddException {
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug(new StringBuffer("Album [").append(getName()).append("]: Adding track [")
+			LOGGER.debug(new StringBuilder("Album [").append(getName()).append("]: Adding track [")
 					.append(track.getName()).append("], file [").append(track.getAbsolutePath()).append("]...").toString());
 		}
 		getElement().addContent(track.getElement()); // adds the track element to the album element
@@ -225,7 +225,7 @@ public class Album extends XMLMusicElement {
 	 */
 	public boolean remove(Track track) {
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug(new StringBuffer("Album [").append(getName()).append("]: Removing track [")
+			LOGGER.debug(new StringBuilder("Album [").append(getName()).append("]: Removing track [")
 					.append(track.getName()).append("]...").toString());
 		}
 		boolean success = false;
