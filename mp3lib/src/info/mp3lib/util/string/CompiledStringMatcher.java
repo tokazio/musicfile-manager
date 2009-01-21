@@ -15,7 +15,7 @@ package info.mp3lib.util.string;
  * @author Gab
  *
  */
-public interface StringPattern {
+public interface CompiledStringMatcher {
 	
 	/**
 	 * Checks if this pattern match the given string according to the concrete pattern implementation

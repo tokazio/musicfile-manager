@@ -27,7 +27,7 @@ public class StringMatcherDummy implements StringMatcher {
 	}
 
 	@Override
-	public StringPattern getPattern(String str) {
+	public CompiledStringMatcher getCompiledMatcher(String str) {
 		// TODO Auto-generated method stub
 		return null;
 	}
