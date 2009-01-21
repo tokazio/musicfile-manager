@@ -29,6 +29,6 @@ public interface StringMatcher {
 	 * @param str
 	 * @return the given string in a compiled pattern
 	 */
-	public StringPattern getPattern(String str);
+	public CompiledStringMatcher getCompiledMatcher(String str);
 
 }

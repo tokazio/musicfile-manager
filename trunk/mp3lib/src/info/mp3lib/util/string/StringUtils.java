@@ -6,7 +6,7 @@ import java.io.File;
  * Implements useful method to manipulate Strings
  * @author Gab
  */
-public final class StringUtils {
+public final class StringUtils extends org.apache.commons.lang.StringUtils {
 	/**
 	 * Remove if it exists the extension (ex .mp3) from the give file name.
 	 * @param fileName the name of a file
@@ -22,7 +22,7 @@ public final class StringUtils {
 		}
 		return name;
 	}
-	
+
 	/**
 	 * Retrieves the name of the parent folder of the file denoted by given filename
 	 * @param fileName the name of a file
@@ -31,7 +31,7 @@ public final class StringUtils {
 	public final static String getParentFolderName(final String fileName) {
 		return new File(fileName).getParentFile().getName();
 	}
-	
+
 	/**
 	 * retrieves the longest common substring of the two given string. (substrings are necessarily contiguous).
 	 * @param str1
@@ -43,7 +43,7 @@ public final class StringUtils {
 		//TODO method implementation
 		return "";
 	}
-	
+
 	/**
 	 * Builds a normalized string from the given one<br/>
 	 * @param str the string to normalize
@@ -58,4 +58,5 @@ public final class StringUtils {
 		//TODO method implementation
 		return "";
 	}
+
 }

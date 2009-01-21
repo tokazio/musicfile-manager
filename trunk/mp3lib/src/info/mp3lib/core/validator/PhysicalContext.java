@@ -8,7 +8,8 @@ import info.mp3lib.core.Track;
 import info.mp3lib.util.string.MatcherConfig;
 import info.mp3lib.util.string.MatcherFactory;
 import info.mp3lib.util.string.StringMatcher;
-import info.mp3lib.util.string.StringPattern;
+import info.mp3lib.util.string.CompiledStringMatcher;
+import info.mp3lib.util.string.StringUtils;
 
 import java.io.File;
 import java.util.Iterator;
@@ -269,7 +270,7 @@ public class PhysicalContext implements Context {
 	 */
 	private void processArtistContext() {
 		final String parentFolderPath = album.getFile().getParentFile().getPath();
-		final StringPattern artistNamePattern = equalMatcher.getPattern(album.getArtistName());
+		final CompiledStringMatcher artistNameMatcher = equalMatcher.getCompiledMatcher(album.getArtistName());
 		int otherMatchCount = 0;
 		int totalCheckedTracks = 0;
 		boolean someDifferent = false;
@@ -290,7 +291,7 @@ public class PhysicalContext implements Context {
 					artistTagNameList.add(artistName);
 					// modify the modifiers according to the current artist name
 					if (track.isTagged()) {
-						if (artistNamePattern.match(artistName)) {
+						if (artistNameMatcher.match(artistName)) {
 							otherMatchCount++;
 						} else {
 							someDifferent = true;
@@ -307,7 +308,7 @@ public class PhysicalContext implements Context {
 						// modify the modifiers according to the current artist
 						// name
 						if (track.isTagged()) {
-							if (artistNamePattern.match(artistName)) {
+							if (artistNameMatcher.match(artistName)) {
 								otherMatchCount++;
 							} else {
 								someDifferent = true;
@@ -381,7 +382,7 @@ public class PhysicalContext implements Context {
 			}
 		}
 		// The first part of this directory name contains the parent directory name
-		final StringPattern artistNamePattern = containMatcher.getPattern(album.getArtistName());
+		final CompiledStringMatcher artistNamePattern = containMatcher.getCompiledMatcher(album.getArtistName());
 		if (artistNamePattern.match(album.getParentPath())) {
 			albumQIModifiers[4] = AlbumPhysicalEnum.NAME_FIRST_PART_MATCH_PARENT;
 		}
@@ -398,13 +399,23 @@ public class PhysicalContext implements Context {
 	}
 	
 	/**
-	 * Computes the album context for the current album.
-	 * Checks if the given artist name contains words defined as validers or invaliders.
-	 * Retrieves modifiers pre-computed by processArtistContext method.
-	 * @requirements : processArtistContext must be executed before
+	 * Computes the tracks context for the current album.
+	 * Checks if the tracks names contain words defined as validers or invaliders or have a common pattern
+	 * (track01, track02, etc.).
+	 * Retrieves modifiers pre-computed by processAlbumContext method.
+	 * @requirements : processAlbumContext must be executed before
 	 */
 	private void processTrackContext() {
-
+		// retrieves modifiers pre_computed by processAlbumContext method
+		if (albumQIModifiers[0] != null) {
+			tracksQIModifiers[0] = TrackPhysicalEnum.NOT_LEAF;
+		}
+		// Checks if the given artist name contains words defined as invaliders
+		if (Config.getConfig().getListAsPattern(Config.P_TRACK_TITLE_INVALIDERS).matcher(albumName).matches()) {
+			tracksQIModifiers[1] = TrackPhysicalEnum.CONTAINS_INVALIDER_WORD;
+		}
+		final String lcs = StringUtils.getLCSubstring(albumName, "TOTO"); // TODO
+		StringBuilder sb = new StringBuilder();
 	}
 	
 	@Override
@@ -503,21 +514,4 @@ public class PhysicalContext implements Context {
 		return leaf && containsValidFile;
 	}
 
-
-	/* ------------------------- CONSTANTS --------------------------- */
-	/** all words (regexp) defined as invalid in a track title. */
-	private final static String[] TRACK_TITLE_INVALIDERS = Config.getConfig().getList(
-			Config.P_TRACK_TITLE_INVALIDERS);
-
-	/** all words (regexp) defined as invalid in an artist name. */
-	private final static String[] ARTIST_NAME_INVALIDERS = Config.getConfig().getList(
-			Config.P_ARTIST_NAME_INVALIDERS);
-
-	/** all words (regexp) that prove that an artist name must be the valid one. */
-	private final static String[] ARTIST_NAME_VALIDERS = Config.getConfig().getList(
-			Config.P_ARTIST_NAME_VALIDERS);
-
-	/** all words (regexp) that prove that an album name must the a valid one. */
-	private final static String[] ALBUM_NAME_INVALIDERS = Config.getConfig().getList(
-			Config.P_ALBUM_NAME_INVALIDERS);
 }

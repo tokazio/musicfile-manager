@@ -10,7 +10,7 @@ import info.mp3lib.core.Track;
 import info.mp3lib.util.string.MatcherConfig;
 import info.mp3lib.util.string.MatcherFactory;
 import info.mp3lib.util.string.StringMatcher;
-import info.mp3lib.util.string.StringPattern;
+import info.mp3lib.util.string.CompiledStringMatcher;
 
 /**
  * Denotes all data deduced from tags of an album and the quality index associated to these values
@@ -188,8 +188,8 @@ public class TagContext implements Context
 	    // iterate ONCE
 	    boolean continueLoop = true;
 	    int i = 0;
-	    StringPattern artistPattern = null;
-	    StringPattern albumPattern = null;
+	    CompiledStringMatcher artistPattern = null;
+	    CompiledStringMatcher albumPattern = null;
 	    for (Iterator<Track> iTrack = album.getTrackIterator(); iTrack.hasNext()
 		    && continueLoop; i++)
 	    {
@@ -247,7 +247,7 @@ public class TagContext implements Context
 				// first iteration, set current artist name to best one
 				// initialize QI to : SOME ARTISTS & ALL ARTISTS
 				bestArtistName = track.getArtistName();
-				artistPattern = tagMatcher.getPattern(bestArtistName);
+				artistPattern = tagMatcher.getCompiledMatcher(bestArtistName);
 				setValueArtistQI(ArtistTagEnum.SOME_ARTIST_FIELD_SET);
 				setValueArtistQI(ArtistTagEnum.ALL_ARTIST_FIELD_SET);
 			    }
@@ -281,7 +281,7 @@ public class TagContext implements Context
 				// first iteration, set current album name to best one
 				// initialize QI to : SOME ALBUMS & ALL ALBUMS
 				bestAlbumName = track.getAlbumName();
-				albumPattern = tagMatcher.getPattern(bestAlbumName);
+				albumPattern = tagMatcher.getCompiledMatcher(bestAlbumName);
 			    }
 			    else if (bestAlbumName != null)
 			    {
@@ -310,7 +310,7 @@ public class TagContext implements Context
 				// first iteration, set current artist name to best one
 				// initialize QI to : SOME ARTISTS & ALL ARTISTS
 				bestArtistName = track.getArtistName();
-				artistPattern = tagMatcher.getPattern(bestArtistName);
+				artistPattern = tagMatcher.getCompiledMatcher(bestArtistName);
 				setNullValueArtistQI(ArtistTagEnum.NO_ARTIST_FIELD_SET);
 				setValueArtistQI(ArtistTagEnum.SOME_ARTIST_FIELD_SET);
 				setValueArtistQI(ArtistTagEnum.ALL_ARTIST_FIELD_SET);
@@ -346,7 +346,7 @@ public class TagContext implements Context
 				// first iteration, set current artist name to best one
 				// initialize QI to : SOME ARTISTS & ALL ARTISTS
 				bestAlbumName = track.getAlbumName();
-				albumPattern = tagMatcher.getPattern(bestAlbumName);
+				albumPattern = tagMatcher.getCompiledMatcher(bestAlbumName);
 				setNullValueArtistQI(ArtistTagEnum.NO_ARTIST_FIELD_SET);
 				setValueArtistQI(ArtistTagEnum.SOME_ARTIST_FIELD_SET);
 				setValueArtistQI(ArtistTagEnum.ALL_ARTIST_FIELD_SET);
