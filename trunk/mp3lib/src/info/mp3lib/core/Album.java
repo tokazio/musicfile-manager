@@ -2,6 +2,7 @@ package info.mp3lib.core;
 
 import info.mp3lib.core.validator.Validator;
 import info.mp3lib.util.cddb.ITagQueryResult;
+import info.mp3lib.util.string.CompiledStringMatcher;
 import info.mp3lib.util.string.MatcherConfig;
 import info.mp3lib.util.string.MatcherFactory;
 import info.mp3lib.util.string.StringMatcher;
@@ -285,7 +286,7 @@ public class Album extends XMLMusicElement {
 	public TagEnum getTagState() {
 		return tagState;
 	}
-
+	
 	/**
 	 * Retrieves the parent folder of the first track of this album.<br/>
 	 * /!\ At some point of its lifecycle an album can holds tracks located in different directories
@@ -297,12 +298,45 @@ public class Album extends XMLMusicElement {
 	}
 	
 	/**
+	 * Retrieves the parent folder of the first track of this album.<br/>
+	 * /!\ At some point of its lifecycle an album can holds tracks located in different directories
+	 * TODO rajouter un attribut fsSynchronisation
+	 * @param escapeSubAlbumDirectories if true the directory one level above will be skipped if it match with
+	 * given <code>subAlbumDirectoriesMatcher</code> instance
+	 * @param subAlbumDirectoriesMatcher a <code>StringMatcher</code> instance thats match directories name known 
+	 * as sub-album directories
+	 * @return the original folder from which this album was build
+	 */
+	public File getFile(boolean escapeSubAlbumDirectories, CompiledStringMatcher subAlbumDirectoriesMatcher) {
+		File result = trackList.get(1).getFile().getParentFile();
+		if (escapeSubAlbumDirectories && subAlbumDirectoriesMatcher != null &&
+				subAlbumDirectoriesMatcher.match(result.getName())) {
+			result = result.getParentFile();
+		}
+		return result;
+	}
+	
+	/**
 	 * Retrieves the parent file path of the current album
 	 * @return the parent of the original folder path from which this album was build
 	 * @see <code>Album.getFile()</code>
+	 * TODO check usage remove if unused
 	 */
 	public String getParentPath() {
 		return getFile().getParentFile().getPath();
+	}
+	
+	/**
+	 * Retrieves the parent file path of the current album
+	 * @param escapeSubAlbumDirectories if true the directory one level above will be skipped if it match with
+	 * given <code>subAlbumDirectoriesMatcher</code> instance
+	 * @param subAlbumDirectoriesMatcher a <code>StringMatcher</code> instance thats match directories name known 
+	 * as sub-album directories
+	 * @return the parent of the original folder path from which this album was build
+	 * @see <code>Album.getFile()</code>
+	 */
+	public String getParentPath(boolean escapeSubAlbumDirectories, CompiledStringMatcher subAlbumDirectoriesMatcher) {
+		return getFile(escapeSubAlbumDirectories, subAlbumDirectoriesMatcher).getParentFile().getPath();
 	}
 
 	/**
