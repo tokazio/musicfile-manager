@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+//TODO check utility of this f**king class !!
 public class Validator {
 
 	Album album = null;

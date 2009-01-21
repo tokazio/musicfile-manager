@@ -21,6 +21,7 @@ package entagged.audioformats;
 import java.io.File;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 
 import entagged.audioformats.ape.MonkeyFileReader;
 import entagged.audioformats.ape.MonkeyFileWriter;
@@ -164,6 +165,15 @@ public class AudioFileIO {
 	private Hashtable readers = new Hashtable();
 
 	private Hashtable writers = new Hashtable();
+	
+	/**
+	 * @return an  an iterator on all supported extensions
+	 * @author Gab (method added by mp3lib team)
+	 */
+	@SuppressWarnings("unchecked")
+	public Iterator<String> getSupportedExtensions() {
+		return readers.keySet().iterator();
+	}
 
 	/**
 	 * Creates an instance.

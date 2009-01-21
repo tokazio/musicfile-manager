@@ -9,7 +9,7 @@ import info.mp3lib.core.validator.PhysicalContext.ArtistPhysicalEnum;
 import info.mp3lib.core.validator.TagContext.ArtistTagEnum;
 
 public class CachedContextBean {
-	/** all the artist names deduced from tag present in the current 'artist' directory */
+	/** all the artist names deduced from tags present in the current 'artist' directory */
 	private String[] artistNames;
 	
 	/** If true, all album of this context have tag state <code>TagEnum.ALL_SAME_TAGS</code> */
