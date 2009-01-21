@@ -6,11 +6,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Properties;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import org.apache.log4j.Logger;
+
+import entagged.audioformats.AudioFileIO;
 
 /**
  * Holds the application configuration attributes loaded from the configuration properties file.<br/>
@@ -29,7 +33,7 @@ public class Config {
 
 	/** the absolute path of the configuration file */
 	private String configFilePath;
-
+	
 	/** 
 	 * configuration attributes for string manipulation
 	 * @see info.mp3lib.string.MatcherConfig
@@ -40,6 +44,8 @@ public class Config {
 	private String[] ignoreList;
 	private String[] excludeList;
 	
+	/** Regular expression matching all files ending with audio supported extension */
+	private Pattern regExpMatchingSupportedExtension;
 	
 	/** Implementation class for <code>IDBQuery</code>ie. tag database access */
 	private Class<IDBQuery> tagDatabaseAccessImpl;
@@ -69,6 +75,7 @@ public class Config {
 			loadLibraryFilePath();
 			loadSeparators();
 			loadTagDatabaseAccessImpl();
+			loadSupportedExtension();
 			ignoreList = getList("DEFAULT.IGNORED");
 			excludeList = getList("DEFAULT.EXCLUDED");
 		} catch (FileNotFoundException e) {
@@ -116,6 +123,16 @@ public class Config {
 			valid = false;
 		}
 		return valid;
+	}
+	
+	/**
+	 * Checks if the file denoted by the given name is a supported audio format
+	 * @param filename the name of the file to check
+	 * @return true if the given string end with one of supported extension, false otherwise
+	 */
+	public boolean isSupported(String filename) {
+		Matcher matcher = regExpMatchingSupportedExtension.matcher(filename);
+		return matcher.matches();
 	}
 
 	/**
@@ -186,9 +203,25 @@ public class Config {
 		libraryFile = config.getProperty(key);
 		if (libraryFile == null) {
 			throw new ConfigurationException(new StringBuilder("configuration property [").append(key)
-					.append("] is invalid, only integer values are allowed")
+			 		.append("] is invalid, only integer values are allowed")
 					.append("\ncheck the configuration file [").append(configFilePath).append("]").toString());
 		}
+	}
+	
+	/**
+	 * Retrieves from default AudioFileIO all supported extensions and builds a regular expression matching 
+	 * all file whose name ends with one of those extensions
+	 */
+	private void loadSupportedExtension() {
+		Iterator<String> it = AudioFileIO.getDefaultAudioFileIO().getSupportedExtensions();
+		String extension;
+		final StringBuilder regExp = new StringBuilder(".*\\.(");
+		while (it.hasNext()) {
+			extension = (String) it.next();
+			regExp.append(extension).append("|");
+		}
+		regExp.append(")");
+		regExpMatchingSupportedExtension = Pattern.compile(regExp.toString());
 	}
 	
 	/**

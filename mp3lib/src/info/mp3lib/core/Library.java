@@ -124,23 +124,27 @@ public class Library {
 
 	/**
 	 * @param folderPath the path of the folder in with are located the expected albums
-	 * @return all albums located in the folder denoted by the given path
+	 * @return all albums located in the folder denoted by the given path, null if there is not
 	 */
 	public Album[] getAlbumsLocatedIn(final String folderPath) {
+		Album[] result = null;
 		Iterator<String> artistIt = artistList.keySet().iterator();
 		final List<Album> albums = new LinkedList<Album>();
-		String artistName = null;
 		Iterator<Album> albumIt = null;
 		while(artistIt.hasNext()) {
 			albumIt = artistList.get(artistIt.next()).getAlbumIterator();
+			Album album;
 			while (albumIt.hasNext()) {
-				final Album album = (Album) albumIt.next();
+				album = (Album) albumIt.next();
 				if (album.getParentPath().equals(folderPath)) {
 					albums.add(album);
 				}
 			}
 		}
-		return albums.toArray(new Album[albums.size()]);
+		if (albums.size() > 0) {
+			result = albums.toArray(new Album[albums.size()]);
+		}
+		return result;
 	}
 
 	/* ------------------------- CONSTANTS --------------------------- */

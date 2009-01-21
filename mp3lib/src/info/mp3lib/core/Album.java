@@ -264,8 +264,7 @@ public class Album extends XMLMusicElement {
 	}
 
 	/**
-	 * Checks if at less more than half of music files of the current directory contains different values
-	 * compared two by two for tags artist or album
+	 * Checks if this album is a compilation
 	 * @return true if album is known to be a compilation, else return false
 	 */
 	public boolean isCompilation() {
