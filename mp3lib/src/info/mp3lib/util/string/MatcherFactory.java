@@ -1,5 +1,7 @@
 package info.mp3lib.util.string;
 
+import info.mp3lib.util.string.test.StringMatcherDummy;
+
 /**
  * Allows to retrieve different implementation of the <code>StringMatcher</code> Interface<BR/>
  * Singleton, use <code>MatcherFactory.getInstance()</code> to retrieve an instance

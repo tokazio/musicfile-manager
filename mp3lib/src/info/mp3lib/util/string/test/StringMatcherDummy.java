@@ -1,14 +1,18 @@
-package info.mp3lib.util.string;
+package info.mp3lib.util.string.test;
+
+import info.mp3lib.util.string.CompiledStringMatcher;
+import info.mp3lib.util.string.StringMatcher;
 
 /**
- * test implementation of StringMatcher interface
+ * stub implementation of StringMatcher interface
  * @author Gab
  */
 @Deprecated
 public class StringMatcherDummy implements StringMatcher {
 
 	/** String processing configuration */
-	private MatcherConfig config;
+//	private MatcherConfig config;
+	
 	@Override
 	public boolean match(String str1, String str2) {
 		boolean result = false;
@@ -21,15 +25,13 @@ public class StringMatcherDummy implements StringMatcher {
 	}
 
 	@Override
-	public String compile(String str) {
-		// TODO Auto-generated method stub
-		return null;
+	public String format(String str) {
+		return str;
 	}
 
 	@Override
-	public CompiledStringMatcher getCompiledMatcher(String str) {
-		// TODO Auto-generated method stub
-		return null;
+	public CompiledStringMatcher compile(String str) {
+		return new CompiledStringMatcherDummy(str);
 	}
 	
 	

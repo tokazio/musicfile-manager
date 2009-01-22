@@ -18,17 +18,17 @@ public interface StringMatcher {
 	public boolean match(String str1, String str2);
 	
 	/**
-	 * Compile the given string according to the concrete matcher implementation
+	 * Formats the given string according to the concrete matcher implementation
 	 * @param str
-	 * @return the compiled string
+	 * @return the formated string
 	 */
-	public String compile(String str);
+	public String format(String str);
 	
 	/**
 	 * Retrieves a compiled pattern from the given string
 	 * @param str
 	 * @return the given string in a compiled pattern
 	 */
-	public CompiledStringMatcher getCompiledMatcher(String str);
+	public CompiledStringMatcher compile(String str);
 
 }

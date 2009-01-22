@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,6 +44,9 @@ public class Config {
 	private String libraryFile;
 	private String[] ignoreList;
 	private String[] excludeList;
+	
+	/** holds all compiled regular expression pattern allowing to detect specific case during string manipulation */
+	private Map<String, Pattern> regexpPatternMap;
 	
 	/** Regular expression matching all files ending with audio supported extension */
 	private Pattern regExpMatchingSupportedExtension;
@@ -225,6 +229,32 @@ public class Config {
 	}
 	
 	/**
+	 * loads compiles and stores all regular expression allowing to detect specific case during string manipulation.
+	 * @throws ConfigurationException if the property is missing or contains invalid expression
+	 */
+	private void loadRegexpPattern() {
+		regexpPatternMap.put(P_TRACK_TITLE_INVALIDERS, getListAsPattern(P_TRACK_TITLE_INVALIDERS));
+		regexpPatternMap.put(P_ARTIST_NAME_INVALIDERS, getListAsPattern(P_ARTIST_NAME_INVALIDERS));
+		regexpPatternMap.put(P_ARTIST_NAME_VALIDERS, getListAsPattern(P_ARTIST_NAME_VALIDERS));
+		regexpPatternMap.put(P_ALBUM_NAME_INVALIDERS, getListAsPattern(P_ALBUM_NAME_INVALIDERS));
+		regexpPatternMap.put(P_SUB_ALBUM_DIRECTORIES, getListAsPattern(P_SUB_ALBUM_DIRECTORIES));
+	}
+	
+	/**
+	 * Retrieves list configuration attribute denoted by the given key as a <code>Pattern</code> instance<br/>
+	 * @return an array of regexp if the given attribute is not empty, null otherwise
+	 * @throws ConfigurationException if the property is missing
+	 */
+	public Pattern getPattern(final String key) {
+		final Pattern result = regexpPatternMap.get(key);
+		if (result == null) {
+			throw new ConfigurationException(new StringBuilder("configuration property [").append(key)
+					.append("] is not set").toString());
+		}
+		return result;
+	}
+	
+	/**
 	 * Retrieves and checks list configuration attribute denoted by the given key<br/>
 	 * Build a reg-exp pattern matching all word or reg-exp contained in the given list
 	 * @return an array of regexp if the given attribute is not empty, null otherwise
@@ -265,8 +295,9 @@ public class Config {
 	 * @return an array of regexp if the given attribute is not empty, null otherwise
 	 * @throws ConfigurationException if the property is missing or contains
 	 * invalid expression
+	 * TODO set this code private under another signature
 	 */
-	public Pattern getListAsPattern(final String key) {
+	private Pattern getListAsPattern(final String key) {
 		final String value = config.getProperty(key);
 		Pattern result = null;
 		if (value == null) {
@@ -396,10 +427,16 @@ public class Config {
 	public final static String PTR_BIG_VARIABLE_SEQUENCE = PTR + "BIG_VARIABLE_SEQUENCE";
 	public final static String PTR_REPEATING_SEQUENCE_IN_FOLDERNAME = PTR + "REPEATING_SEQUENCE_IN_FOLDERNAME";
 	
+	/** all string denoting a bad case in the title of tracks ("track+digit", "piste+digit", etc...) */
 	public final static String P_TRACK_TITLE_INVALIDERS = "PHYSICAL.TRACK_TITLE_INVALIDERS";
+	/** all string denoting a bad case in the folder name expected to be the artist folder ("compilation", etc...) */
 	public final static String P_ARTIST_NAME_INVALIDERS = "PHYSICAL.ARTIST_NAME_INVALIDERS";
+	/** all string denoting a good case in the folder name expected to be the artist folder ("discography", etc...) */
 	public final static String P_ARTIST_NAME_VALIDERS = "PHYSICAL.ARTIST_NAME_VALIDERS";
+	/** all string denoting a bad case in the folder name expected to be the album folder ("compilation", etc...) */
 	public final static String P_ALBUM_NAME_INVALIDERS = "PHYSICAL.ALBUM_NAME_INVALIDERS";
+	/** all string denoting a sub-album directory like "cd+digit" or "disk+digit */
+	public final static String P_SUB_ALBUM_DIRECTORIES = "PHYSICAL.SUB_ALBUM_DIRECTORIES";
 	
 	/**
 	 * Tag context quality index modifiers keys to access configuration data
