@@ -292,6 +292,7 @@ public class Album extends XMLMusicElement {
 	 * /!\ At some point of its lifecycle an album can holds tracks located in different directories
 	 * TODO rajouter un attribut fsSynchronisation
 	 * @return the original folder from which this album was build
+	 * @see Album#getFile(boolean, CompiledStringMatcher)
 	 */
 	public File getFile() {
 		return trackList.get(1).getFile().getParentFile();
@@ -304,7 +305,7 @@ public class Album extends XMLMusicElement {
 	 * @param escapeSubAlbumDirectories if true the directory one level above will be skipped if it match with
 	 * given <code>subAlbumDirectoriesMatcher</code> instance
 	 * @param subAlbumDirectoriesMatcher a <code>StringMatcher</code> instance thats match directories name known 
-	 * as sub-album directories
+	 * as sub-album directories (like "CD1" or "disk1")
 	 * @return the original folder from which this album was build
 	 */
 	public File getFile(boolean escapeSubAlbumDirectories, CompiledStringMatcher subAlbumDirectoriesMatcher) {
@@ -331,7 +332,7 @@ public class Album extends XMLMusicElement {
 	 * @param escapeSubAlbumDirectories if true the directory one level above will be skipped if it match with
 	 * given <code>subAlbumDirectoriesMatcher</code> instance
 	 * @param subAlbumDirectoriesMatcher a <code>StringMatcher</code> instance thats match directories name known 
-	 * as sub-album directories
+	 * as sub-album directories (like "CD1" or "disk1")
 	 * @return the parent of the original folder path from which this album was build
 	 * @see <code>Album.getFile()</code>
 	 */

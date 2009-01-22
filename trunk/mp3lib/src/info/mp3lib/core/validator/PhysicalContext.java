@@ -34,6 +34,8 @@ import java.util.List;
  * (a mon avis plutot complexe, penser a supprimer le pkg cache sinon)
  */
 public class PhysicalContext implements Context {
+	
+	private static final Config SETTINGS = Config.getConfig();
 
 	/* ------------------------ QUALITY INDEX MODIFIERS ------------------------ */
 	/**
@@ -218,10 +220,10 @@ public class PhysicalContext implements Context {
 	/** The album from which is built this Context */
 	private Album album;
 
-	/** the album name deduced from the context */
+	/** the album name deduced from the context (formated with the default file name equality matcher) */
 	private String albumName;
 
-	/** the artist name deduced from the context */
+	/** the artist name deduced from the context (formated with the default file name equality matcher)*/
 	private String artistName;
 
 	/** the tracks name name deduced from the context */
@@ -247,15 +249,19 @@ public class PhysicalContext implements Context {
 
 	/* ----------------------- CONSTRUCTORS ----------------------- */
 	public PhysicalContext(final Album pAlbum) {
+		equalMatcher = MatcherFactory.getInstance().getMatcher(MatcherConfig.FILE);
+		containMatcher = MatcherFactory.getInstance().getMatcher(MatcherConfig.FILE); // TODO create a specific matcher instance in configuration
 		album = pAlbum;
-		albumName = album.getName();
-		artistName = album.getFile().getParentFile().getName();
+		albumName = equalMatcher.format(album.getName());
+		// retrieves name of this artist from the physical context and format it according to String manipulation config
+//		artistName = equalMatcher.format(album.getFile(true, Config.getConfig().getPattern(Config.P_SUB_ALBUM_DIRECTORIES)).getParentFile().getName()); // TODO
 		tracksName = album.getTracksName();
+		for (int i = 0; i < tracksName.length; i++) {
+			tracksName[i] = equalMatcher.format(tracksName[i]);
+		} 
 		artistQIModifiers = new ArtistPhysicalEnum[5];
 		albumQIModifiers = new AlbumPhysicalEnum[8];
 		tracksQIModifiers = new TrackPhysicalEnum[6];
-		equalMatcher = MatcherFactory.getInstance().getMatcher(MatcherConfig.FILE);
-		containMatcher = MatcherFactory.getInstance().getMatcher(MatcherConfig.FILE); // TODO create a specific matcher instance in configuration
 		processArtistContext();
 		processAlbumContext();
 		processTrackContext();
@@ -270,7 +276,7 @@ public class PhysicalContext implements Context {
 	 */
 	private void processArtistContext() {
 		final String parentFolderPath = album.getFile().getParentFile().getPath();
-		final CompiledStringMatcher artistNameMatcher = equalMatcher.getCompiledMatcher(album.getArtistName());
+		final CompiledStringMatcher artistNameMatcher = equalMatcher.compile(album.getArtistName());
 		int otherMatchCount = 0;
 		int totalCheckedTracks = 0;
 		boolean someDifferent = false;
@@ -332,11 +338,11 @@ public class PhysicalContext implements Context {
 
 		// Checks if the given artist name contains words defined as validers or
 		// invaliders
-		if (Config.getConfig().getListAsPattern(Config.P_ARTIST_NAME_INVALIDERS).matcher(artistName)
+		if (Config.getConfig().getPattern(Config.P_ARTIST_NAME_INVALIDERS).matcher(artistName)
 				.matches()) {
 			artistQIModifiers[1] = ArtistPhysicalEnum.CONTAINS_INVALIDER_WORD;
 		}
-		if (Config.getConfig().getListAsPattern(Config.P_ARTIST_NAME_VALIDERS).matcher(artistName).matches()) {
+		if (Config.getConfig().getPattern(Config.P_ARTIST_NAME_VALIDERS).matcher(artistName).matches()) {
 			artistQIModifiers[2] = ArtistPhysicalEnum.CONTAINS_VALIDER_WORD;
 		}
 	}
@@ -359,7 +365,7 @@ public class PhysicalContext implements Context {
 			albumQIModifiers[7] = AlbumPhysicalEnum.ALL_ARTIST_TREE_TAGGED_WITH_SAME_ARTIST;
 		}
 		// Checks if the given artist name contains words defined as invaliders
-		if (Config.getConfig().getListAsPattern(Config.P_ALBUM_NAME_INVALIDERS).matcher(albumName).matches()) {
+		if (Config.getConfig().getPattern(Config.P_ALBUM_NAME_INVALIDERS).matcher(albumName).matches()) {
 			albumQIModifiers[1] = AlbumPhysicalEnum.CONTAINS_INVALIDER_WORD;
 		}
 		// check if the current album folder is a leaf of the file system tree
@@ -382,7 +388,7 @@ public class PhysicalContext implements Context {
 			}
 		}
 		// The first part of this directory name contains the parent directory name
-		final CompiledStringMatcher artistNamePattern = containMatcher.getCompiledMatcher(album.getArtistName());
+		final CompiledStringMatcher artistNamePattern = containMatcher.compile(album.getArtistName());
 		if (artistNamePattern.match(album.getParentPath())) {
 			albumQIModifiers[4] = AlbumPhysicalEnum.NAME_FIRST_PART_MATCH_PARENT;
 		}
@@ -411,7 +417,7 @@ public class PhysicalContext implements Context {
 			tracksQIModifiers[0] = TrackPhysicalEnum.NOT_LEAF;
 		}
 		// Checks if the given artist name contains words defined as invaliders
-		if (Config.getConfig().getListAsPattern(Config.P_TRACK_TITLE_INVALIDERS).matcher(albumName).matches()) {
+		if (Config.getConfig().getPattern(Config.P_TRACK_TITLE_INVALIDERS).matcher(albumName).matches()) {
 			tracksQIModifiers[1] = TrackPhysicalEnum.CONTAINS_INVALIDER_WORD;
 		}
 		final String lcs = StringUtils.getLCSubstring(albumName, "TOTO"); // TODO
